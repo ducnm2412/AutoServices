@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoServices</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/app/views/css/contact.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Gửi Phản Hồi Của Bạn</h2>
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label for="name">Họ và Tên</label>
+                <input type="text" id="name" name="name" placeholder="Nhập họ và tên" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Nhập email" required>
+            </div>
+            <div class="form-group">
+                <label for="rating">Đánh Giá</label>
+                <div class="rating">
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1"><i class="fa-solid fa-star"></i></label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2"><i class="fa-solid fa-star"></i></label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3"><i class="fa-solid fa-star"></i></label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4"><i class="fa-solid fa-star"></i></label>
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5"><i class="fa-solid fa-star"></i></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="feedback">Phản Hồi</label>
+                <textarea id="feedback" name="feedback" rows="4" placeholder="Chia sẻ ý kiến của bạn" required></textarea>
+            </div>
+            <button type="submit">Gửi Phản Hồi </button>
+        </form>
+        <hr>
+        <div class="feedback-list" id="feedbackList">
+            <h2>Phản Hồi Từ Người Dùng</h2>
+        </div>
+        <div class="view-all" id="viewAll">
+            <button onclick="showAllFeedbacks()">Xem tất cả</button>
+        </div>
+    </div>
+    <script src="/app/views/js/contact.js"> </script>
+</body>
+</html>
