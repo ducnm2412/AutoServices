@@ -1,10 +1,15 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/../models/OrderModel.php';
+require_once __DIR__ . '/../services/OrderService.php';
 require_once __DIR__ . '/../models/PaymentModel.php';
 
 class OrderController {
+    private $orderService;
+
+    public function __construct() {
+        $this->orderService = new OrderService();
+    }
 
     private function checkAuth($adminOnly = false) {
         if (!isset($_SESSION['user'])) {
@@ -22,26 +27,21 @@ class OrderController {
     // Checkout giỏ hàng
     public function checkout() {
         $this->checkAuth();
-
         if (empty($_SESSION['cart'])) {
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Giỏ hàng của bạn đang trống.']);
             exit();
         }
-
         $userID = $_SESSION['user']['userID'];
         $cart = $_SESSION['cart'];
-
-        $orderModel = new OrderModel();
-        $orderID = $orderModel->checkout($userID, $cart);
-
-        if ($orderID) {
+        $result = $this->orderService->checkout($userID, $cart);
+        if ($result['success']) {
             unset($_SESSION['cart']);
             http_response_code(201);
-            echo json_encode(['success' => true, 'message' => 'Đặt hàng thành công!', 'orderID' => $orderID]);
+            echo json_encode(['success' => true, 'message' => 'Đặt hàng thành công!', 'orderID' => $result['orderID'], 'totalAmount' => $result['totalAmount']]);
         } else {
             http_response_code(500);
-            echo json_encode(['success' => false, 'message' => 'Đã có lỗi xảy ra khi đặt hàng.']);
+            echo json_encode(['success' => false, 'message' => $result['message']]);
         }
     }
 
@@ -49,25 +49,19 @@ class OrderController {
     public function getOrderDetails() {
         $this->checkAuth();
         $orderID = $_GET['orderID'] ?? 0;
-
-        $orderModel = new OrderModel();
-        $invoiceData = $orderModel->generateInvoice($orderID);
-
+        $invoiceData = $this->orderService->generateInvoice($orderID);
         if (!$invoiceData['order'] || ($_SESSION['user']['role'] !== 'admin' && $invoiceData['order']['userID'] !== $_SESSION['user']['userID'])) {
             http_response_code(404);
             echo json_encode(['success' => false, 'message' => 'Không tìm thấy đơn hàng hoặc bạn không có quyền xem.']);
             exit();
         }
-
         echo json_encode(['success' => true, 'data' => $invoiceData]);
     }
     
     // Admin xem tất cả đơn hàng
     public function getAllOrders() {
         $this->checkAuth(true); // Chỉ Admin mới được vào
-        $orderModel = new OrderModel();
-        // Bạn cũng cần thêm hàm getAllOrders() vào OrderModel
-        $orders = $orderModel->getAllOrders();
+        $orders = $this->orderService->getAllOrders();
         echo json_encode(['success' => true, 'orders' => $orders]);
     }
 
@@ -77,24 +71,16 @@ class OrderController {
         $data = json_decode(file_get_contents('php://input'), true);
         $orderID = $data['orderID'];
         $paymentMethod = $data['paymentMethod'];
-
-        $orderModel = new OrderModel();
-        $paymentModel = new PaymentModel();
-
-        $invoiceData = $orderModel->generateInvoice($orderID);
+        $invoiceData = $this->orderService->generateInvoice($orderID);
         if (!$invoiceData['order'] || $invoiceData['order']['userID'] !== $_SESSION['user']['userID']) {
             http_response_code(404);
             echo json_encode(['success' => false, 'message' => 'Đơn hàng không hợp lệ.']);
             exit();
         }
-        
         $totalAmount = $invoiceData['order']['totalAmount'];
-
+        $paymentModel = new PaymentModel();
         $paymentID = $paymentModel->processPayment($orderID, $totalAmount, $paymentMethod);
-        
-        // Gọi hàm updateStatus đã được thêm vào OrderModel
-        $orderModel->updateStatus($orderID, 'paid');
-
+        $this->orderService->updateStatus($orderID, 'paid');
         if ($paymentID) {
             echo json_encode(['success' => true, 'message' => 'Thanh toán thành công!', 'paymentID' => $paymentID]);
         } else {

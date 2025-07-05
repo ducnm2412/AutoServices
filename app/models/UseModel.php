@@ -51,5 +51,6 @@ class UserModel extends Database {
     $stmt->bind_param("sssss", $email, $name, $phoneNumber, $address, $userID);
     return $stmt->execute();
 }
+
 }
 ?>

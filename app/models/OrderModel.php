@@ -12,41 +12,39 @@ class OrderModel extends Database {
         return $this->conn->insert_id; // trả về orderID vừa tạo
     }
 
-    // Thêm dịch vụ vào đơn hàng
-    public function addServiceToOrder($orderID, $serviceID) {
-        $stmt = $this->conn->prepare(
-            "INSERT INTO Order_Service (orderID, serviceID) VALUES (?, ?)"
-        );
-        $stmt->bind_param("is", $orderID, $serviceID);
-        return $stmt->execute();
+// Thêm phụ tùng vào đơn hàng (có quantity)
+public function addPartToOrder($orderID, $partID, $quantity = 1) {
+    $stmt = $this->conn->prepare(
+        "INSERT INTO Order_Part (orderID, partID, quantity) VALUES (?, ?, ?)"
+    );
+    $stmt->bind_param("isi", $orderID, $partID, $quantity);
+    return $stmt->execute();
+}
+// Thêm dịch vụ vào đơn hàng (không cần quantity)
+public function addServiceToOrder($orderID, $serviceID) {
+    $stmt = $this->conn->prepare(
+        "INSERT INTO Order_Service (orderID, serviceID) VALUES (?, ?)"
+    );
+    $stmt->bind_param("is", $orderID, $serviceID);
+    return $stmt->execute();
+}
+// Checkout giỏ hàng
+public function checkout($userID, $cart) {
+    $orderDate = date('Y-m-d');
+    $totalAmount = 0;
+    foreach ($cart as $item) {
+        $totalAmount += $item['price'] * ($item['quantity'] ?? 1);
     }
-
-    // Thêm thiết bị/phụ tùng vào đơn hàng
-    public function addPartToOrder($orderID, $partID) {
-        $stmt = $this->conn->prepare(
-            "INSERT INTO Order_Part (orderID, partID) VALUES (?, ?)"
-        );
-        $stmt->bind_param("is", $orderID, $partID);
-        return $stmt->execute();
-    }
-
-    // Thanh toán (checkout): tạo đơn hàng từ session giỏ hàng
-    public function checkout($userID, $cart) {
-        $orderDate = date('Y-m-d');
-        $totalAmount = 0;
-        foreach ($cart as $item) {
-            $totalAmount += $item['price'];
+    $orderID = $this->createOrder($userID, $orderDate, $totalAmount, 'pending');
+    foreach ($cart as $item) {
+        if ($item['type'] == 'service') {
+            $this->addServiceToOrder($orderID, $item['id']);
+        } else if ($item['type'] == 'part') {
+            $this->addPartToOrder($orderID, $item['id'], $item['quantity'] ?? 1);
         }
-        $orderID = $this->createOrder($userID, $orderDate, $totalAmount, 'pending');
-        foreach ($cart as $item) {
-            if ($item['type'] == 'service') {
-                $this->addServiceToOrder($orderID, $item['id']);
-            } else if ($item['type'] == 'part') {
-                $this->addPartToOrder($orderID, $item['id']);
-            }
-        }
-        return $orderID;
     }
+    return $orderID;
+}
 
     // Sinh hóa đơn (trả về thông tin đơn hàng và chi tiết)
     public function generateInvoice($orderID) {
@@ -106,5 +104,17 @@ class OrderModel extends Database {
         $stmt->bind_param("si", $status, $orderID);
         return $stmt->execute();
     }
+// Mua nhanh 1 sản phẩm/dịch vụ
+public function buySingle($userID, $item) {
+    $orderDate = date('Y-m-d');
+    $totalAmount = $item['price'] * ($item['quantity'] ?? 1);
+    $orderID = $this->createOrder($userID, $orderDate, $totalAmount, 'pending');
+    if ($item['type'] == 'service') {
+        $this->addServiceToOrder($orderID, $item['id']);
+    } else if ($item['type'] == 'part') {
+        $this->addPartToOrder($orderID, $item['id'], $item['quantity'] ?? 1);
+    }
+    return $orderID;
+}
 }
 ?> 

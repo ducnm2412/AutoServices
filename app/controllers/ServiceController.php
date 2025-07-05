@@ -1,9 +1,14 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/../models/ServiceModel.php';
+require_once __DIR__ . '/../services/ServiceService.php';
 
 class ServiceController {
+    private $serviceService;
+
+    public function __construct() {
+        $this->serviceService = new ServiceService();
+    }
 
     // Kiểm tra xem người dùng có phải là admin không
     private function checkAdminAuth() {
@@ -16,16 +21,14 @@ class ServiceController {
 
     // Lấy tất cả dịch vụ (công khai)
     public function getAll() {
-        $serviceModel = new ServiceModel();
-        $services = $serviceModel->getAllServices();
+        $services = $this->serviceService->getAllServices();
         echo json_encode(['success' => true, 'services' => $services]);
     }
 
     // Tìm kiếm dịch vụ (công khai)
     public function search() {
         $keyword = $_GET['keyword'] ?? '';
-        $serviceModel = new ServiceModel();
-        $services = $serviceModel->searchServiceByName($keyword);
+        $services = $this->serviceService->searchServiceByName($keyword);
         echo json_encode(['success' => true, 'services' => $services]);
     }
 
@@ -33,15 +36,13 @@ class ServiceController {
     public function add() {
         $this->checkAdminAuth();
         $data = json_decode(file_get_contents('php://input'), true);
-
-        $serviceModel = new ServiceModel();
-        $result = $serviceModel->addService(
+        $result = $this->serviceService->addService(
             $data['serviceID'],
             $data['name'],
             $data['price'],
-            $data['description']
+            $data['description'],
+            $data['categoryID']
         );
-
         if ($result) {
             http_response_code(201);
             echo json_encode(['success' => true, 'message' => 'Thêm dịch vụ thành công!']);
@@ -55,15 +56,13 @@ class ServiceController {
     public function update() {
         $this->checkAdminAuth();
         $data = json_decode(file_get_contents('php://input'), true);
-        
-        $serviceModel = new ServiceModel();
-        $result = $serviceModel->updateService(
+        $result = $this->serviceService->updateService(
             $data['serviceID'],
             $data['name'],
             $data['price'],
-            $data['description']
+            $data['description'],
+            $data['categoryID']
         );
-
         if ($result) {
             echo json_encode(['success' => true, 'message' => 'Cập nhật dịch vụ thành công!']);
         } else {
@@ -76,10 +75,7 @@ class ServiceController {
     public function delete() {
         $this->checkAdminAuth();
         $data = json_decode(file_get_contents('php://input'), true);
-        
-        $serviceModel = new ServiceModel();
-        $result = $serviceModel->removeService($data['serviceID']);
-
+        $result = $this->serviceService->deleteService($data['serviceID']);
         if ($result) {
             echo json_encode(['success' => true, 'message' => 'Xóa dịch vụ thành công!']);
         } else {
@@ -87,6 +83,12 @@ class ServiceController {
             echo json_encode(['success' => false, 'message' => 'Xóa dịch vụ thất bại.']);
         }
     }
+    // Lấy dịch vụ theo categoryID (công khai)
+public function getByCategory() {
+    $categoryID = $_GET['categoryID'] ?? '';
+    $services = $this->serviceService->getServicesByCategory($categoryID);
+    echo json_encode(['success' => true, 'services' => $services]);
+}
 }
 
 // Routing
@@ -108,6 +110,9 @@ switch ($action) {
         break;
     case 'delete':
         $controller->delete();
+        break;
+    case 'getByCategory':
+        $controller->getByCategory();
         break;
     default:
         http_response_code(404);

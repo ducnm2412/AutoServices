@@ -3,11 +3,12 @@ require_once 'core/Database.php';
 
 class PaymentModel extends Database {
     // Xử lý thanh toán (lưu thông tin thanh toán)
-    public function processPayment($orderID, $amount, $paymentMethod) {
+    public function processPayment($orderID, $amount, $paymentMethodID) {
         $stmt = $this->conn->prepare(
             "INSERT INTO Payment (orderID, amount, paymentMethod) VALUES (?, ?, ?)"
         );
-        $stmt->bind_param("ids", $orderID, $amount, $paymentMethod);
+        // paymentMethod giờ là INT (ID của PaymentCategory)
+        $stmt->bind_param("idi", $orderID, $amount, $paymentMethodID);
         if ($stmt->execute()) {
             return $this->conn->insert_id; // trả về paymentID vừa tạo
         } else {
@@ -20,7 +21,7 @@ class PaymentModel extends Database {
         $stmt = $this->conn->prepare(
             "SELECT * FROM Payment WHERE paymentID = ?"
         );
-        $stmt->bind_param("i", $paymentID);
+        $stmt->bind_param("i" , $paymentID);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_assoc();
@@ -36,5 +37,17 @@ class PaymentModel extends Database {
         $result = $stmt->get_result();
         return $result->fetch_assoc();
     }
+
+    // (Tuỳ chọn) Lấy tên phương thức thanh toán từ bảng PaymentCategory
+    public function getPaymentMethodName($paymentMethodID) {
+        $stmt = $this->conn->prepare(
+            "SELECT methodName FROM PaymentCategory WHERE paymentCategoryID = ?"
+        );
+        $stmt->bind_param("i", $paymentMethodID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return $row ? $row['methodName'] : null;
+    }
 }
-?> 
+?>

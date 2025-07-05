@@ -1,9 +1,15 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/../models/FeedbackModel.php';
+require_once __DIR__ . '/../services/FeedbackService.php';
 
 class FeedbackController {
+
+    private $feedbackService;
+
+    public function __construct() {
+        $this->feedbackService = new FeedbackService();
+    }
 
     private function checkAuth($adminOnly = false) {
         if (!isset($_SESSION['user'])) {
@@ -24,8 +30,7 @@ class FeedbackController {
         $data = json_decode(file_get_contents('php://input'), true);
         $userID = $_SESSION['user']['userID'];
 
-        $feedbackModel = new FeedbackModel();
-        $result = $feedbackModel->submitFeedback(
+        $result = $this->feedbackService->createFeedback(
             $data['orderID'],
             $userID,
             $data['content'],
@@ -33,12 +38,12 @@ class FeedbackController {
             date('Y-m-d H:i:s')
         );
 
-        if ($result) {
+        if ($result['success']) {
             http_response_code(201);
-            echo json_encode(['success' => true, 'message' => 'Gửi phản hồi thành công!']);
+            echo json_encode(['success' => true, 'message' => $result['message']]);
         } else {
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Gửi phản hồi thất bại.']);
+            echo json_encode(['success' => false, 'message' => $result['message']]);
         }
     }
 
@@ -52,9 +57,7 @@ class FeedbackController {
             'orderID' => $_GET['orderID'] ?? null
         ];
 
-        $feedbackModel = new FeedbackModel();
-        // Bạn cần bổ sung hàm getFeedbacksByFilters trong FeedbackModel
-        $feedbacks = $feedbackModel->getFeedbacksByFilters($filters);
+        $feedbacks = $this->feedbackService->getFeedbacksByFilters($filters);
 
         echo json_encode(['success' => true, 'feedbacks' => $feedbacks]);
     }

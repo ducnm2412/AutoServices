@@ -1,14 +1,17 @@
 <?php
-require_once 'models/UserModel.php';
+require_once __DIR__ . '/../services/AuthService.php';
 
 class AuthController {
+    private $authService;
+
+    public function __construct() {
+        $this->authService = new AuthService();
+    }
+
     // Đăng ký
     public function register() {
-        // Lấy dữ liệu từ request (giả sử gửi dạng JSON)
         $data = json_decode(file_get_contents('php://input'), true);
-
-        $userModel = new UserModel();
-        $result = $userModel->addUser(
+        $result = $this->authService->register(
             $data['email'],
             $data['name'],
             $data['password'],
@@ -16,31 +19,26 @@ class AuthController {
             $data['role'],
             $data['address']
         );
-
-        if ($result === "Thêm user thành công!") {
+        if ($result['success']) {
             http_response_code(201);
-            echo json_encode(['success' => true, 'message' => 'Đăng ký thành công!']);
+            echo json_encode(['success' => true, 'message' => $result['message']]);
         } else {
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => $result]);
+            echo json_encode(['success' => false, 'message' => $result['message']]);
         }
     }
 
     // Đăng nhập
     public function login() {
         $data = json_decode(file_get_contents('php://input'), true);
-
-        $userModel = new UserModel();
-        $user = $userModel->login($data['email'], $data['password']);
-
-        if ($user) {
-            // Lưu session hoặc trả về token (nếu dùng JWT)
+        $result = $this->authService->login($data['email'], $data['password']);
+        if ($result['success']) {
             session_start();
-            $_SESSION['user'] = $user;
-            echo json_encode(['success' => true, 'user' => $user]);
+            $_SESSION['user'] = $result['user'];
+            echo json_encode(['success' => true, 'user' => $result['user']]);
         } else {
             http_response_code(401);
-            echo json_encode(['success' => false, 'message' => 'Sai email hoặc mật khẩu!']);
+            echo json_encode(['success' => false, 'message' => $result['message']]);
         }
     }
 
