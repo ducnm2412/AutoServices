@@ -14,20 +14,8 @@ class AdminModel extends Database {
         }
     }
 
-    public function getAllAdmins() {
-        $sql = "SELECT * FROM Admin";
-        $result = $this->conn->query($sql);
-        $admins = [];
-        if ($result && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $admins[] = $row;
-            }
-        }
-        return $admins;
-    }
-
-    // Quản lý dịch vụ
-    public function manageServices() {
+    // CRUD cho Service
+    public function getAllServices() {
         $sql = "SELECT * FROM Service";
         $result = $this->conn->query($sql);
         $services = [];
@@ -38,9 +26,30 @@ class AdminModel extends Database {
         }
         return $services;
     }
+    public function addService($serviceID, $name, $price, $description, $categoryID) {
+        $stmt = $this->conn->prepare(
+            "INSERT INTO Service (serviceID, name, price, description, categoryID) VALUES (?, ?, ?, ?, ?)"
+        );
+        $stmt->bind_param("ssdss", $serviceID, $name, $price, $description, $categoryID);
+        return $stmt->execute();
+    }
+    public function updateService($serviceID, $name, $price, $description, $categoryID) {
+        $stmt = $this->conn->prepare(
+            "UPDATE Service SET name = ?, price = ?, description = ?, categoryID = ? WHERE serviceID = ?"
+        );
+        $stmt->bind_param("sdsss", $name, $price, $description, $categoryID, $serviceID);
+        return $stmt->execute();
+    }
+    public function deleteService($serviceID) {
+        $stmt = $this->conn->prepare(
+            "DELETE FROM Service WHERE serviceID = ?"
+        );
+        $stmt->bind_param("s", $serviceID);
+        return $stmt->execute();
+    }
 
-    // Quản lý phụ tùng
-    public function manageParts() {
+    // CRUD cho Part
+    public function getAllParts() {
         $sql = "SELECT * FROM Part";
         $result = $this->conn->query($sql);
         $parts = [];
@@ -51,10 +60,31 @@ class AdminModel extends Database {
         }
         return $parts;
     }
+    public function addPart($partID, $name, $price, $quantity, $images, $categoryID) {
+        $stmt = $this->conn->prepare(
+            "INSERT INTO Part (partID, name, price, quantity, images, categoryID) VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        $stmt->bind_param("ssdis s", $partID, $name, $price, $quantity, $images, $categoryID);
+        return $stmt->execute();
+    }
+    public function updatePart($partID, $name, $price, $quantity, $images, $categoryID) {
+        $stmt = $this->conn->prepare(
+            "UPDATE Part SET name = ?, price = ?, quantity = ?, images = ?, categoryID = ? WHERE partID = ?"
+        );
+        $stmt->bind_param("sdisss", $name, $price, $quantity, $images, $categoryID, $partID);
+        return $stmt->execute();
+    }
+    public function deletePart($partID) {
+        $stmt = $this->conn->prepare(
+            "DELETE FROM Part WHERE partID = ?"
+        );
+        $stmt->bind_param("s", $partID);
+        return $stmt->execute();
+    }
 
-    // Xem đơn hàng đã thanh toán
-    public function viewPaidOrders() {
-        $sql = "SELECT * FROM `Order` WHERE status = 'paid'";
+    // Xem tất cả đơn hàng
+    public function viewAllOrders() {
+        $sql = "SELECT * FROM `Order`";
         $result = $this->conn->query($sql);
         $orders = [];
         if ($result && $result->num_rows > 0) {
@@ -64,8 +94,7 @@ class AdminModel extends Database {
         }
         return $orders;
     }
-
-    // Xem phản hồi
+    // Xem tất cả phản hồi
     public function viewFeedback() {
         $sql = "SELECT * FROM Feedback";
         $result = $this->conn->query($sql);

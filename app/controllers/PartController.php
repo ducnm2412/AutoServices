@@ -1,9 +1,14 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/../models/PartModel.php';
+require_once __DIR__ . '/../services/PartService.php';
 
 class PartController {
+    private $partService;
+
+    public function __construct() {
+        $this->partService = new PartService();
+    }
 
     // Kiểm tra xem người dùng có phải là admin không
     private function checkAdminAuth() {
@@ -16,16 +21,14 @@ class PartController {
 
     // Lấy tất cả phụ tùng (công khai)
     public function getAll() {
-        $partModel = new PartModel();
-        $parts = $partModel->getAllParts();
+        $parts = $this->partService->getAllParts();
         echo json_encode(['success' => true, 'parts' => $parts]);
     }
 
     // Tìm kiếm phụ tùng (công khai)
     public function search() {
         $keyword = $_GET['keyword'] ?? '';
-        $partModel = new PartModel();
-        $parts = $partModel->searchPartByName($keyword);
+        $parts = $this->partService->searchPartByName($keyword);
         echo json_encode(['success' => true, 'parts' => $parts]);
     }
 
@@ -33,22 +36,20 @@ class PartController {
     public function add() {
         $this->checkAdminAuth();
         $data = json_decode(file_get_contents('php://input'), true);
-
-        $partModel = new PartModel();
-        $result = $partModel->addPart(
+        $result = $this->partService->addPart(
             $data['partID'],
             $data['name'],
             $data['price'],
             $data['quantity'],
-            $data['images']
+            $data['images'],
+            $data['categoryID']
         );
-
-        if ($result) {
+        if ($result['success']) {
             http_response_code(201);
-            echo json_encode(['success' => true, 'message' => 'Thêm phụ tùng thành công!']);
+            echo json_encode(['success' => true, 'message' => $result['message']]);
         } else {
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Thêm phụ tùng thất bại.']);
+            echo json_encode(['success' => false, 'message' => $result['message']]);
         }
     }
 
@@ -56,16 +57,14 @@ class PartController {
     public function update() {
         $this->checkAdminAuth();
         $data = json_decode(file_get_contents('php://input'), true);
-        
-        $partModel = new PartModel();
-        $result = $partModel->updatePart(
+        $result = $this->partService->updatePart(
             $data['partID'],
             $data['name'],
             $data['price'],
             $data['quantity'],
-            $data['images']
+            $data['images'],
+            $data['categoryID']
         );
-
         if ($result) {
             echo json_encode(['success' => true, 'message' => 'Cập nhật phụ tùng thành công!']);
         } else {
@@ -78,10 +77,7 @@ class PartController {
     public function delete() {
         $this->checkAdminAuth();
         $data = json_decode(file_get_contents('php://input'), true);
-        
-        $partModel = new PartModel();
-        $result = $partModel->removePart($data['partID']);
-
+        $result = $this->partService->deletePart($data['partID']);
         if ($result) {
             echo json_encode(['success' => true, 'message' => 'Xóa phụ tùng thành công!']);
         } else {

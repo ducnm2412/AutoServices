@@ -1,25 +1,24 @@
 <?php
 session_start();
+require_once __DIR__ . '/../services/CartService.php';
 
 class CartController {
+    private $cartService;
 
     public function __construct() {
-        if (!isset($_SESSION['cart'])) {
-            $_SESSION['cart'] = [];
-        }
+        $this->cartService = new CartService();
     }
 
     // Lấy toàn bộ giỏ hàng
     public function get() {
-        $cart = $_SESSION['cart'];
+        $cart = $this->cartService->getCart();
         $totalAmount = 0;
         foreach ($cart as $item) {
             $totalAmount += $item['price'] * $item['quantity'];
         }
-
         echo json_encode([
             'success' => true,
-            'cart' => array_values($cart), // Đảm bảo index luôn tuần tự
+            'cart' => array_values($cart),
             'totalAmount' => $totalAmount
         ]);
     }
@@ -27,64 +26,34 @@ class CartController {
     // Thêm một item vào giỏ hàng
     public function add() {
         $data = json_decode(file_get_contents('php://input'), true);
-
-        $newItem = [
+        $item = [
             'id' => $data['id'],
             'type' => $data['type'],
             'name' => $data['name'],
             'price' => $data['price'],
-            'quantity' => 1
+            'quantity' => $data['quantity'] ?? 1
         ];
-
-        $itemKey = $data['type'] . '-' . $data['id'];
-
-        if (isset($_SESSION['cart'][$itemKey])) {
-            $_SESSION['cart'][$itemKey]['quantity']++;
-        } else {
-            $_SESSION['cart'][$itemKey] = $newItem;
-        }
-        
+        $this->cartService->addToCart($item);
         echo json_encode(['success' => true, 'message' => 'Đã thêm vào giỏ hàng!']);
     }
 
     // Cập nhật số lượng của một item
     public function update() {
         $data = json_decode(file_get_contents('php://input'), true);
-        $itemKey = $data['type'] . '-' . $data['id'];
-        $quantity = $data['quantity'];
-
-        if (isset($_SESSION['cart'][$itemKey])) {
-            if ($quantity > 0) {
-                $_SESSION['cart'][$itemKey]['quantity'] = $quantity;
-                echo json_encode(['success' => true, 'message' => 'Cập nhật giỏ hàng thành công!']);
-            } else {
-                // Nếu số lượng <= 0 thì xóa item
-                unset($_SESSION['cart'][$itemKey]);
-                echo json_encode(['success' => true, 'message' => 'Đã xóa khỏi giỏ hàng.']);
-            }
-        } else {
-            http_response_code(404);
-            echo json_encode(['success' => false, 'message' => 'Sản phẩm không tồn tại trong giỏ hàng.']);
-        }
+        $this->cartService->updateQuantity($data['id'], $data['type'], $data['quantity']);
+        echo json_encode(['success' => true, 'message' => 'Cập nhật giỏ hàng thành công!']);
     }
 
     // Xóa một item khỏi giỏ hàng
     public function remove() {
         $data = json_decode(file_get_contents('php://input'), true);
-        $itemKey = $data['type'] . '-' . $data['id'];
-
-        if (isset($_SESSION['cart'][$itemKey])) {
-            unset($_SESSION['cart'][$itemKey]);
-            echo json_encode(['success' => true, 'message' => 'Đã xóa khỏi giỏ hàng.']);
-        } else {
-            http_response_code(404);
-            echo json_encode(['success' => false, 'message' => 'Sản phẩm không tồn tại trong giỏ hàng.']);
-        }
+        $this->cartService->removeFromCart($data['id'], $data['type']);
+        echo json_encode(['success' => true, 'message' => 'Đã xóa khỏi giỏ hàng.']);
     }
 
     // Xóa toàn bộ giỏ hàng
     public function clear() {
-        $_SESSION['cart'] = [];
+        $this->cartService->clearCart();
         echo json_encode(['success' => true, 'message' => 'Giỏ hàng đã được xóa.']);
     }
 }

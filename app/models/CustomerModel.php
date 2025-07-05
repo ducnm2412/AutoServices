@@ -13,10 +13,10 @@ class CustomerModel extends Database {
     }
 
     // Xem lịch sử đặt hàng
-    public function viewOrderHistory($customerID) {
-        $sql = "SELECT * FROM `Order` WHERE customerID = ?";
+    public function viewOrderHistory($userID) {
+        $sql = "SELECT * FROM `Order` WHERE userID = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("s", $customerID);
+        $stmt->bind_param("s", $userID);
         $stmt->execute();
         $result = $stmt->get_result();
         $orders = [];

@@ -1,10 +1,14 @@
 <?php
 session_start(); // Luôn bắt đầu session ở đầu file
 
-require_once __DIR__ . '/../models/CustomerModel.php';
-require_once __DIR__ . '/../models/FeedbackModel.php';
+require_once __DIR__ . '/../services/CustomerService.php';
 
 class CustomerController {
+    private $customerService;
+
+    public function __construct() {
+        $this->customerService = new CustomerService();
+    }
 
     private function checkAuth() {
         if (!isset($_SESSION['user'])) {
@@ -17,58 +21,27 @@ class CustomerController {
     public function bookService() {
         $this->checkAuth();
         $data = json_decode(file_get_contents('php://input'), true);
-        $customerID = $_SESSION['user']['userID'];
-
-        $customerModel = new CustomerModel();
-        $result = $customerModel->bookServices(
-            $customerID,
+        $userID = $_SESSION['user']['userID'];
+        $result = $this->customerService->bookServices(
+            $userID,
             $data['serviceID'],
             $data['date'],
             $data['note'] ?? ''
         );
-
-        if ($result) {
+        if ($result['success']) {
             http_response_code(201);
-            echo json_encode(['success' => true, 'message' => 'Đặt dịch vụ thành công!']);
+            echo json_encode(['success' => true, 'message' => $result['message']]);
         } else {
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Đặt dịch vụ thất bại.']);
+            echo json_encode(['success' => false, 'message' => $result['message']]);
         }
     }
 
     public function viewMyOrderHistory() {
         $this->checkAuth();
-        $customerID = $_SESSION['user']['userID'];
-
-        $customerModel = new CustomerModel();
-        $orders = $customerModel->viewOrderHistory($customerID);
-
-        echo json_encode(['success' => true, 'orders' => $orders]);
-    }
-
-    // Gửi phản hồi / Đánh giá đơn hàng
-    public function giveFeedback() {
-        $this->checkAuth();
-        $data = json_decode(file_get_contents('php://input'), true);
         $userID = $_SESSION['user']['userID'];
-
-        $feedbackModel = new FeedbackModel();
-        // Hàm này sẽ lưu cả rating (sao) và content (bình luận)
-        $result = $feedbackModel->submitFeedback(
-            $data['orderID'],
-            $userID,
-            $data['content'],
-            $data['rating'],
-            date('Y-m-d H:i:s')
-        );
-
-        if ($result) {
-            http_response_code(201);
-            echo json_encode(['success' => true, 'message' => 'Gửi phản hồi thành công!']);
-        } else {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Gửi phản hồi thất bại.']);
-        }
+        $orders = $this->customerService->viewOrderHistory($userID);
+        echo json_encode(['success' => true, 'orders' => $orders]);
     }
 }
 
@@ -82,9 +55,6 @@ switch ($action) {
         break;
     case 'viewMyOrderHistory':
         $controller->viewMyOrderHistory();
-        break;
-    case 'giveFeedback':
-        $controller->giveFeedback();
         break;
     default:
         http_response_code(404);

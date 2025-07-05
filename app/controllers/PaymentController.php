@@ -1,10 +1,16 @@
 <?php
 session_start();
 
+require_once __DIR__ . '/../services/PaymentService.php';
 require_once __DIR__ . '/../models/OrderModel.php';
-require_once __DIR__ . '/../models/PaymentModel.php';
 
 class PaymentController {
+
+    private $paymentService;
+
+    public function __construct() {
+        $this->paymentService = new PaymentService();
+    }
 
     private function checkAuth() {
         if (!isset($_SESSION['user'])) {
@@ -22,7 +28,6 @@ class PaymentController {
         $paymentMethod = $data['paymentMethod'];
 
         $orderModel = new OrderModel();
-        $paymentModel = new PaymentModel();
 
         // 1. Lấy thông tin đơn hàng để xác thực và lấy tổng tiền
         $orderData = $orderModel->generateInvoice($orderID)['order'];
@@ -41,16 +46,16 @@ class PaymentController {
         
         $totalAmount = $orderData['totalAmount'];
 
-        // 3. Lưu thông tin thanh toán
-        $paymentID = $paymentModel->processPayment($orderID, $totalAmount, $paymentMethod);
+        // 3. Lưu thông tin thanh toán qua service
+        $result = $this->paymentService->processPayment($orderID, $totalAmount, $paymentMethod);
 
-        if ($paymentID) {
+        if ($result['success']) {
             // 4. Cập nhật trạng thái đơn hàng thành 'paid'
             $orderModel->updateStatus($orderID, 'paid');
-            echo json_encode(['success' => true, 'message' => 'Thanh toán thành công!', 'paymentID' => $paymentID]);
+            echo json_encode(['success' => true, 'message' => $result['message'], 'paymentID' => $result['paymentID']]);
         } else {
             http_response_code(500);
-            echo json_encode(['success' => false, 'message' => 'Xử lý thanh toán thất bại.']);
+            echo json_encode(['success' => false, 'message' => $result['message']]);
         }
     }
 
@@ -59,8 +64,7 @@ class PaymentController {
         $this->checkAuth();
         $paymentID = $_GET['paymentID'] ?? 0;
         
-        $paymentModel = new PaymentModel();
-        $paymentDetails = $paymentModel->generateInvoice($paymentID);
+        $paymentDetails = $this->paymentService->getPaymentByID($paymentID);
 
         if (!$paymentDetails) {
             http_response_code(404);

@@ -16,11 +16,11 @@ class ServiceModel extends Database {
     }
 
     // Thêm dịch vụ mới
-    public function addService($serviceID, $name, $price, $description) {
+    public function addService($serviceID, $name, $price, $description, $categoryID) {
         $stmt = $this->conn->prepare(
-            "INSERT INTO Service (serviceID, name, price, description) VALUES (?, ?, ?, ?)"
+            "INSERT INTO Service (serviceID, name, price, description, categoryID) VALUES (?, ?, ?, ?, ?)"
         );
-        $stmt->bind_param("ssds", $serviceID, $name, $price, $description);
+        $stmt->bind_param("ssdss", $serviceID, $name, $price, $description, $categoryID);
         return $stmt->execute();
     }
 
@@ -34,11 +34,11 @@ class ServiceModel extends Database {
     }
 
     // Cập nhật dịch vụ
-    public function updateService($serviceID, $name, $price, $description) {
+    public function updateService($serviceID, $name, $price, $description, $categoryID) {
         $stmt = $this->conn->prepare(
-            "UPDATE Service SET name = ?, price = ?, description = ? WHERE serviceID = ?"
+            "UPDATE Service SET name = ?, price = ?, description = ?, categoryID = ? WHERE serviceID = ?"
         );
-        $stmt->bind_param("sdss", $name, $price, $description, $serviceID);
+        $stmt->bind_param("sdsss", $name, $price, $description, $categoryID, $serviceID);
         return $stmt->execute();
     }
 
@@ -58,5 +58,19 @@ class ServiceModel extends Database {
         }
         return $services;
     }
+    // Lấy dịch vụ theo categoryID
+public function getServicesByCategory($categoryID) {
+    $stmt = $this->conn->prepare("SELECT * FROM Service WHERE categoryID = ?");
+    $stmt->bind_param("s", $categoryID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $services = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $services[] = $row;
+        }
+    }
+    return $services;
+}
 }
 ?> 
