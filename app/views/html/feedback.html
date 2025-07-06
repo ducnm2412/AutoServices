@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Feedback - Giao Diện Mới</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/feedback.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Gửi Phản Hồi Của Bạn</h2>
+        <form id="feedbackForm">
+            <label for="orderID">Mã đơn hàng</label>
+            <input type="text" id="orderID" placeholder="VD: ORD12345" required />
+            <div class="form-group">
+                <label for="rating">Đánh Giá</label>
+                <div class="rating">
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5"> <i class="fa-solid fa-star"></i></label>
+
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4"> <i class="fa-solid fa-star"></i></label>
+
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3"> <i class="fa-solid fa-star"></i></label>
+
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2"> <i class="fa-solid fa-star"></i></label>
+
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1"> <i class="fa-solid fa-star"></i></label>
+                    
+                    
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="feedback">Nội Dung Phản Hồi</label>
+                <textarea id="feedback" name="feedback" rows="4" placeholder="Chia sẻ ý kiến của bạn..." required></textarea>
+            </div>
+            <button type="submit">Gửi Phản Hồi </button>
+            <div id="messageBox" class="message"></div>
+        </form>
+        <hr>
+    </div>
+    <script src="../js/feedback.js"></script>
+</body>
+</html>
