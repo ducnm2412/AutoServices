@@ -1,30 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AutoServices</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/app/views/css/cart.css" />
+    <title>AutoServices - Giỏ hàng</title>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/cart.css" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
     <header>
       <div class="header">
         <div class="logo">
-          <img src="/app/views/images/logo-Photoroom.png" alt="logo" />
+          <img src="/laptrinhweb/AutoServices/app/views/images/logo-Photoroom.png" alt="logo" />
           <p>Auto<span>Services</span></p>
         </div>
         <div class="navbar">
           <nav>
             <ul>
-              <li><a href="">Trang chủ</a></li>
+              <li><a href="/laptrinhweb/AutoServices/">Trang chủ</a></li>
               <li><a href="">Giới thiệu</a></li>
               <li><a href="">Dịch vụ</a></li>
               <li><a href="">Sản phẩm</a></li>
@@ -32,169 +27,67 @@
           </nav>
         </div>
         <div class="account">
-          <div class="btn-account">
-            <button><i class="bx bx-user-circle"></i></button>
-          </div>
-          <div class="btn-cart">
-            <button><i class="bx bx-cart"></i></button>
-          </div>
-          <div class="btn-menu">
-            <button><i class="ri-menu-line"></i></button>
-          </div>
+          <div class="btn-account"><button><i class="bx bx-user-circle"></i></button></div>
+          <div class="btn-cart"><button><i class="bx bx-cart"></i></button></div>
+          <div class="btn-menu"><button><i class="ri-menu-line"></i></button></div>
         </div>
       </div>
     </header>
+
     <main>
       <section>
-        <div class="head">
-          <h3>AutoServices luôn đồng hành cùng bạn trên mọi con đường</h3>
-        </div>
+        <div class="head"><h3>AutoServices luôn đồng hành cùng bạn trên mọi con đường</h3></div>
         <div class="container">
           <div class="head-container">
-            <i class="ri-arrow-left-line"></i>
+            <a href="/laptrinhweb/AutoServices/"><i class="ri-arrow-left-line"></i></a>
             <h3>Giỏ hàng của bạn</h3>
           </div>
-          <div class="cart-container">
-            <div class="cart-item">
-              <div class="checkbox"><input type="checkbox" /></div>
-              <img src="/app/views/images/acquy.jpg" alt="Hoa chân móc" />
-              <div class="item-info">
-                <div class="title">
-                  Hoa Chân Móc Bộ Phụ Kiện Thủ Công Đa Năng...
-                </div>
-                <div class="price-group">
-                  <span class="new-price">182.600₫</span>
-                </div>
-              </div>
-              <div class="quantity-control">
-                <button><i class="ri-subtract-line"></i></button>
-                <input type="text" value="1" />
-                <button><i class="ri-add-fill"></i></button>
-              </div>
-              <div class="actions"><button>Xóa</button></div>
-            </div>
-            <div class="cart-item">
-              <div class="checkbox"><input type="checkbox" /></div>
-              <img src="/app/views/images/acquy.jpg" alt="Hoa chân móc" />
-              <div class="item-info">
-                <div class="title">
-                  Hoa Chân Móc Bộ Phụ Kiện Thủ Công Đa Năng...
-                </div>
-                <div class="price-group">
-                  <span class="new-price">182.600₫</span>
-                </div>
-              </div>
-              <div class="quantity-control">
-                <button><i class="ri-subtract-line"></i></button>
-                <input type="text" value="1" />
-                <button><i class="ri-add-fill"></i></button>
-              </div>
-              <div class="actions"><button>Xóa</button></div>
-            </div>
-            <div class="cart-item">
-              <div class="checkbox"><input type="checkbox" /></div>
-              <img src="/app/views/images/acquy.jpg" alt="Hoa chân móc" />
-              <div class="item-info">
-                <div class="title">
-                  Hoa Chân Móc Bộ Phụ Kiện Thủ Công Đa Năng...
-                </div>
-                <div class="price-group">
-                  <span class="new-price">182.600₫</span>
-                </div>
-              </div>
-              <div class="quantity-control">
-                <button><i class="ri-subtract-line"></i></button>
-                <input type="text" value="1" />
-                <button><i class="ri-add-fill"></i></button>
-              </div>
-              <div class="actions"><button>Xóa</button></div>
-            </div>
-            <div class="cart-item">
-              <div class="checkbox"><input type="checkbox" /></div>
-              <img src="/app/views/images/acquy.jpg" alt="Hoa chân móc" />
-              <div class="item-info">
-                <div class="title">
-                  Hoa Chân Móc Bộ Phụ Kiện Thủ Công Đa Năng...
-                </div>
-                <div class="price-group">
-                  <span class="new-price">182.600₫</span>
-                </div>
-              </div>
-              <div class="quantity-control">
-                <button><i class="ri-subtract-line"></i></button>
-                <input type="text" value="1" />
-                <button><i class="ri-add-fill"></i></button>
-              </div>
-              <div class="actions"><button>Xóa</button></div>
-            </div>
-            <div class="cart-item">
-              <div class="checkbox"><input type="checkbox" /></div>
-              <img src="/app/views/images/acquy.jpg" alt="Hoa chân móc" />
-              <div class="item-info">
-                <div class="title">
-                  Hoa Chân Móc Bộ Phụ Kiện Thủ Công Đa Năng...
-                </div>
-                <div class="price-group">
-                  <span class="new-price">182.600₫</span>
-                </div>
-              </div>
-              <div class="quantity-control">
-                <button><i class="ri-subtract-line"></i></button>
-                <input type="text" value="1" />
-                <button><i class="ri-add-fill"></i></button>
-              </div>
-              <div class="actions"><button>Xóa</button></div>
-            </div>
-            <div class="cart-item">
-              <div class="checkbox"><input type="checkbox" /></div>
-              <img src="/app/views/images/acquy.jpg" alt="Hoa chân móc" />
-              <div class="item-info">
-                <div class="title">
-                  Hoa Chân Móc Bộ Phụ Kiện Thủ Công Đa Năng...
-                </div>
-                <div class="price-group">
-                  <span class="new-price">182.600₫</span>
-                </div>
-              </div>
-              <div class="quantity-control">
-                <button><i class="ri-subtract-line"></i></button>
-                <input type="text" value="1" />
-                <button><i class="ri-add-fill"></i></button>
-              </div>
-              <div class="actions"><button>Xóa</button></div>
-            </div>
-          </div>
+          <div class="cart-container"></div>
         </div>
       </section>
+
       <section>
         <div class="sum">
           <div class="summary">
             <div>
               Tổng cộng (0 Sản phẩm): <span class="total-price">0₫</span>
             </div>
-            <button class="buy-button">Mua Hàng</button>
+            <button class="buy-button" id="openModalBtn">Mua Hàng</button>
           </div>
         </div>
       </section>
-      <section class="modal">
+
+      <section class="modal" id="orderModal">
         <div class="modal-container">
-          <header>
-            <dv class="modal-header">
-              <h1>Đơn hàng của bạn</h1>
-            </dv>
-            <div class="btn-close">
-              <i class="ri-close-circle-line"></i>
-            </div>
-          </header>
-          <duv class="modal-body">
+          <div class="modal-header">
+            <h1>Đơn hàng của bạn</h1>
+            <div class="btn-close" id="closeModalBtn"><i class="ri-close-circle-line"></i></div>
+          </div>
+
+          <div class="modal-body">
             <div class="modal-contact">
-              <h3>Họ và tên: a</h3>
-              <h3>Sô điện thoại; abc </h3>
-              <h3>Địa chỉ : abcxyz</h3>
+              <h3>Họ và tên: Nguyễn Văn A</h3>
+              <h3>Số điện thoại: 0123456789</h3>
+              <h3>Địa chỉ: 123 Đường ABC, Quận XYZ</h3>
             </div>
-          </duv>
+            <div class="modal-cart-items"></div>
+          </div>
+
+          <div class="modal-footer">
+            <div class="total-group">
+              <span class="total-label">Tổng cộng:</span>
+              <span class="total-value"></span>
+              <div class="payment-method">
+                <label><input type="radio" name="payment" value="cod" /> Thanh toán khi hoàn thành dịch vụ</label>
+                <label><input type="radio" name="payment" value="bank" checked /> Chuyển khoản</label>
+              </div>
+            </div>
+            <button class="btn-confirm">Xác nhận đơn hàng</button>
+          </div>
         </div>
       </section>
     </main>
+
+    <script src="../js/cart.js"></script>
   </body>
 </html>
