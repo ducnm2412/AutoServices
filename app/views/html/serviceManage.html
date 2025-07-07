@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quản lý Dịch vụ</title>
+    <link rel="stylesheet" href="../css/cart.css" />
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background: #f0f0f0;
+      }
+      .action-btn {
+        margin: 0 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Quản lý Dịch vụ</h1>
+
+    <!-- Form Thêm/Sửa dịch vụ -->
+    <form id="serviceForm">
+      <input type="hidden" id="serviceID" name="serviceID" />
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="Tên dịch vụ"
+        required
+      />
+      <input type="number" id="price" name="price" placeholder="Giá" required />
+      <input
+        type="text"
+        id="description"
+        name="description"
+        placeholder="Mô tả"
+        required
+      />
+      <input
+        type="text"
+        id="categoryID"
+        name="categoryID"
+        placeholder="Mã loại dịch vụ"
+        required
+      />
+      <button type="submit" id="saveBtn">Thêm/Sửa</button>
+      <button type="button" onclick="resetForm()">Hủy</button>
+    </form>
+
+    <!-- Bảng danh sách dịch vụ -->
+    <table>
+      <thead>
+        <tr>
+          <th>Mã dịch vụ</th>
+          <th>Tên</th>
+          <th>Giá</th>
+          <th>Mô tả</th>
+          <th>Mã loại</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="serviceTableBody">
+        <!-- Dữ liệu sẽ được render ở đây -->
+      </tbody>
+    </table>
+
+    <script>
+      // Đường dẫn API, chỉnh lại cho đúng dự án của bạn
+      const API = "../../../controllers/ServiceController.php";
+
+      // Lấy danh sách dịch vụ
+      function fetchServices() {
+        fetch(`${API}?action=getAll`)
+          .then((res) => res.json())
+          .then((data) => {
+            const tbody = document.getElementById("serviceTableBody");
+            tbody.innerHTML = "";
+            data.forEach((service) => {
+              tbody.innerHTML += `
+                            <tr>
+                                <td>${service.serviceID}</td>
+                                <td>${service.name}</td>
+                                <td>${service.price}</td>
+                                <td>${service.description}</td>
+                                <td>${service.categoryID}</td>
+                                <td>
+                                    <button class="action-btn" onclick='editService(${JSON.stringify(
+                                      service
+                                    )})'>Sửa</button>
+                                    <button class="action-btn" onclick="deleteService('${
+                                      service.serviceID
+                                    }')">Xóa</button>
+                                </td>
+                            </tr>
+                        `;
+            });
+          });
+      }
+
+      // Thêm/Sửa dịch vụ
+      document.getElementById("serviceForm").onsubmit = function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        let action = formData.get("serviceID") ? "update" : "add";
+        fetch(`${API}?action=${action}`, {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then(() => {
+            fetchServices();
+            resetForm();
+          });
+      };
+
+      // Sửa
+      function editService(service) {
+        document.getElementById("serviceID").value = service.serviceID;
+        document.getElementById("name").value = service.name;
+        document.getElementById("price").value = service.price;
+        document.getElementById("description").value = service.description;
+        document.getElementById("categoryID").value = service.categoryID;
+      }
+
+      // Xóa
+      function deleteService(serviceID) {
+        if (confirm("Bạn có chắc muốn xóa?")) {
+          fetch(`${API}?action=delete`, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `serviceID=${encodeURIComponent(serviceID)}`,
+          })
+            .then((res) => res.json())
+            .then(() => fetchServices());
+        }
+      }
+
+      // Reset form
+      function resetForm() {
+        document.getElementById("serviceForm").reset();
+        document.getElementById("serviceID").value = "";
+      }
+
+      // Tải dữ liệu khi load trang
+      fetchServices();
+    </script>
+  </body>
+</html>
