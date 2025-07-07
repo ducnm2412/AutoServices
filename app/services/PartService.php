@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/../repositories/PartRepository.php';
+require_once __DIR__ . '/../repository/PartRepository.php';
+
 
 class PartService {
     private $partRepository;

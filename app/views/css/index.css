@@ -311,7 +311,7 @@ section .services {
   flex-direction: column;
   align-items: center;
   padding: 5rem 2rem;
-  background-image: url(/app/views/images/back-services-fotor-20250701143013.png);
+  background-image: url(/laptrinhweb/AutoServices/app/views/images/back-services-fotor-20250701143013.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -521,6 +521,111 @@ section .services {
   color: black;
   border-radius: 5px;
 }
+/*modal-section*/
+.modal {
+  position: fixed;
+  top: 0; bottom: 0; left: 0; right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  display: none;
+}
+
+.modal.active {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-container {
+  background-color: #fff;
+  width: 90%;
+  max-width: 900px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 14px #ccc;
+}
+
+.modal-header {
+  background: linear-gradient(to right, #0077ff, #00c2ff);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.modal-header h1 {
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+}
+
+.modal-header .btn-close i {
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.modal-header .btn-close i:hover {
+  color: #ff4d4d;
+  transform: scale(1.2);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-content {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.modal-content img {
+  width: 180px;
+  height: auto;
+  border-radius: 8px;
+}
+
+.modal-details p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.modal-footer {
+  margin-top: 1.5rem;
+  text-align: right;
+}
+
+#confirmOrderBtn {
+  padding: 10px 20px;
+  background-color: #0077ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+#confirmOrderBtn:hover {
+  background-color: #005fcc;
+}
+
 /* myteam-section*/
 .myteam-section {
   padding: 2rem 2rem;
@@ -646,7 +751,7 @@ input.error {
 }
 /*footer */
 .footer {
-  background-image: url(/app/views/images/footer2_img.jpg); 
+  background-image: url(/laptrinhweb/AutoServices/app/views/images/footer2_img.jpg); 
   color: #fff; 
   display: flex;
   flex-wrap: wrap;
