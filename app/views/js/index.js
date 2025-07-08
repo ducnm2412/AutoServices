@@ -246,6 +246,24 @@ function setupBuyButtons() {
         Number(price).toLocaleString() + "₫";
       document.getElementById("modal-product-img").src = img;
 
+      // Gán item vào nút xác nhận
+      const product = allProducts.find((p) => p.name === name);
+      console.log("🔍 Tìm thấy sản phẩm:", product);
+      if (product) {
+        document.getElementById("confirmOrderBtn").dataset.item =
+          JSON.stringify({
+            id: product.partID,
+            name: product.name,
+            price: product.price,
+            img: product.images,
+            quantity: 1,
+            type: "part"
+          });
+      } else {
+        console.warn("❌ Không tìm thấy product hoặc thiếu ID:", product);
+      }
+
+      // Mở modal
       document.getElementById("orderModal").classList.add("active");
     });
   });
@@ -254,6 +272,123 @@ function setupBuyButtons() {
 document.querySelector(".modal .btn-close").addEventListener("click", () => {
   document.getElementById("orderModal").classList.remove("active");
 });
+fetch(
+  "/laptrinhweb/AutoServices/app/controllers/auth.php?action=getCurrentUser"
+)
+  .then((res) => res.text()) // ⚠️ Đọc text thay vì json
+  .then((text) => {
+    console.log("🔍 Phản hồi từ server:", text);
+    try {
+      const data = JSON.parse(text);
+      if (data.success) {
+        const user = data.user;
+
+        document.getElementById("modal-customer-name").textContent = user.name;
+        document.getElementById("modal-customer-phone").textContent =
+          user.phoneNumber;
+        document.getElementById("modal-customer-address").textContent =
+          user.address;
+
+        window.loggedInUser = user;
+      } else {
+        console.warn("Chưa đăng nhập");
+      }
+    } catch (err) {
+      console.error("❌ Phản hồi không phải JSON:", text);
+    }
+  })
+  .catch((err) => {
+    console.error("Lỗi khi lấy người dùng:", err);
+  });
+
+document.getElementById("confirmOrderBtn").addEventListener("click", () => {
+  const confirmBtn = document.getElementById("confirmOrderBtn");
+  const item = JSON.parse(confirmBtn.dataset.item || "{}");
+
+  const user = window.loggedInUser;
+  if (!user) {
+    Swal.fire({
+      icon: "warning",
+      title: "Bạn chưa đăng nhập",
+      text: "Vui lòng đăng nhập để đặt hàng.",
+    });
+    return;
+  }
+
+  if (!item || !item.id) {
+    Swal.fire({
+      icon: "warning",
+      title: "Lỗi",
+      text: "Không tìm thấy sản phẩm để đặt hàng.",
+    });
+    return;
+  }
+
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "Đang xử lý...";
+  const payload = {
+  items: [item],
+  customer: {
+    name: user.name,
+    phone: user.phoneNumber,
+    address: user.address
+  }
+};
+
+console.log("📦 Đơn hàng gửi:", payload);
+  fetch(
+    "/laptrinhweb/AutoServices/app/controllers/OrderController.php?action=checkout",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      
+      body: JSON.stringify({
+        
+        items: [item],
+        customer: {
+          name: user.name,
+          phone: user.phoneNumber,
+          address: user.address,
+        },
+      }),
+    }
+  )
+    .then((res) => {
+      if (!res.ok) {
+        return res.json().then((error) => {
+          throw new Error(error.message || "Có lỗi xảy ra.");
+        });
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if (data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Thành công!",
+          text: "Đơn hàng của bạn đã được đặt.",
+          timer: 2000,
+          showConfirmButton: false,
+        }).then(() => {
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = "Xác nhận đơn hàng";
+          document.getElementById("orderModal").classList.remove("active");
+        });
+      } else {
+        throw new Error(data.message || "Lỗi đặt hàng.");
+      }
+    })
+    .catch((err) => {
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: "Đã xảy ra lỗi khi đặt hàng: " + err.message,
+      });
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = "Xác nhận đơn hàng";
+    });
+});
+
 /*xử lý giỏ hàng */
 function setupCartButtons() {
   const cartButtons = document.querySelectorAll(".cart button:last-child"); // Nút Giỏ hàng
@@ -318,12 +453,12 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
   fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=login", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ email, password }),
   })
-    .then(res => res.text()) // 👈 Nhận dưới dạng text trước
-    .then(text => {
+    .then((res) => res.text()) // 👈 Nhận dưới dạng text trước
+    .then((text) => {
       console.log("🔍 Phản hồi từ server:", text); // 👈 thêm dòng này
       try {
         const data = JSON.parse(text); // ✅ Parse JSON thủ công
@@ -333,7 +468,8 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
           alert("Đăng nhập thành công! Token: " + token);
 
           if (role === "admin") {
-            window.location.href = "/laptrinhweb/AutoServices/app/views/html/admin.html";
+            window.location.href =
+              "/laptrinhweb/AutoServices/app/views/html/admin.html";
           } else if (role === "customer") {
             window.location.href = "/laptrinhweb/AutoServices/"; // hoặc "/" nếu là trang chủ
           } else {
@@ -347,7 +483,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
         alert("Đã xảy ra lỗi khi xử lý phản hồi từ server.");
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("❌ Lỗi fetch:", err);
       alert("Không thể kết nối đến server.");
     });

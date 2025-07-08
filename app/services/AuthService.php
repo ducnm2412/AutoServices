@@ -41,5 +41,9 @@ class AuthService {
             return ['success' => false, 'message' => 'Sai email hoặc mật khẩu!'];
         }
     }
+    public function getCurrentUser() {
+    session_start();
+    return $_SESSION['user'] ?? null;
+}
 }
 ?> 

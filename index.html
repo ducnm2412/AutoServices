@@ -18,6 +18,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
   </head>
   <body>
     <div id="mod-container">
@@ -114,7 +116,7 @@
                 </h1>
               </div>
               <div class="box-2">
-                <img src="/AutoServices/app/views/images/autoservice-Photoroom.png" alt="" />
+                <img src="./app/views/images/autoservice-Photoroom.png" alt="" />
 
               </div>
             </div>
@@ -280,36 +282,37 @@
 
           <div class="product-list" id="product-list"></div>
           <!-- Modal Xác Nhận Đơn Hàng -->
-          <div id="orderModal" class="modal">
-            <div class="modal-container">
-              <div class="modal-header">
-                <h1>Xác nhận đơn hàng</h1>
-                <div class="btn-close">
-                  <i class="ri-close-circle-line"></i>
-                </div>
-              </div>
-              <div class="modal-body">
-                <div class="modal-content">
-                  <img id="modal-product-img" src="" alt="Ảnh sản phẩm" />
-                  <div class="modal-details">
-                    <p>
-                      <strong>Sản phẩm:</strong>
-                      <span id="modal-product-name"></span>
-                    </p>
-                    <p>
-                      <strong>Giá:</strong>
-                      <span id="modal-product-price"></span>
-                    </p>
-                    <p><strong>Người nhận:</strong> Nguyễn Văn A</p>
-                    <p><strong>Số điện thoại:</strong> 0987654321</p>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button id="confirmOrderBtn">Xác nhận đơn hàng</button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <!-- Modal xác nhận đơn hàng -->
+<div id="orderModal" class="modal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h1>Xác nhận đơn hàng</h1>
+      <div class="btn-close"><i class="ri-close-circle-line"></i></div>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-content">
+        <img id="modal-product-img" src="" alt="Ảnh sản phẩm" />
+        <div class="modal-details">
+          <p><strong>Sản phẩm:</strong> <span id="modal-product-name"></span></p>
+          <p><strong>Giá:</strong> <span id="modal-product-price"></span></p>
+        </div>
+      </div>
+
+      <!-- Thông tin người nhận -->
+      <div class="modal-details">
+  <p><strong>Người nhận:</strong> <span id="modal-customer-name"></span></p>
+  <p><strong>Số điện thoại:</strong> <span id="modal-customer-phone"></span></p>
+  <p><strong>Địa chỉ:</strong> <span id="modal-customer-address"></span></p>
+</div>
+    </div>
+
+    <div class="modal-footer">
+      <button id="confirmOrderBtn">Xác nhận đơn hàng</button>
+    </div>
+  </div>
+</div>
+
           <div class="myteam-section">
             <div class="myteam-img">
               <img src="./app/views/images/doingunhansu.jpg" alt="" />
