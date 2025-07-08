@@ -14,8 +14,8 @@ class ServiceRepository {
     }
 
     // Thêm dịch vụ mới
-    public function add($serviceID, $name, $price, $description, $categoryID) {
-        return $this->serviceModel->addService($serviceID, $name, $price, $description, $categoryID);
+    public function add( $name, $price, $description, $categoryID) {
+        return $this->serviceModel->addService( $name, $price, $description, $categoryID);
     }
 
     // Xóa dịch vụ

@@ -10,8 +10,10 @@ class PartService {
     }
 
     // Thêm sản phẩm mới (có thể kiểm tra dữ liệu đầu vào ở đây)
-    public function addPart($partID, $name, $price, $quantity, $images, $categoryID) {
-        if (empty($partID) || empty($name) || empty($price) || empty($quantity) || empty($images) || empty($categoryID)) {
+    // Removed $partID from parameters as it's auto-incrementing in the database
+    public function addPart($name, $price, $quantity, $images, $categoryID) {
+        // Removed empty($partID) from validation as partID is auto-generated
+        if (empty($name) || empty($price) || empty($quantity) || empty($images) || empty($categoryID)) {
             return ['success' => false, 'message' => 'Vui lòng nhập đầy đủ thông tin sản phẩm!'];
         }
         if (!is_numeric($price) || $price <= 0) {
@@ -20,7 +22,8 @@ class PartService {
         if (!is_numeric($quantity) || $quantity < 0) {
             return ['success' => false, 'message' => 'Số lượng phải là số không âm!'];
         }
-        $result = $this->partRepository->add($partID, $name, $price, $quantity, $images, $categoryID);
+        // Adjusted the call to PartRepository::add to no longer pass $partID
+        $result = $this->partRepository->add($name, $price, $quantity, $images, $categoryID);
         if ($result) {
             return ['success' => true, 'message' => 'Thêm sản phẩm thành công!'];
         } else {
@@ -53,4 +56,4 @@ class PartService {
         return $this->partRepository->getByCategory($categoryID);
     }
 }
-?> 
+?>

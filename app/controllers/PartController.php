@@ -35,14 +35,20 @@ class PartController {
     // Thêm phụ tùng mới (chỉ admin)
     public function add() {
         $this->checkAdminAuth();
-        $data = json_decode(file_get_contents('php://input'), true);
+        // Changed to use $_POST as partManage.js sends FormData
+        $name = $_POST['name'] ?? null;
+        $price = $_POST['price'] ?? null;
+        $quantity = $_POST['quantity'] ?? null;
+        $images = $_POST['images'] ?? null;
+        $categoryID = $_POST['categoryID'] ?? null;
+
+        // partID is auto-incrementing, so it's not passed to addPart
         $result = $this->partService->addPart(
-            $data['partID'],
-            $data['name'],
-            $data['price'],
-            $data['quantity'],
-            $data['images'],
-            $data['categoryID']
+            $name,
+            $price,
+            $quantity,
+            $images,
+            $categoryID
         );
         if ($result['success']) {
             http_response_code(201);
@@ -56,16 +62,25 @@ class PartController {
     // Cập nhật phụ tùng (chỉ admin)
     public function update() {
         $this->checkAdminAuth();
-        $data = json_decode(file_get_contents('php://input'), true);
+        // Changed to use $_POST as partManage.js sends FormData
+        $partID = (int)($_POST['partID'] ?? 0); // Cast partID to integer
+        $name = $_POST['name'] ?? null;
+        $price = $_POST['price'] ?? null;
+        $quantity = $_POST['quantity'] ?? null;
+        $images = $_POST['images'] ?? null;
+        $categoryID = $_POST['categoryID'] ?? null;
+
         $result = $this->partService->updatePart(
-            $data['partID'],
-            $data['name'],
-            $data['price'],
-            $data['quantity'],
-            $data['images'],
-            $data['categoryID']
+            $partID, // partID is required for update
+            $name,
+            $price,
+            $quantity,
+            $images,
+            $categoryID
         );
-        if ($result) {
+        // Note: The previous logic for $result check was simplified.
+        // It should check for success from the PartService method return if it's consistent.
+        if ($result) { // Assuming updatePart returns true on success, false on failure
             echo json_encode(['success' => true, 'message' => 'Cập nhật phụ tùng thành công!']);
         } else {
             http_response_code(400);
@@ -74,17 +89,19 @@ class PartController {
     }
 
     // Xóa phụ tùng (chỉ admin)
-    public function delete() {
-        $this->checkAdminAuth();
-        $data = json_decode(file_get_contents('php://input'), true);
-        $result = $this->partService->deletePart($data['partID']);
-        if ($result) {
-            echo json_encode(['success' => true, 'message' => 'Xóa phụ tùng thành công!']);
-        } else {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Xóa phụ tùng thất bại.']);
-        }
+    // Trong PartController.php, bên trong hàm delete():
+public function delete() {
+    $this->checkAdminAuth();
+    $partID = (int)($_POST['partID'] ?? 0);
+    error_log("Debug: Deleting partID = " . $partID); // Thêm dòng này để kiểm tra
+    $result = $this->partService->deletePart($partID);
+    if ($result) {
+        echo json_encode(['success' => true, 'message' => 'Xóa phụ tùng thành công!']);
+    } else {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Xóa phụ tùng thất bại.']);
     }
+}
 }
 
 // Routing

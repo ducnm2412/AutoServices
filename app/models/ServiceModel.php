@@ -16,14 +16,13 @@ class ServiceModel extends Database {
     }
 
     // Thêm dịch vụ mới
-    public function addService($serviceID, $name, $price, $description, $categoryID) {
-        $stmt = $this->conn->prepare(
-            "INSERT INTO Service (serviceID, name, price, description, categoryID) VALUES (?, ?, ?, ?, ?)"
-        );
-        $stmt->bind_param("ssdss", $serviceID, $name, $price, $description, $categoryID);
-        return $stmt->execute();
-    }
-
+    public function addService($name, $price, $description, $categoryID) {
+       $stmt = $this->conn->prepare(
+           "INSERT INTO Service (name, price, description, categoryID) VALUES (?, ?, ?, ?)"
+       );
+       $stmt->bind_param("sdss", $name, $price, $description, $categoryID);
+       return $stmt->execute();
+   }
     // Xóa dịch vụ
     public function removeService($serviceID) {
         $stmt = $this->conn->prepare(

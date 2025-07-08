@@ -4,11 +4,13 @@ require_once __DIR__ . '/../../core/Database.php';
 
 class PartModel extends Database {
     // Thêm sản phẩm mới
-    public function addPart($partID, $name, $price, $quantity, $images, $categoryID) {
+    public function addPart($name, $price, $quantity, $images, $categoryID) {
         $stmt = $this->conn->prepare(
-            "INSERT INTO Part (partID, name, price, quantity, images, categoryID) VALUES (?, ?, ?, ?, ?, ?)"
+            // Removed partID from INSERT statement as it's auto-incrementing
+            "INSERT INTO Part (name, price, quantity, images, categoryID) VALUES (?, ?, ?, ?, ?)"
         );
-        $stmt->bind_param("ssdis s", $partID, $name, $price, $quantity, $images, $categoryID);
+        // Adjusted bind_param types: name (string), price (double), quantity (integer), images (string), categoryID (string)
+        $stmt->bind_param("sdiss", $name, $price, $quantity, $images, $categoryID);
         return $stmt->execute();
     }
 
@@ -17,7 +19,8 @@ class PartModel extends Database {
         $stmt = $this->conn->prepare(
             "DELETE FROM Part WHERE partID = ?"
         );
-        $stmt->bind_param("s", $partID);
+        // Changed bind_param type for partID to 'i' (integer)
+        $stmt->bind_param("i", $partID);
         return $stmt->execute();
     }
 
@@ -26,7 +29,9 @@ class PartModel extends Database {
         $stmt = $this->conn->prepare(
             "UPDATE Part SET name = ?, price = ?, quantity = ?, images = ?, categoryID = ? WHERE partID = ?"
         );
-        $stmt->bind_param("sdisss", $name, $price, $quantity, $images, $categoryID, $partID);
+        // Changed bind_param type for partID to 'i' (integer) at the end
+        // Parameters: name (string), price (double), quantity (integer), images (string), categoryID (string), partID (integer)
+        $stmt->bind_param("sdisis", $name, $price, $quantity, $images, $categoryID, $partID);
         return $stmt->execute();
     }
 
@@ -75,4 +80,4 @@ class PartModel extends Database {
         return $parts;
     }
 }
-?> 
+?>
