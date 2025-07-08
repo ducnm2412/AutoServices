@@ -1,5 +1,5 @@
 <?php
-require_once 'core/Database.php';
+require_once __DIR__ . '/../../core/Database.php';
 
 class AdminModel extends Database {
     public function addAdmin($userID, $role) {

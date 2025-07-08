@@ -8,7 +8,7 @@ if (!orderID) {
   document.body.innerHTML = "<h2>Không tìm thấy mã đơn hàng!</h2>";
 } else {
   fetch(
-    `../../../controllers/OrderController.php?action=getOrderDetails&orderID=${orderID}`
+    `/laptrinhweb/AutoServices/app/controllers/OrderController.php?action=getOrderDetails&orderID=${orderID}`
   )
     .then((res) => res.json())
     .then((result) => {

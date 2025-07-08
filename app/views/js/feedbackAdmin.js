@@ -1,4 +1,4 @@
-fetch("../../../controllers/FeedbackController.php?action=getAllWithUserInfo")
+fetch("/laptrinhweb/AutoServices/app/controllers/FeedbackController.php?action=getAllWithUserInfo")
   .then((res) => res.json())
   .then((result) => {
     if (!result.success) {

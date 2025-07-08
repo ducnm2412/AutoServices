@@ -1,6 +1,6 @@
 // Lấy danh sách đơn hàng
 function fetchOrders() {
-  fetch("../../../controllers/OrderController.php?action=getAllOrders")
+  fetch("/laptrinhweb/AutoServices/app/controllers/OrderController.php?action=getAllOrders")
     .then((res) => res.json())
     .then((data) => {
       if (!data.success) {

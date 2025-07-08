@@ -46,7 +46,7 @@ function renderContacts(contacts) {
 }
 
 function fetchContacts() {
-  fetch("../../../controllers/ContactController.php?action=getAll")
+  fetch("/laptrinhweb/AutoServices/app/controllers/ContactController.php?action=getAll")
     .then((res) => res.json())
     .then((result) => {
       if (!result.success) {
@@ -70,7 +70,7 @@ window.sendReply = function (event, contactID) {
   const form = event.target;
   const adminReply = form.adminReply.value.trim();
   if (!adminReply) return false;
-  fetch("../../../controllers/ContactController.php?action=reply", {
+  fetch("/laptrinhweb/AutoServices/app/controllers/ContactController.php?action=reply", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ contactID, adminReply }),
