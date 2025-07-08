@@ -9,8 +9,10 @@ class PartRepository {
     }
 
     // Thêm sản phẩm mới
-    public function add($partID, $name, $price, $quantity, $images, $categoryID) {
-        return $this->partModel->addPart($partID, $name, $price, $quantity, $images, $categoryID);
+    // Removed $partID from parameters as it's auto-incrementing in the database
+    public function add($name, $price, $quantity, $images, $categoryID) {
+        // Adjusted the call to PartModel::addPart to no longer pass $partID
+        return $this->partModel->addPart($name, $price, $quantity, $images, $categoryID);
     }
 
     // Xóa sản phẩm

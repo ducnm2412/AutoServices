@@ -308,3 +308,47 @@ function togglePassword() {
     toggleIcon.textContent = "👁️"; // đổi lại icon khi ẩn mật khẩu
   }
 }
+
+document.getElementById("loginForm").addEventListener("submit", function (e) {
+  e.preventDefault(); // Ngăn reload form
+
+  const email = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email, password })
+  })
+    .then(res => res.text()) // 👈 Nhận dưới dạng text trước
+    .then(text => {
+      console.log("🔍 Phản hồi từ server:", text); // 👈 thêm dòng này
+      try {
+        const data = JSON.parse(text); // ✅ Parse JSON thủ công
+        if (data.success) {
+          const role = data.user.role;
+          const token = data.token;
+          alert("Đăng nhập thành công! Token: " + token);
+
+          if (role === "admin") {
+            window.location.href = "/laptrinhweb/AutoServices/app/views/html/admin.html";
+          } else if (role === "customer") {
+            window.location.href = "/laptrinhweb/AutoServices/"; // hoặc "/" nếu là trang chủ
+          } else {
+            alert("Không xác định vai trò.");
+          }
+        } else {
+          alert(data.message || "Đăng nhập thất bại.");
+        }
+      } catch (err) {
+        console.error("❌ Phản hồi không phải JSON:", text);
+        alert("Đã xảy ra lỗi khi xử lý phản hồi từ server.");
+      }
+    })
+    .catch(err => {
+      console.error("❌ Lỗi fetch:", err);
+      alert("Không thể kết nối đến server.");
+    });
+});

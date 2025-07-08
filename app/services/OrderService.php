@@ -32,6 +32,7 @@ class OrderService {
     }
 
 public function checkout($userID, $cart) {
+    error_log("Dữ liệu giỏ hàng nhận được từ frontend: " . print_r($cart, true)); // THÊM DÒNG NÀY
     if (empty($userID) || empty($cart) || !is_array($cart)) {
         return ['success' => false, 'message' => 'Thông tin giỏ hàng không hợp lệ!'];
     }
