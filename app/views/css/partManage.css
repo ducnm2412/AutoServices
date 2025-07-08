@@ -23,15 +23,16 @@ form {
 
 form input[type="text"],
 form input[type="number"] {
-  padding: 10px 16px;
-  border: 1.5px solid #e67e22;
-  border-radius: 6px;
-  font-size: 1.08em;
+   padding: 10px 16px;
+  border: 2px solid #e67e22;
+  border-radius: 10px;
+  font-size: 1em;
   outline: none;
-  transition: border 0.2s;
   background: #fff7f0;
   color: #222;
-  min-width: 180px;
+  min-width: 200px;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: none;
 }
 
 form input[type="text"]:focus,
@@ -46,12 +47,14 @@ input[type="button"] {
   background: #e74c3c;
   color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 10px 22px;
+  border-radius: 10px;
+  padding: 10px 16px;
   font-size: 1.08em;
-  margin-left: 4px;
+  margin-left: 8px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, box-shadow 0.2s;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.08);
 }
 
 form button:hover,
