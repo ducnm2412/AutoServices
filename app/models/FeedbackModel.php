@@ -59,37 +59,37 @@ class FeedbackModel extends Database {
     }
 
     // Thêm hàm này vào trong class FeedbackModel
-    public function getFeedbacksByFilters($filters) {
-        $sql = "SELECT * FROM Feedback WHERE 1=1";
-        $params = [];
-        $types = "";
+public function getFeedbacksByFilters($filters) {
+    $sql = "SELECT * FROM Feedback WHERE 1=1";
+    $params = [];
+    $types = "";
 
-        if (!empty($filters['userID'])) {
-            $sql .= " AND userID = ?";
-            $params[] = $filters['userID'];
-            $types .= "s";
-        }
-
-        if (!empty($filters['orderID'])) {
-            $sql .= " AND orderID = ?";
-            $params[] = $filters['orderID'];
-            $types .= "s";
-        }
-
-        $sql .= " ORDER BY feedbackDate DESC";
-
-        $stmt = $this->conn->prepare($sql);
-        if (!empty($params)) {
-            $stmt->bind_param($types, ...$params);
-        }
-        
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $feedbacks = [];
-        while ($row = $result->fetch_assoc()) {
-            $feedbacks[] = $row;
-        }
-        return $feedbacks;
+    if (!empty($filters['userID'])) {
+        $sql .= " AND userID = ?";
+        $params[] = $filters['userID'];
+        $types .= "s";
     }
+
+    if (!empty($filters['orderID'])) {
+        $sql .= " AND orderID = ?";
+        $params[] = $filters['orderID'];
+        $types .= "s";
+    }
+
+    $sql .= " ORDER BY feedbackDate DESC";
+
+    $stmt = $this->conn->prepare($sql);
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
+    
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $feedbacks = [];
+    while ($row = $result->fetch_assoc()) {
+        $feedbacks[] = $row;
+    }
+    return $feedbacks;
+}
 }
 ?> 
