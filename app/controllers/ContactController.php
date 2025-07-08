@@ -26,17 +26,17 @@ class ContactController {
         echo json_encode($result);
     }
 
-    // Lấy tất cả liên hệ
-    public function getAll() {
-        // Chỉ admin mới được xem danh sách liên hệ
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            http_response_code(403);
-            echo json_encode(['success' => false, 'message' => 'Bạn không có quyền truy cập!']);
-            exit();
+        // Lấy tất cả liên hệ
+        public function getAll() {
+            // Chỉ admin mới được xem danh sách liên hệ
+            if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Bạn không có quyền truy cập!']);
+                exit();
+            }
+            $contacts = $this->contactService->getAllContacts();
+            echo json_encode(['success' => true, 'contacts' => $contacts]);
         }
-        $contacts = $this->contactService->getAllContacts();
-        echo json_encode(['success' => true, 'contacts' => $contacts]);
-    }
 
     // Xóa liên hệ
     public function remove() {
@@ -61,6 +61,31 @@ class ContactController {
             echo json_encode(['success' => false, 'message' => 'Xóa liên hệ thất bại!']);
         }
     }
+
+    // Admin trả lời liên hệ (nối thêm vào message)
+    public function reply() {
+        // Chỉ admin mới được trả lời
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'Bạn không có quyền truy cập!']);
+            exit();
+        }
+        $data = json_decode(file_get_contents('php://input'), true);
+        $contactID = $data['contactID'] ?? null;
+        $adminReply = $data['adminReply'] ?? '';
+        if (!$contactID) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Thiếu mã liên hệ!']);
+            exit();
+        }
+        $result = $this->contactService->replyContact($contactID, $adminReply);
+        if ($result['success']) {
+            echo json_encode($result);
+        } else {
+            http_response_code(400);
+            echo json_encode($result);
+        }
+    }
 }
 
 // Routing
@@ -76,6 +101,9 @@ switch ($action) {
         break;
     case 'remove':
         $controller->remove();
+        break;
+    case 'reply':
+        $controller->reply();
         break;
     default:
         http_response_code(404);
