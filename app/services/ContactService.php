@@ -36,5 +36,18 @@ class ContactService {
     public function removeContact($contactID) {
         return $this->contactRepository->remove($contactID);
     }
+
+    // Admin trả lời liên hệ (nối thêm vào message)
+    public function replyContact($contactID, $adminReply) {
+        if (empty($adminReply)) {
+            return ['success' => false, 'message' => 'Nội dung trả lời không được để trống!'];
+        }
+        $result = $this->contactRepository->reply($contactID, $adminReply);
+        if ($result) {
+            return ['success' => true, 'message' => 'Đã trả lời liên hệ!'];
+        } else {
+            return ['success' => false, 'message' => 'Trả lời thất bại!'];
+        }
+    }
 }
 ?> 

@@ -1,5 +1,5 @@
 <?php
-require_once 'core/Database.php';
+require_once __DIR__ . '/../../core/Database.php';
 
 class ContactModel extends Database {
     // Thêm liên hệ mới
@@ -32,5 +32,24 @@ class ContactModel extends Database {
         $stmt->bind_param("i", $contactID);
         return $stmt->execute();
     }
+    // Admin trả lời liên hệ (nối thêm vào message)
+public function replyContact($contactID, $adminReply) {
+    // Lấy message cũ
+    $stmt = $this->conn->prepare("SELECT message FROM contact WHERE contactID = ?");
+    $stmt->bind_param("i", $contactID);
+    $stmt->execute();
+    $stmt->bind_result($oldMessage);
+    if ($stmt->fetch()) {
+        $stmt->close();
+        // Nối thêm trả lời admin
+        $newMessage = $oldMessage . "\n---\nAdmin: " . $adminReply;
+        $stmt2 = $this->conn->prepare("UPDATE contact SET message = ? WHERE contactID = ?");
+        $stmt2->bind_param("si", $newMessage, $contactID);
+        return $stmt2->execute();
+    } else {
+        $stmt->close();
+        return false;
+    }
+}
 }
 ?>

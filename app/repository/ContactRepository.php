@@ -22,5 +22,10 @@ class ContactRepository {
     public function remove($contactID) {
         return $this->contactModel->removeContact($contactID);
     }
+
+    // Trả lời liên hệ (admin)
+    public function reply($contactID, $adminReply) {
+        return $this->contactModel->replyContact($contactID, $adminReply);
+    }
 }
 ?> 

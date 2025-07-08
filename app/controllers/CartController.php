@@ -41,14 +41,14 @@ class CartController {
     public function update() {
         $data = json_decode(file_get_contents('php://input'), true);
         $this->cartService->updateQuantity($data['id'], $data['type'], $data['quantity']);
-        echo json_encode(['success' => true, 'message' => 'Cập nhật giỏ hàng thành công!']);
+                echo json_encode(['success' => true, 'message' => 'Cập nhật giỏ hàng thành công!']);
     }
 
     // Xóa một item khỏi giỏ hàng
     public function remove() {
         $data = json_decode(file_get_contents('php://input'), true);
         $this->cartService->removeFromCart($data['id'], $data['type']);
-        echo json_encode(['success' => true, 'message' => 'Đã xóa khỏi giỏ hàng.']);
+            echo json_encode(['success' => true, 'message' => 'Đã xóa khỏi giỏ hàng.']);
     }
 
     // Xóa toàn bộ giỏ hàng

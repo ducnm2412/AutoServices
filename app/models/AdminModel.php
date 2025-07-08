@@ -1,5 +1,5 @@
 <?php
-require_once 'core/Database.php';
+require_once __DIR__ . '/../../core/Database.php';
 
 class AdminModel extends Database {
     public function addAdmin($userID, $role) {
@@ -83,17 +83,17 @@ class AdminModel extends Database {
     }
 
     // Xem tất cả đơn hàng
-    public function viewAllOrders() {
-        $sql = "SELECT * FROM `Order`";
-        $result = $this->conn->query($sql);
-        $orders = [];
-        if ($result && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $orders[] = $row;
-            }
+public function viewAllOrders() {
+    $sql = "SELECT * FROM `Order`";
+    $result = $this->conn->query($sql);
+    $orders = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $orders[] = $row;
         }
-        return $orders;
     }
+    return $orders;
+}
     // Xem tất cả phản hồi
     public function viewFeedback() {
         $sql = "SELECT * FROM Feedback";

@@ -61,6 +61,13 @@ class FeedbackController {
 
         echo json_encode(['success' => true, 'feedbacks' => $feedbacks]);
     }
+
+    // Admin xem tất cả feedback kèm thông tin user
+    public function getAllWithUserInfo() {
+        $this->checkAuth(true); // Chỉ admin được xem
+        $feedbacks = $this->feedbackService->getAllFeedbacksWithUserInfo();
+        echo json_encode(['success' => true, 'feedbacks' => $feedbacks]);
+    }
 }
 
 // Routing
@@ -73,6 +80,9 @@ switch ($action) {
         break;
     case 'getAll':
         $controller->getAll();
+        break;
+    case 'getAllWithUserInfo':
+        $controller->getAllWithUserInfo();
         break;
     default:
         http_response_code(404);

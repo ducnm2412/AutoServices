@@ -3,31 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <title>Quản lý Phụ tùng</title>
-    <link rel="stylesheet" href="../css/cart.css" />
-    <style>
-      /* Thêm CSS tùy chỉnh nếu cần */
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      th,
-      td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: center;
-      }
-      th {
-        background: #f0f0f0;
-      }
-      .action-btn {
-        margin: 0 4px;
-      }
-    </style>
+    <link rel="stylesheet" href="../css/partManage.css" />
   </head>
   <body>
     <h1>Quản lý Phụ tùng</h1>
-
-    <!-- Form Thêm/Sửa phụ tùng -->
     <form id="partForm">
       <input type="hidden" id="partID" name="partID" />
       <input
@@ -59,11 +38,9 @@
         placeholder="Mã loại phụ tùng"
         required
       />
-      <button type="submit" id="saveBtn">Thêm/Sửa</button>
+      <button type="submit" id="saveBtn">Thêm</button>
       <button type="button" onclick="resetForm()">Hủy</button>
     </form>
-
-    <!-- Bảng danh sách phụ tùng -->
     <table>
       <thead>
         <tr>
@@ -73,94 +50,10 @@
           <th>Số lượng</th>
           <th>Ảnh</th>
           <th>Mã loại</th>
-          <th>Hành động</th>
         </tr>
       </thead>
-      <tbody id="partTableBody">
-        <!-- Dữ liệu sẽ được render ở đây -->
-      </tbody>
+      <tbody id="partTableBody"></tbody>
     </table>
-
-    <script>
-      // Lấy danh sách phụ tùng
-      function fetchParts() {
-        fetch("../../../controllers/PartController.php?action=getAll")
-          .then((res) => res.json())
-          .then((data) => {
-            const tbody = document.getElementById("partTableBody");
-            tbody.innerHTML = "";
-            data.forEach((part) => {
-              tbody.innerHTML += `
-                            <tr>
-                                <td>${part.partID}</td>
-                                <td>${part.name}</td>
-                                <td>${part.price}</td>
-                                <td>${part.quantity}</td>
-                                <td><img src="${
-                                  part.images
-                                }" alt="Ảnh" width="60"></td>
-                                <td>${part.categoryID}</td>
-                                <td>
-                                    <button class="action-btn" onclick='editPart(${JSON.stringify(
-                                      part
-                                    )})'>Sửa</button>
-                                    <button class="action-btn" onclick="deletePart('${
-                                      part.partID
-                                    }')">Xóa</button>
-                                </td>
-                            </tr>
-                        `;
-            });
-          });
-      }
-
-      // Thêm/Sửa phụ tùng
-      document.getElementById("partForm").onsubmit = function (e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        let action = formData.get("partID") ? "update" : "add";
-        fetch(`../controllers/PartController.php?action=${action}`, {
-          method: "POST",
-          body: formData,
-        })
-          .then((res) => res.json())
-          .then(() => {
-            fetchParts();
-            resetForm();
-          });
-      };
-
-      // Sửa
-      function editPart(part) {
-        document.getElementById("partID").value = part.partID;
-        document.getElementById("name").value = part.name;
-        document.getElementById("price").value = part.price;
-        document.getElementById("quantity").value = part.quantity;
-        document.getElementById("images").value = part.images;
-        document.getElementById("categoryID").value = part.categoryID;
-      }
-
-      // Xóa
-      function deletePart(partID) {
-        if (confirm("Bạn có chắc muốn xóa?")) {
-          fetch(`../../../controllers/PartController.php?action=delete`, {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `partID=${encodeURIComponent(partID)}`,
-          })
-            .then((res) => res.json())
-            .then(() => fetchParts());
-        }
-      }
-
-      // Reset form
-      function resetForm() {
-        document.getElementById("partForm").reset();
-        document.getElementById("partID").value = "";
-      }
-
-      // Tải dữ liệu khi load trang
-      fetchParts();
-    </script>
+    <script src="../js/partManage.js"></script>
   </body>
 </html>

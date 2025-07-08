@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../repositories/ServiceRepository.php';
+require_once __DIR__ . '/../repository/ServiceRepository.php';
 
 class ServiceService {
     private $serviceRepository;

@@ -50,11 +50,6 @@ class OrderController {
         $this->checkAuth();
         $orderID = $_GET['orderID'] ?? 0;
         $invoiceData = $this->orderService->generateInvoice($orderID);
-        if (!$invoiceData['order'] || ($_SESSION['user']['role'] !== 'admin' && $invoiceData['order']['userID'] !== $_SESSION['user']['userID'])) {
-            http_response_code(404);
-            echo json_encode(['success' => false, 'message' => 'Không tìm thấy đơn hàng hoặc bạn không có quyền xem.']);
-            exit();
-        }
         echo json_encode(['success' => true, 'data' => $invoiceData]);
     }
     
@@ -62,6 +57,11 @@ class OrderController {
     public function getAllOrders() {
         $this->checkAuth(true); // Chỉ Admin mới được vào
         $orders = $this->orderService->getAllOrders();
+        if (!$invoiceData['order'] || ($_SESSION['user']['role'] !== 'admin' && $invoiceData['order']['userID'] !== $_SESSION['user']['userID'])) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Không tìm thấy đơn hàng hoặc bạn không có quyền xem.']);
+            exit();
+        }
         echo json_encode(['success' => true, 'orders' => $orders]);
     }
 
