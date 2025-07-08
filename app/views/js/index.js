@@ -8,7 +8,7 @@ function runTyped() {
 
   // Tìm phần tử .simple-text trong slide đang active
   const currentItem = items[active];
-  const simpleText = currentItem.querySelector('.simple-text');
+  const simpleText = currentItem.querySelector(".simple-text");
 
   if (simpleText) {
     typed = new Typed(simpleText, {
@@ -21,11 +21,11 @@ function runTyped() {
   }
 }
 
-let listHome = document.querySelector('.slider-home .list');
-let items = document.querySelectorAll('.slider-home .list .item');
-let dots = document.querySelectorAll('.slider-home .dots li');
-let prev = document.getElementById('prev');
-let next = document.getElementById('next');
+let listHome = document.querySelector(".slider-home .list");
+let items = document.querySelectorAll(".slider-home .list .item");
+let dots = document.querySelectorAll(".slider-home .dots li");
+let prev = document.getElementById("prev");
+let next = document.getElementById("next");
 
 let active = 0;
 let lengthItems = items.length - 1;
@@ -47,56 +47,64 @@ prev.onclick = function () {
   }
   reLoadSlider();
 };
-let refreshSlider = setInterval(()=> {next.click()}, 3000)
+let refreshSlider = setInterval(() => {
+  next.click();
+}, 3000);
 function reLoadSlider() {
   let offset = items[active].offsetLeft;
   listHome.style.transform = `translateX(-${offset}px)`;
 
-  let lastActiveDot = document.querySelector('.slider-home .dots li.active');
-  lastActiveDot.classList.remove('active');
-  dots[active].classList.add('active');
+  let lastActiveDot = document.querySelector(".slider-home .dots li.active");
+  lastActiveDot.classList.remove("active");
+  dots[active].classList.add("active");
   clearInterval(refreshSlider);
-  refreshSlider = setInterval(()=> {next.click()}, 3000);
+  refreshSlider = setInterval(() => {
+    next.click();
+  }, 3000);
   runTyped();
 }
 
 dots.forEach((li, key) => {
-    li.addEventListener('click', function(){
-        active = key;
-        reLoadSlider();
-    })
-})
+  li.addEventListener("click", function () {
+    active = key;
+    reLoadSlider();
+  });
+});
 
 // Dừng slider nếu không nhìn thấy slider-home
-window.addEventListener('scroll', () => {
-  const slider = document.querySelector('.slider-home');
+window.addEventListener("scroll", () => {
+  const slider = document.querySelector(".slider-home");
   const rect = slider.getBoundingClientRect();
-  
+
   // Nếu slider không còn trong vùng hiển thị → dừng auto slide
   if (rect.bottom < 0 || rect.top > window.innerHeight) {
     clearInterval(refreshSlider);
   } else {
     if (!refreshSlider) {
-      refreshSlider = setInterval(() => { next.click(); }, 3000);
+      refreshSlider = setInterval(() => {
+        next.click();
+      }, 3000);
     }
   }
 });
-const menuBtn = document.querySelector('.btn-menu');
-const closeBtn = document.querySelector('.btn-close');
-const navBg = document.querySelector('.nav-bg');
+const menuBtn = document.querySelector(".btn-menu");
+const closeBtn = document.querySelector(".btn-close");
+const navBg = document.querySelector(".nav-bg");
 
-menuBtn.addEventListener('click', function() {
-  navBg.classList.add('active');
+menuBtn.addEventListener("click", function () {
+  navBg.classList.add("active");
 });
 
-closeBtn.addEventListener('click', function() {
-  navBg.classList.remove('active');
+closeBtn.addEventListener("click", function () {
+  navBg.classList.remove("active");
 });
 /*products-cart*/
 let allProducts = [];
 
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("/laptrinhweb/AutoServices/app/controllers/PartController.php?action=getAll")
+  fetch(
+    "/laptrinhweb/AutoServices/app/controllers/PartController.php?action=getAll"
+  )
     .then((res) => res.json())
     .then((data) => {
       if (data.success) {
@@ -104,7 +112,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // ✅ Hiển thị mặc định sản phẩm Lốp (pcat02)
         const defaultCategory = "pcat02";
-        const filtered = allProducts.filter(p => p.categoryID === defaultCategory);
+        const filtered = allProducts.filter(
+          (p) => p.categoryID === defaultCategory
+        );
         renderProducts(filtered);
 
         // ✅ Đặt nút "Lốp" là active (nếu chưa)
@@ -132,11 +142,13 @@ document.addEventListener("DOMContentLoaded", function () {
       let filtered = [];
 
       if (category === "lop") {
-        filtered = allProducts.filter(p => p.categoryID === "pcat02");
+        filtered = allProducts.filter((p) => p.categoryID === "pcat02");
       } else if (category === "acquy") {
-        filtered = allProducts.filter(p => p.categoryID === "pcat03");
+        filtered = allProducts.filter((p) => p.categoryID === "pcat03");
       } else {
-        filtered = allProducts.filter(p => p.categoryID !== "pcat02" && p.categoryID !== "pcat03");
+        filtered = allProducts.filter(
+          (p) => p.categoryID !== "pcat02" && p.categoryID !== "pcat03"
+        );
       }
 
       renderProducts(filtered);
@@ -144,7 +156,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
-
 
 function renderProducts(products) {
   const productList = document.querySelector(".product-list");
@@ -178,7 +189,6 @@ function renderProducts(products) {
   setupBuyButtons();
   setupCartButtons();
 }
-
 
 /*
 document.addEventListener("DOMContentLoaded", () => {
@@ -232,7 +242,8 @@ function setupBuyButtons() {
       const img = btn.getAttribute("data-img");
 
       document.getElementById("modal-product-name").textContent = name;
-      document.getElementById("modal-product-price").textContent = Number(price).toLocaleString() + "₫";
+      document.getElementById("modal-product-price").textContent =
+        Number(price).toLocaleString() + "₫";
       document.getElementById("modal-product-img").src = img;
 
       document.getElementById("orderModal").classList.add("active");
@@ -251,14 +262,15 @@ function setupCartButtons() {
       const card = btn.closest(".product-card");
       const name = card.querySelector("p").textContent;
 
-      const priceText = card.querySelector("p:nth-of-type(2)")?.textContent || "0";
+      const priceText =
+        card.querySelector("p:nth-of-type(2)")?.textContent || "0";
       const price = parseFloat(priceText.replace(/[^\d]/g, ""));
       const img = card.querySelector("img").src;
 
       const newItem = { name, price, img, quantity: 1 };
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      const existing = cart.find(item => item.name === name);
+      const existing = cart.find((item) => item.name === name);
       if (existing) {
         existing.quantity += 1;
       } else {
@@ -271,5 +283,28 @@ function setupCartButtons() {
   });
 }
 
+//popup
+const btn_open = document.getElementById("btn-open");
+const btn_close = document.getElementById("btn-close");
+const mod_container = document.getElementById("mod-container");
+btn_open.addEventListener("click", () => {
+  // Add class .show
+  mod_container.classList.add("show");
+});
+btn_close.addEventListener("click", () => {
+  // Add class .show
+  mod_container.classList.remove("show");
+});
 
+function togglePassword() {
+  const passwordInput = document.getElementById("password");
+  const toggleIcon = document.querySelector(".toggle-password");
 
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    toggleIcon.textContent = "🙈"; // đổi icon khi hiện mật khẩu
+  } else {
+    passwordInput.type = "password";
+    toggleIcon.textContent = "👁️"; // đổi lại icon khi ẩn mật khẩu
+  }
+}
