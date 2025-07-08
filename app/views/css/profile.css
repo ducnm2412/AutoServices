@@ -107,7 +107,5 @@ body {
     filter: blur(3px);
     z-index: -1; 
 }
-.content{
-    box-shadow: 0 0 5px black;
-}
+
 
