@@ -39,21 +39,29 @@ function renderCartFromStorage() {
     const div = document.createElement("div");
     div.className = "cart-item";
     div.innerHTML = `
-            <div class="checkbox"><input type="checkbox" checked /></div>
-            <img src="${item.img}" alt="${item.name}" />
-            <div class="item-info">
-                <div class="title">${item.name}</div>
-                <div class="price-group"><span class="new-price">${formatCurrency(
-                  item.price
-                )}</span></div>
-            </div>
-            <div class="quantity-control">
-                <button><i class="ri-subtract-line"></i></button>
-                <input type="text" value="${item.quantity}" />
-                <button><i class="ri-add-fill"></i></button>
-            </div>
-            <div class="actions"><button>Xóa</button></div>
-        `;
+        <div class="checkbox"><input type="checkbox" checked /></div>
+        <img src="${item.img}" alt="${item.name}" />
+        <div class="item-info">
+            <div class="title">${item.name}</div>
+            <div class="price-group"><span class="new-price">${formatCurrency(
+              item.price
+            )}</span></div>
+        </div>
+        <div class="quantity-control">
+            <button data-id="${item.id}" data-type="${
+      item.type
+    }" data-action="decrease"><i class="ri-subtract-line"></i></button>
+            <input type="text" value="${item.quantity}" data-id="${
+      item.id
+    }" data-type="${item.type}" />
+            <button data-id="${item.id}" data-type="${
+      item.type
+    }" data-action="increase"><i class="ri-add-fill"></i></button>
+        </div>
+        <div class="actions"><button class="remove-from-cart" data-id="${
+          item.id
+        }" data-type="${item.type}">Xóa</button></div>
+    `;
     cartContainer.appendChild(div);
   });
 
@@ -70,252 +78,211 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalCartItems = document.querySelector(".modal-cart-items");
   const confirmBtn = document.querySelector(".btn-confirm");
 
+  // Xử lý sự kiện mở modal
   openModalBtn.addEventListener("click", () => {
     modal.classList.add("active");
     modalCartItems.innerHTML = "";
+    let modalTotal = 0;
 
+    // Lấy các mục đã chọn từ giỏ hàng thực tế
     const cartItems = document.querySelectorAll(".cart-container .cart-item");
+    // Định nghĩa selectedItems ở đây để nó có thể được sử dụng
+    let selectedItems = [];
+
     cartItems.forEach((item) => {
-      if (item.querySelector("input[type='checkbox']").checked) {
+      const checkbox = item.querySelector("input[type='checkbox']");
+      if (checkbox.checked) {
         const imgSrc = item.querySelector("img").src;
         const title = item.querySelector(".title").textContent;
-        const price = item.querySelector(".new-price").textContent;
-        const quantity = item.querySelector("input[type='text']").value;
+        const priceText = item.querySelector(".new-price").textContent;
+        const price = parseFloat(priceText.replace(/\D/g, ""));
+        const quantity =
+          parseInt(item.querySelector("input[type='text']").value) || 1;
+        const itemId = item.querySelector(".remove-from-cart").dataset.id; // Lấy ID của sản phẩm/dịch vụ
+        const itemType = item.querySelector(".remove-from-cart").dataset.type; // Lấy loại của sản phẩm/dịch vụ
 
-        const modalItem = document.createElement("div");
-        modalItem.className = "cart-item";
-        modalItem.innerHTML = `
+        // Thêm vào mảng selectedItems
+        selectedItems.push({
+          id: itemId,
+          type: itemType,
+          name: title,
+          price: price,
+          quantity: quantity,
+          img: imgSrc,
+        });
+
+        modalTotal += price * quantity;
+
+        const div = document.createElement("div");
+        div.className = "modal-cart-item";
+        div.innerHTML = `
                     <img src="${imgSrc}" alt="${title}" />
                     <div class="item-info">
                         <div class="title">${title}</div>
-                        <div class="price-group"><span class="new-price">${price}</span></div>
+                        <div class="price-quantity">
+                            ${formatCurrency(price)} x ${quantity}
+                        </div>
                     </div>
-                    <div class="quantity-control"><span>Số lượng: ${quantity}</span></div>
                 `;
-        modalCartItems.appendChild(modalItem);
+        modalCartItems.appendChild(div);
       }
     });
 
-    if (!modalCartItems.children.length) {
-      modalCartItems.innerHTML = "<p>Không có sản phẩm nào được chọn.</p>";
+    document.querySelector(".modal-footer .total-value").textContent =
+      formatCurrency(modalTotal);
+
+    // Lưu selectedItems vào thuộc tính dataset của nút xác nhận để có thể truy cập sau
+    // Hoặc đơn giản hơn là định nghĩa fetch ở đây, ngay trong scope này
+    confirmBtn.dataset.selectedItems = JSON.stringify(selectedItems);
+  });
+
+  // Xử lý sự kiện đóng modal
+  closeModalBtn.addEventListener("click", () => {
+    modal.classList.remove("active");
+  });
+
+  // Đóng modal khi click ra ngoài
+  window.addEventListener("click", (event) => {
+    if (event.target == modal) {
+      modal.classList.remove("active");
     }
   });
 
-  closeModalBtn.addEventListener("click", () =>
-    modal.classList.remove("active")
-  );
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) modal.classList.remove("active");
-  });
-
+  // Xử lý thay đổi số lượng
   cartContainer.addEventListener("click", (e) => {
-    const target = e.target;
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    if (e.target.tagName === "BUTTON" || e.target.closest("button")) {
+      const button = e.target.closest("button");
+      const action = button.dataset.action;
+      const itemId = button.dataset.id;
+      const itemType = button.dataset.type;
+      const quantityInput =
+        button.parentNode.querySelector("input[type='text']");
 
-    if (target.tagName === "BUTTON" && target.textContent.trim() === "Xóa") {
-      const cartItem = target.closest(".cart-item");
-      const title = cartItem.querySelector(".title").textContent;
-      const newCart = cart.filter((item) => item.name !== title);
-      localStorage.setItem("cart", JSON.stringify(newCart));
-      renderCartFromStorage();
-    }
-
-    if (target.matches(".ri-subtract-line, .ri-add-fill")) {
-      const cartItem = target.closest(".cart-item");
-      const title = cartItem.querySelector(".title").textContent;
-      const input = cartItem.querySelector("input[type='text']");
-      let quantity = parseInt(input.value);
-
-      if (target.classList.contains("ri-subtract-line") && quantity > 1)
+      let quantity = parseInt(quantityInput.value);
+      if (action === "decrease" && quantity > 1) {
         quantity--;
-      else if (target.classList.contains("ri-add-fill")) quantity++;
+      } else if (action === "increase") {
+        quantity++;
+      } else if (button.classList.contains("remove-from-cart")) {
+        // Xử lý xóa mục khỏi giỏ hàng
+        let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        cart = cart.filter(
+          (item) => !(item.id === itemId && item.type === itemType)
+        );
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCartFromStorage();
+        return; // Thoát khỏi hàm để không xử lý tiếp quantity
+      } else {
+        return; // Không làm gì nếu không phải nút tăng/giảm hoặc xóa
+      }
 
-      input.value = quantity;
-
-      const updatedCart = cart.map((item) =>
-        item.name === title ? { ...item, quantity } : item
-      );
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      quantityInput.value = quantity;
       updateCartSummary();
+
+      // Cập nhật số lượng trong localStorage
+      let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const itemIndex = cart.findIndex(
+        (item) => item.id === itemId && item.type === itemType
+      );
+      if (itemIndex !== -1) {
+        cart[itemIndex].quantity = quantity;
+        localStorage.setItem("cart", JSON.stringify(cart));
+      }
     }
   });
 
-  cartContainer.addEventListener("input", (e) => {
-    if (e.target.matches("input[type='text']")) {
-      const cartItem = e.target.closest(".cart-item");
-      const title = cartItem.querySelector(".title").textContent;
-      const quantity = parseInt(e.target.value) || 1;
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      const updatedCart = cart.map((item) =>
-        item.name === title ? { ...item, quantity } : item
-      );
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-      updateCartSummary();
-    }
-  });
-
+  // Cập nhật summary khi checkbox thay đổi
   cartContainer.addEventListener("change", (e) => {
-    if (e.target.type === "checkbox") updateCartSummary();
+    if (e.target.type === "checkbox") {
+      updateCartSummary();
+    }
   });
 
-  // Xác nhận đơn hàng
+  // Xử lý nút Xác nhận đơn hàng
   confirmBtn.addEventListener("click", () => {
     confirmBtn.disabled = true;
     confirmBtn.textContent = "Đang xử lý...";
 
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    if (!cart.length) {
+    // Lấy dữ liệu selectedItems từ data attribute đã lưu khi mở modal
+    const selectedItemsData = JSON.parse(
+      confirmBtn.dataset.selectedItems || "[]"
+    );
+    console.log("Dữ liệu gửi đi:", selectedItemsData);
+    if (selectedItemsData.length === 0) {
       Swal.fire({
-        icon: "error",
-        title: "Lỗi",
-        text: "Giỏ hàng của bạn đang trống!",
+        icon: "warning",
+        title: "Giỏ hàng trống",
+        text: "Vui lòng chọn ít nhất một sản phẩm/dịch vụ để đặt hàng.",
       });
       confirmBtn.disabled = false;
       confirmBtn.textContent = "Xác nhận đơn hàng";
       return;
     }
 
-    const selectedItems = [];
-    const cartItems = document.querySelectorAll(".cart-container .cart-item");
-    cartItems.forEach((item) => {
-      if (item.querySelector("input[type='checkbox']").checked) {
-        const title = item.querySelector(".title").textContent;
-        const priceText = item.querySelector(".new-price").textContent;
-        const price = parseFloat(priceText.replace(/\D/g, ""));
-        const img = item.querySelector("img").src;
-        const quantity = parseInt(
-          item.querySelector("input[type='text']").value
-        );
-
-        selectedItems.push({ name: title, price, img, quantity });
-      }
-    });
-
-    if (!selectedItems.length) {
-      Swal.fire({
-        icon: "error",
-        title: "Lỗi",
-        text: "Vui lòng chọn ít nhất một sản phẩm!",
-      });
-      confirmBtn.disabled = false;
-      confirmBtn.textContent = "Xác nhận đơn hàng";
-      return;
-    }
-
-    // Bước 1: Gọi API checkout để tạo đơn hàng
+    // Di chuyển lệnh fetch vào đây
     fetch(
       "/laptrinhweb/AutoServices/app/controllers/OrderController.php?action=checkout",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: selectedItems }),
+        body: JSON.stringify({ items: selectedItemsData }), // Sử dụng selectedItemsData
       }
     )
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          // Xử lý lỗi HTTP (ví dụ: 400, 500)
+          return res.json().then((errorData) => {
+            throw new Error(
+              errorData.message || `HTTP error! status: ${res.status}`
+            );
+          });
+        }
+        return res.json();
+      })
       .then((data) => {
-        if (!data.success) {
+        if (data.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Thành công!",
+            text: "Đặt hàng thành công!",
+            timer: 2000,
+            showConfirmButton: false,
+          }).then(() => {
+            localStorage.removeItem("cart"); // Xóa giỏ hàng
+            renderCartFromStorage(); // Hiển thị giỏ hàng trống trên giao diện
+            updateCartSummary(); // Cập nhật tổng tiền/số lượng về 0
+
+            // THÊM DÒNG NÀY ĐỂ ẨN NÚT XÁC NHẬN ĐƠN HÀNG KHI THÀNH CÔNG
+            confirmBtn.style.display = "none";
+
+            // Đảm bảo modal cũng được đóng nếu nó đang mở
+            const modal = document.getElementById("orderModal");
+            if (modal) {
+              modal.classList.remove("active");
+            }
+          });
+        } else {
+          // Nếu có lỗi, hiển thị thông báo lỗi và kích hoạt lại nút
           Swal.fire({
             icon: "error",
             title: "Lỗi",
             text: "Lỗi khi đặt hàng: " + data.message,
           });
+          // Kích hoạt lại nút và đặt lại văn bản nếu có lỗi
           confirmBtn.disabled = false;
           confirmBtn.textContent = "Xác nhận đơn hàng";
-          return;
         }
-
-        // Bước 2: Gọi API processPayment để thanh toán và cập nhật trạng thái paid
-        const orderID = data.orderID;
-        fetch(
-          "/laptrinhweb/AutoServices/app/controllers/OrderController.php?action=processPayment",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ orderID, paymentMethod: "cod" }), // hoặc paymentMethod khác nếu có
-          }
-        )
-          .then((res) => res.json())
-          .then((payResult) => {
-            if (payResult.success) {
-              Swal.fire({
-                icon: "success",
-                title: "Thành công!",
-                text: "Đơn hàng đã được thanh toán!",
-                timer: 2000,
-              }).then(() => {
-                localStorage.removeItem("cart");
-                window.location.href = "/laptrinhweb/AutoServices";
-              });
-            } else {
-              Swal.fire({
-                icon: "error",
-                title: "Lỗi",
-                text: payResult.message || "Thanh toán thất bại!",
-              });
-            }
-          })
-          .catch(() => {
-            Swal.fire({
-              icon: "error",
-              title: "Lỗi",
-              text: "Đã xảy ra lỗi khi thanh toán.",
-            });
-          })
-          .finally(() => {
-            confirmBtn.disabled = false;
-            confirmBtn.textContent = "Xác nhận đơn hàng";
-          });
       })
       .catch((err) => {
         console.error("Lỗi:", err);
         Swal.fire({
           icon: "error",
           title: "Lỗi",
-          text: "Đã xảy ra lỗi khi gửi đơn hàng.",
+          text: "Đã xảy ra lỗi khi gửi đơn hàng: " + err.message,
         });
+        // Kích hoạt lại nút và đặt lại văn bản nếu có lỗi mạng
         confirmBtn.disabled = false;
         confirmBtn.textContent = "Xác nhận đơn hàng";
       });
   });
-
-  fetch(
-    "/laptrinhweb/AutoServices/app/controllers/OrderController.php?action=checkout",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: selectedItems }),
-    }
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Thành công!",
-          text: "Đặt hàng thành công!",
-          timer: 2000,
-        }).then(() => {
-          localStorage.removeItem("cart");
-          window.location.href = "/laptrinhweb/AutoServices";
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Lỗi khi đặt hàng: " + data.message,
-        });
-      }
-    })
-    .catch((err) => {
-      console.error("Lỗi:", err);
-      Swal.fire({
-        icon: "error",
-        title: "Lỗi",
-        text: "Đã xảy ra lỗi khi gửi đơn hàng.",
-      });
-    })
-    .finally(() => {
-      confirmBtn.disabled = false;
-      confirmBtn.textContent = "Xác nhận đơn hàng";
-    });
 });

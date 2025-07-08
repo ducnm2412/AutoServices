@@ -27,18 +27,35 @@ class OrderController {
     // Checkout giỏ hàng
     public function checkout() {
         $this->checkAuth();
-        if (empty($_SESSION['cart'])) {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $cart = $data['items'] ?? [];
+        if (empty($cart)) {
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Giỏ hàng của bạn đang trống.']);
             exit();
         }
         $userID = $_SESSION['user']['userID'];
-        $cart = $_SESSION['cart'];
         $result = $this->orderService->checkout($userID, $cart);
         if ($result['success']) {
-            unset($_SESSION['cart']);
-            http_response_code(201);
-            echo json_encode(['success' => true, 'message' => 'Đặt hàng thành công!', 'orderID' => $result['orderID'], 'totalAmount' => $result['totalAmount']]);
+            // Sau khi tạo đơn hàng thành công, tiến hành thanh toán luôn
+            $orderID = $result['orderID'];
+            $totalAmount = $result['totalAmount'];
+            $paymentModel = new PaymentModel();
+            $paymentID = $paymentModel->processPayment($orderID, $totalAmount, 'cod'); // hoặc lấy paymentMethod từ $data nếu muốn
+            $this->orderService->updateStatus($orderID, 'paid');
+            if ($paymentID) {
+                http_response_code(201);
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Đặt hàng và thanh toán thành công!',
+                    'orderID' => $orderID,
+                    'paymentID' => $paymentID,
+                    'totalAmount' => $totalAmount
+                ]);
+            } else {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Thanh toán thất bại!']);
+            }
         } else {
             http_response_code(500);
             echo json_encode(['success' => false, 'message' => $result['message']]);
