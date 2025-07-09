@@ -142,7 +142,6 @@ class AdminController {
 
     // Thống kê tổng quan dashboard
     public function getStats() {
-        $this->checkAdminAuth();
         require_once __DIR__ . '/../services/OrderService.php';
         require_once __DIR__ . '/../services/CustomerService.php';
         require_once __DIR__ . '/../services/FeedbackService.php';

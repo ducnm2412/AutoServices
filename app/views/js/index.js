@@ -282,6 +282,7 @@ fetch(
       const data = JSON.parse(text);
       if (data.success) {
         const user = data.user;
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
 
         document.getElementById("modal-customer-name").textContent = user.name;
         document.getElementById("modal-customer-phone").textContent =
@@ -462,8 +463,10 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
       try {
         const data = JSON.parse(text); // ✅ Parse JSON thủ công
         if (data.success) {
+          const user = data.user;
           const role = data.user.role;
           const token = data.token;
+          localStorage.setItem("loggedInUser", JSON.stringify(user));
 
           console.log("🎉 Đăng nhập thành công! Token:", token);
           document.getElementById("mod-container").classList.remove("show");

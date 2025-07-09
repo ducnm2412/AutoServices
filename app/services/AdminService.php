@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../repositories/AdminRepository.php';
+require_once __DIR__ . '/../repository/AdminRepository.php';
 
 class AdminService {
     private $adminRepository;

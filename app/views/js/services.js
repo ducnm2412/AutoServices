@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <ul class="service-details">
                 ${descriptionHtml}
             </ul>
-            <button class="detail-btn">Xem chi tiết</button>
+            <button class="order-btn">Đặt dịch vụ</button>
         `;
         return card;
     }

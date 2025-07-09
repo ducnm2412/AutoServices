@@ -1,5 +1,5 @@
 // Lấy số liệu tổng
-fetch("/app/controllers/AdminController.php?action=getStats")
+fetch("/laptrinhweb/AutoServices/app/controllers/AdminController.php?action=getStats")
   .then((res) => res.json())
   .then((data) => {
     if (data.success) {
@@ -12,7 +12,7 @@ fetch("/app/controllers/AdminController.php?action=getStats")
   });
 
 // Lấy dữ liệu biểu đồ
-fetch("/app/controllers/AdminController.php?action=getOrderChart")
+fetch("/laptrinhweb/AutoServices/app/controllers/AdminController.php?action=getOrderChart")
   .then((res) => res.json())
   .then((data) => {
     if (data.success) {

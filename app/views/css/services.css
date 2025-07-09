@@ -232,7 +232,7 @@ body {
     font-size: 1.1em;
 }
 
-.detail-btn {
+.order-btn {
     background: var(--button-bg);
     color: var(--dark-bg);
     border: none;
@@ -245,7 +245,7 @@ body {
     width: 100%;
 }
 
-.detail-btn:hover {
+.order-btn:hover {
     background: var(--button-hover-bg);
     transform: translateY(-2px);
 }

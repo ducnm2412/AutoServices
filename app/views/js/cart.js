@@ -16,8 +16,8 @@ function updateCartSummary() {
       const cartItem = checkbox.closest(".cart-item");
       const priceText = cartItem.querySelector(".new-price").textContent;
       const price = parseFloat(priceText.replace(/\D/g, ""));
-      const quantity =
-        parseInt(cartItem.querySelector("input[type='text']").value) || 1;
+      const quantityInput = cartItem.querySelector("input[type='text']");
+const quantity = parseInt(quantityInput?.value) || 1;
 
       total += price * quantity;
       count++;
@@ -96,8 +96,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const title = item.querySelector(".title").textContent;
         const priceText = item.querySelector(".new-price").textContent;
         const price = parseFloat(priceText.replace(/\D/g, ""));
-        const quantity =
-          parseInt(item.querySelector("input[type='text']").value) || 1;
+        const quantityInput = item.querySelector("input[type='text']");
+        const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
         const itemId = item.querySelector(".remove-from-cart").dataset.id; // Lấy ID của sản phẩm/dịch vụ
         const itemType = item.querySelector(".remove-from-cart").dataset.type; // Lấy loại của sản phẩm/dịch vụ
 
@@ -155,31 +155,42 @@ document.addEventListener("DOMContentLoaded", () => {
       const action = button.dataset.action;
       const itemId = button.dataset.id;
       const itemType = button.dataset.type;
-      const quantityInput =
-        button.parentNode.querySelector("input[type='text']");
 
-      let quantity = parseInt(quantityInput.value);
-      if (action === "decrease" && quantity > 1) {
-        quantity--;
-      } else if (action === "increase") {
-        quantity++;
-      } else if (button.classList.contains("remove-from-cart")) {
-        // Xử lý xóa mục khỏi giỏ hàng
+      // 🔒 Kiểm tra nếu là nút xóa
+      if (button.classList.contains("remove-from-cart")) {
         let cart = JSON.parse(localStorage.getItem("cart") || "[]");
         cart = cart.filter(
           (item) => !(item.id === itemId && item.type === itemType)
         );
         localStorage.setItem("cart", JSON.stringify(cart));
+
+        // ✅ Render lại giỏ hàng
         renderCartFromStorage();
-        return; // Thoát khỏi hàm để không xử lý tiếp quantity
+        return;
+      }
+
+      const quantityInput = item.querySelector("input[type='text']");
+const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+
+      // 🛡️ Kiểm tra quantityInput có tồn tại không
+      if (!quantityInput) {
+        console.warn("Không tìm thấy input số lượng.");
+        return;
+      }
+
+
+      if (action === "decrease" && quantity > 1) {
+        quantity--;
+      } else if (action === "increase") {
+        quantity++;
       } else {
-        return; // Không làm gì nếu không phải nút tăng/giảm hoặc xóa
+        return; // Không xử lý gì nếu không hợp lệ
       }
 
       quantityInput.value = quantity;
       updateCartSummary();
 
-      // Cập nhật số lượng trong localStorage
+      // 🔄 Cập nhật localStorage
       let cart = JSON.parse(localStorage.getItem("cart") || "[]");
       const itemIndex = cart.findIndex(
         (item) => item.id === itemId && item.type === itemType
