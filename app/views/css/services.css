@@ -1,0 +1,363 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+    --dark-bg: #1a1a1a;
+    --card-bg: #222222;
+    --text-color: #f0f0f0;
+    --highlight-color: #ffcc00; /* Yellowish color for prices/accents */
+    --button-bg: linear-gradient(to right, #ffcc00, #ffcc00); /* Adjusted for visual match */
+    --button-hover-bg: linear-gradient(to right, #e6b800, #e6b800);
+    --border-color: #444;
+    --gear-color: #ffcc00; /* Color for the gear icon */
+    --check-icon-color: #ffcc00; /* Color for checkmark icons */
+    --active-button-bg: #ffcc00;
+    --active-button-text: #1a1a1a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Header Styles */
+.header {
+    background-color: var(--dark-bg);
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.brand-name {
+    font-size: 1.5em;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    font-size: 0.9em;
+}
+
+.nav-links a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--highlight-color);
+}
+
+.nav-links .separator {
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.nav-links .active {
+    color: var(--highlight-color);
+    font-weight: 500;
+}
+
+/* Main Content and Filter Buttons */
+.main-content {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.filter-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.filter-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.filter-btn:hover {
+    background-color: var(--border-color);
+}
+
+.filter-btn.active {
+    background-color: var(--active-button-bg);
+    color: var(--active-button-text);
+    border-color: var(--active-button-bg);
+}
+
+/* Services Grid */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.service-card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.gear-icon {
+    font-size: 2.5em;
+    color: var(--gear-color);
+    margin-right: 15px;
+    animation: rotateGear 10s linear infinite; /* Simple animation */
+}
+
+@keyframes rotateGear {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+.service-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.card-price-time {
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.price-label {
+    font-size: 0.8em;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.price-value {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: var(--highlight-color);
+    display: inline-block;
+}
+
+.price-value .currency {
+    font-size: 0.6em; /* Smaller for currency */
+    vertical-align: super;
+}
+
+.contact-price {
+    font-size: 1.8em; /* Slightly smaller for 'Liên hệ' */
+    font-weight: 700;
+    color: var(--highlight-color);
+}
+
+.time-value {
+    font-size: 1.1em;
+    color: var(--text-color);
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.service-details {
+    list-style: none;
+    margin-bottom: 30px;
+    flex-grow: 1; /* Allows the list to take up available space */
+}
+
+.service-details li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+    color: var(--text-color);
+}
+
+.check-icon {
+    color: var(--check-icon-color);
+    margin-right: 10px;
+    margin-top: 3px; /* Align icon better with text */
+    font-size: 1.1em;
+}
+
+.detail-btn {
+    background: var(--button-bg);
+    color: var(--dark-bg);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+}
+
+.detail-btn:hover {
+    background: var(--button-hover-bg);
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .navbar {
+        align-items: flex-start;
+        margin-top: 15px;
+    }
+
+    .brand-name {
+        font-size: 1.3em;
+    }
+
+    .filter-buttons {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .services-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 15px 20px;
+    }
+
+    .logo {
+        font-size: 1.8em;
+    }
+
+    .navbar {
+        width: 100%;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: space-around;
+        gap: 0;
+    }
+
+    .filter-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-btn {
+        width: 100%;
+    }
+
+    .service-card {
+        padding: 25px;
+    }
+
+    .service-title {
+        font-size: 1.2em;
+    }
+
+    .price-value {
+        font-size: 1.8em;
+    }
+
+    .contact-price {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 10px 15px;
+    }
+
+    .logo {
+        font-size: 1.5em;
+    }
+
+    .brand-name {
+        font-size: 1.1em;
+    }
+
+    .nav-links {
+        font-size: 0.8em;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .service-card {
+        padding: 20px;
+    }
+
+    .gear-icon {
+        font-size: 2em;
+    }
+
+    .detail-btn {
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+}

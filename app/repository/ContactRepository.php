@@ -9,8 +9,8 @@ class ContactRepository {
     }
 
     // Thêm liên hệ mới
-    public function create($name, $phone, $email, $serviceID, $message) {
-        return $this->contactModel->addContact($name, $phone, $email, $serviceID, $message);
+     public function create($name, $phone, $email, $categoryID, $message) {
+        return $this->contactModel->addContact($name, $phone, $email, $categoryID, $message);
     }
 
     // Lấy tất cả liên hệ
@@ -24,8 +24,6 @@ class ContactRepository {
     }
 
     // Trả lời liên hệ (admin)
-    public function reply($contactID, $adminReply) {
-        return $this->contactModel->replyContact($contactID, $adminReply);
-    }
+    
 }
 ?> 
