@@ -139,6 +139,42 @@ class AdminController {
         $feedbacks = $this->adminService->getAllFeedback();
         echo json_encode(['success' => true, 'feedbacks' => $feedbacks]);
     }
+
+    // Thống kê tổng quan dashboard
+    public function getStats() {
+        $this->checkAdminAuth();
+        require_once __DIR__ . '/../services/OrderService.php';
+        require_once __DIR__ . '/../services/CustomerService.php';
+        require_once __DIR__ . '/../services/FeedbackService.php';
+        require_once __DIR__ . '/../services/ServiceService.php';
+        require_once __DIR__ . '/../services/PartService.php';
+        $orderService = new OrderService();
+        $customerService = new CustomerService();
+        $feedbackService = new FeedbackService();
+        $serviceService = new ServiceService();
+        $partService = new PartService();
+        $orderCount = $orderService->countOrders();
+        $customerCount = $customerService->countCustomers();
+        $feedbackCount = $feedbackService->countFeedbacks();
+        $serviceCount = $serviceService->countServices();
+        $partCount = $partService->countParts();
+        echo json_encode([
+            'success' => true,
+            'orderCount' => $orderCount,
+            'customerCount' => $customerCount,
+            'feedbackCount' => $feedbackCount,
+            'serviceCount' => $serviceCount,
+            'partCount' => $partCount
+        ]);
+    }
+
+    // Lấy dữ liệu biểu đồ đơn hàng theo tháng
+    public function getOrderChart() {
+        require_once __DIR__ . '/../services/OrderService.php';
+        $orderService = new OrderService();
+        $chartData = $orderService->getOrderChart();
+        echo json_encode(['success' => true, 'data' => $chartData]);
+    }
 }
 
 // Routing
@@ -175,6 +211,12 @@ switch ($action) {
         break;
     case 'getAllFeedback':
         $controller->getAllFeedback();
+        break;
+    case 'getStats':
+        $controller->getStats();
+        break;
+    case 'getOrderChart':
+        $controller->getOrderChart();
         break;
     default:
         http_response_code(404);

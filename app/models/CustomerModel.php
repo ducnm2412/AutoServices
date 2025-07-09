@@ -36,5 +36,12 @@ class CustomerModel extends Database {
         $stmt->bind_param("ss", $paymentInfo, $orderID);
         return $stmt->execute();
     }
+
+    // Đếm số lượng khách hàng
+    public function countCustomers() {
+        $sql = "SELECT COUNT(*) as total FROM User WHERE role = 'customer'";
+        $result = $this->conn->query($sql);
+        return $result->fetch_assoc()['total'] ?? 0;
+    }
 }
 ?>

@@ -3,109 +3,64 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AutoServices</title>
-    <link rel="stylesheet" href="../css/index.css" />
-    <link rel="stylesheet" href="../css/breakpoint.css" />
+    <title>AutoServices - Dashboard</title>
+    <link rel="stylesheet" href="../css/dashboard.css" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
     />
-    <link
-      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
-      rel="stylesheet"
-    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
-    <nav class="nav-bg">
-      <div class="btn-close">
-        <i class="ri-close-circle-line"></i>
-      </div>
+    <div class="sidebar">
+      <div class="avatar"><i class="bx bx-user"></i></div>
+      <div class="name">Tên Admin</div>
+      <div class="role">Quản trị viên</div>
       <ul>
-        <li><a href="../html/serviceManage.html">Dịch vụ</a></li>
-        <li><a href="../html/partManage.html">Phụ tùng</a></li>
-        <li><a href="../html/allOrder.html">Đơn hàng</a></li>
-        <li><a href="../html/feedbackAdmin.html">Phản hồi</a></li>
-        <li><a href="../html/contractAdmin.html">Liên hệ</a></li>
+        <li class="active">Dashboard</li>
+        <li><a href="serviceManage.html">Quản lý dịch vụ</a></li>
+        <li><a href="partManage.html">Quản lý phụ tùng</a></li>
+        <li><a href="allOrder.html">Quản lý đơn hàng</a></li>
+        <li><a href="feedbackAdmin.html">Quản lý phản hồi</a></li>
+        <li><a href="contractAdmin.html">Quản lý liên hệ</a></li>
+        <li><a href="#">Đăng xuất</a></li>
       </ul>
-    </nav>
-    <header>
-      <div class="header">
-        <div class="logo">
-          <img src="../images/logo-Photoroom.png" alt="logo" />
-          <p>Auto<span>Services</span></p>
+    </div>
+    <div class="main-content">
+      <div class="dashboard-header">
+        <h1>Dashboard</h1>
+      </div>
+      <div class="dashboard-cards">
+        <div class="dashboard-card blue">
+          <i class="bx bx-calendar-check"></i>
+          <div class="stat-number" id="orderCount">0</div>
+          <div class="stat-label">Đơn hàng</div>
         </div>
-        <div class="navbar">
-          <nav>
-            <ul>
-              <li><a href="../html/serviceManage.html">Dịch vụ</a></li>
-              <li><a href="../html/partManage.html">Phụ tùng</a></li>
-              <li><a href="../html/allOrder.html">Đơn hàng</a></li>
-              <li><a href="../html/feedbackAdmin.html">Phản hồi</a></li>
-              <li><a href="../html/contractAdmin.html">Liên hệ</a></li>
-            </ul>
-          </nav>
+        <div class="dashboard-card yellow">
+          <i class="bx bx-user"></i>
+          <div class="stat-number" id="customerCount">0</div>
+          <div class="stat-label">Khách hàng</div>
         </div>
-        <div class="account">
-          <div class="btn-account">
-            <button>
-              <a href=""><i class="bx bx-user-circle"></i></a>
-            </button>
-          </div>
-          <div class="btn-menu">
-            <button><i class="ri-menu-line"></i></button>
-          </div>
+        <div class="dashboard-card orange">
+          <i class="bx bx-message-dots"></i>
+          <div class="stat-number" id="feedbackCount">0</div>
+          <div class="stat-label">Phản hồi</div>
+        </div>
+        <div class="dashboard-card green">
+          <i class="bx bx-cog"></i>
+          <div class="stat-number" id="serviceCount">0</div>
+          <div class="stat-label">Dịch vụ</div>
+        </div>
+        <div class="dashboard-card red">
+          <i class="bx bx-package"></i>
+          <div class="stat-number" id="partCount">0</div>
+          <div class="stat-label">Phụ tùng</div>
         </div>
       </div>
-    </header>
-    <div class="slider-home">
-      <div class="list">
-        <div class="item" id="item1">
-          <div class="box-1">
-            <h1>
-              Dịch vụ bảo dưỡng xe <br />
-              Auto<span class="simple-text"></span>
-            </h1>
-          </div>
-          <div class="box-2">
-            <img <img src="../images/autoservice-Photoroom.png" alt="" />
-            alt="" />
-          </div>
-        </div>
-        <div class="item" id="item2">
-          <div class="box-1">
-            <h1>
-              Dịch vụ bảo dưỡng xe <br />
-              Auto<span class="simple-text"></span>
-            </h1>
-          </div>
-          <div class="box-2">
-            <img src="../images/blu.png" alt="" />
-          </div>
-        </div>
-        <div class="item" id="item3">
-          <div class="box-1">
-            <h1>
-              Dịch vụ bảo dưỡng xe <br />
-              Auto<span class="simple-text"></span>
-            </h1>
-          </div>
-          <div class="box-2">
-            <img <img src="../images/yelow-removebg-preview.png" alt="" />
-            alt="" />
-          </div>
-        </div>
-      </div>
-      <div class="btn-prev-next">
-        <button id="prev"><i class="ri-arrow-left-s-fill"></i></button>
-        <button id="next"><i class="ri-arrow-right-s-fill"></i></button>
-      </div>
-      <div class="dots">
-        <li class="active"></li>
-        <li></li>
-        <li></li>
+      <div class="dashboard-charts">
+        <canvas id="orderChart" width="400" height="180"></canvas>
       </div>
     </div>
-    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-    <script src="../js/index.js"></script>
+    <script src="../js/dashboard.js"></script>
   </body>
 </html>

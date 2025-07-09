@@ -88,9 +88,18 @@ public function buySingle($userID, $item) {
         return $this->orderRepository->getAllOrders();
     }
 
+    // Lấy số lượng đơn hàng theo từng tháng
+    public function getOrderChart() {
+        return $this->orderRepository->getOrderChart();
+    }
+
     // Cập nhật trạng thái đơn hàng
     public function updateStatus($orderID, $status) {
         return $this->orderRepository->updateStatus($orderID, $status);
+    }
+        // Đếm tổng số đơn hàng
+    public function countOrders() {
+        return $this->orderRepository->countOrders();
     }
 }
 ?> 

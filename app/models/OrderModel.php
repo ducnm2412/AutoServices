@@ -116,5 +116,25 @@ public function buySingle($userID, $item) {
     }
     return $orderID;
 }
+public function countOrders() {
+    $sql = "SELECT COUNT(*) as total FROM orders";
+    $result = $this->conn->query($sql);
+    return $result->fetch_assoc()['total'] ?? 0;
+}
+
+    // Lấy số lượng đơn hàng theo từng tháng trong năm hiện tại
+    public function getOrderChart() {
+        $year = date('Y');
+        $sql = "SELECT MONTH(orderDate) as month, COUNT(*) as total FROM `Order` WHERE YEAR(orderDate) = ? GROUP BY MONTH(orderDate) ORDER BY month";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $year);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = array_fill(1, 12, 0); // Khởi tạo mảng 12 tháng = 0
+        while ($row = $result->fetch_assoc()) {
+            $data[(int)$row['month']] = (int)$row['total'];
+        }
+        return $data;
+    }
 }
 ?> 

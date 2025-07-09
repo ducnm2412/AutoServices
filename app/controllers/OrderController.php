@@ -100,6 +100,21 @@ public function getAllOrders() {
             echo json_encode(['success' => false, 'message' => 'Thanh toán thất bại.']);
         }
     }
+
+    // Mua nhanh 1 sản phẩm hoặc dịch vụ
+    public function buySingle() {
+        $this->checkAuth();
+        $data = json_decode(file_get_contents('php://input'), true);
+        $item = $data['item'] ?? null;
+        $userID = $_SESSION['user']['userID'];
+        $result = $this->orderService->buySingle($userID, $item);
+        if ($result['success']) {
+            echo json_encode(['success' => true, 'orderID' => $result['orderID']]);
+        } else {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => $result['message']]);
+        }
+    }
 }
 
 // Routing
@@ -118,6 +133,9 @@ switch ($action) {
         break;
     case 'processPayment':
         $controller->processPayment();
+        break;
+    case 'buySingle':
+        $controller->buySingle();
         break;
     default:
         http_response_code(404);

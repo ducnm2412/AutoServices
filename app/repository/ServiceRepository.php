@@ -37,5 +37,10 @@ class ServiceRepository {
     public function getByCategory($categoryID) {
         return $this->serviceModel->getServicesByCategory($categoryID);
     }
+
+    // Đếm số lượng dịch vụ
+    public function countServices() {
+        return $this->serviceModel->countServices();
+    }
 }
 ?>

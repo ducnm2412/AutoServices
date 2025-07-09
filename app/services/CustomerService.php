@@ -36,5 +36,10 @@ public function viewOrderHistory($userID) {
             return ['success' => false, 'message' => 'Thanh toán thất bại!'];
         }
     }
+
+    // Đếm số lượng khách hàng
+    public function countCustomers() {
+        return $this->customerRepository->countCustomers();
+    }
 }
 ?> 
