@@ -501,6 +501,15 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
     });
 });
 //register
+window.addEventListener('DOMContentLoaded', function() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user && user.name) {
+    const accountName = document.querySelector('.account-name');
+    if (accountName) {
+      accountName.textContent = user.name;
+    }
+  }
+});
 // Mở & đóng form đăng ký
 // 👉 Mở form đăng ký và ẩn form đăng nhập
 // ==== Hiển thị form đăng nhập ====
