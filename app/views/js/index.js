@@ -445,36 +445,32 @@ function togglePassword() {
 }
 
 document.getElementById("loginForm").addEventListener("submit", function (e) {
-  e.preventDefault(); // Ngăn reload form
+  e.preventDefault();
 
   const email = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
   fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=login", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   })
-    .then((res) => res.text()) // 👈 Nhận dưới dạng text trước
+    .then((res) => res.text())
     .then((text) => {
-      console.log("🔍 Phản hồi từ server:", text); // 👈 thêm dòng này
+      console.log("🔍 Phản hồi từ server:", text);
       try {
-        const data = JSON.parse(text); // ✅ Parse JSON thủ công
+        const data = JSON.parse(text);
         if (data.success) {
           const user = data.user;
-          const role = data.user.role;
+          const role = user.role;
           const token = data.token;
-          localStorage.setItem("loggedInUser", JSON.stringify(user));
-
-          console.log("🎉 Đăng nhập thành công! Token:", token);
-          document.getElementById("mod-container").classList.remove("show");
+          // Lưu user vào localStorage
+          localStorage.setItem("user", JSON.stringify(user));
 
           Swal.fire({
             icon: "success",
             title: "Đăng nhập thành công!",
-            text: "Xin chào " + data.user.name + "!",
+            text: "Xin chào " + user.name + "!",
             timer: 2000,
             showConfirmButton: false,
           }).then(() => {
