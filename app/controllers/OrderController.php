@@ -64,7 +64,7 @@ class OrderController {
 
     // Xem chi tiết một đơn hàng
     public function getOrderDetails() {
-        $this->checkAuth();
+        //$this->checkAuth();
         $orderID = $_GET['orderID'] ?? 0;
         $invoiceData = $this->orderService->generateInvoice($orderID);
         echo json_encode(['success' => true, 'data' => $invoiceData]);
@@ -103,19 +103,30 @@ public function getAllOrders() {
 
     // Mua nhanh 1 sản phẩm hoặc dịch vụ
     public function buySingle() {
-        $this->checkAuth();
-        
-        $data = json_decode(file_get_contents('php://input'), true);
-        $item = $data['item'] ?? null;
-        $userID = $_SESSION['user']['userID'];
-        $result = $this->orderService->buySingle($userID, $item);
-        if ($result['success']) {
-            echo json_encode(['success' => true, 'orderID' => $result['orderID']]);
-        } else {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => $result['message']]);
-        }
+    $this->checkAuth();
+    
+    $data = json_decode(file_get_contents('php://input'), true);
+    $item = $data['item'] ?? null;
+    $userID = $_SESSION['user']['userID'];
+
+    if (!$item || !isset($item['type'], $item['id'], $item['price'])) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Dữ liệu không hợp lệ.']);
+        return;
     }
+
+    // Đảm bảo quantity luôn có
+    $item['quantity'] = $item['quantity'] ?? 1;
+
+    $result = $this->orderService->buySingle($userID, $item);
+    if ($result['success']) {
+        echo json_encode(['success' => true, 'orderID' => $result['orderID']]);
+    } else {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => $result['message']]);
+    }
+}
+
 }
 
 // Routing

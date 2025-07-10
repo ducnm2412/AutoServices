@@ -29,19 +29,22 @@ function fetchParts() {
     })
     .catch((error) => {
       console.error("Lỗi khi lấy danh sách phụ tùng:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi!",
+        text: "Không thể tải danh sách phụ tùng."
+      });
     });
 }
-
 
 // Thêm/Sửa phụ tùng
 document.getElementById("partForm").onsubmit = function (e) {
   e.preventDefault();
   const formData = new FormData(this);
-  let action = formData.get("partID") ? "update" : "add"; // Determine if it's an update or add operation
+  let action = formData.get("partID") ? "update" : "add";
 
-  // If adding, and partID is auto-increment, ensure it's not sent
   if (action === "add") {
-    formData.delete("partID"); // Remove partID from formData for 'add' operation
+    formData.delete("partID");
   }
 
   fetch(`/laptrinhweb/AutoServices/app/controllers/PartController.php?action=${action}`, {
@@ -50,21 +53,28 @@ document.getElementById("partForm").onsubmit = function (e) {
   })
     .then((res) => res.json())
     .then((data) => {
+      Swal.fire({
+        icon: data.success ? "success" : "error",
+        title: data.success ? "Thành công!" : "Thất bại!",
+        text: data.message || "Đã xảy ra lỗi."
+      });
+
       if (data.success) {
-        alert(data.message); // Use a simple alert for success/failure messages
-      } else {
-        alert(data.message);
+        fetchParts();
+        resetForm();
       }
-      fetchParts(); // Refresh the list of parts
-      resetForm(); // Clear the form
     })
     .catch((error) => {
       console.error("Lỗi khi thêm/sửa phụ tùng:", error);
-      alert("Đã xảy ra lỗi khi thực hiện thao tác.");
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi!",
+        text: "Đã xảy ra lỗi khi thực hiện thao tác."
+      });
     });
 };
 
-// Sửa phụ tùng - Populates the form with existing part data
+// Sửa phụ tùng - Điền dữ liệu vào form
 function editPart(part) {
   document.getElementById("partID").value = part.partID;
   document.getElementById("name").value = part.name;
@@ -72,19 +82,28 @@ function editPart(part) {
   document.getElementById("quantity").value = part.quantity;
   document.getElementById("images").value = part.images;
   document.getElementById("categoryID").value = part.categoryID;
-  document.getElementById("saveBtn").textContent = "Cập nhật"; // Change button text
+  document.getElementById("saveBtn").textContent = "Cập nhật";
 }
 
-// Xóa phụ tùng - Shows the custom confirmation modal
+// Xóa phụ tùng
 function deletePart(partID) {
-  // Thêm xác nhận bằng confirm() để tránh xóa nhầm.
-  // Nếu bạn không muốn hộp thoại xác nhận, bạn có thể bỏ qua dòng if này.
-  if (confirm("Bạn có chắc chắn muốn xóa phụ tùng này không?")) {
-    confirmDeleteAction(partID);
-  }
+  Swal.fire({
+    title: "Bạn có chắc chắn muốn xóa?",
+    text: "Thao tác này sẽ không thể hoàn tác!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Xóa",
+    cancelButtonText: "Hủy",
+    confirmButtonColor: "#e74c3c",
+    cancelButtonColor: "#aaa"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      confirmDeleteAction(partID);
+    }
+  });
 }
 
-// Function to execute the delete action (logic không đổi)
+// Gửi yêu cầu xóa
 function confirmDeleteAction(partID) {
   fetch("/laptrinhweb/AutoServices/app/controllers/PartController.php?action=delete", {
     method: "POST",
@@ -92,33 +111,37 @@ function confirmDeleteAction(partID) {
     body: `partID=${encodeURIComponent(partID)}`,
   })
     .then((res) => {
-        if (!res.ok) {
-            throw new Error(`Network response was not ok (${res.status})`);
-        }
-        return res.json();
+      if (!res.ok) throw new Error(`Lỗi HTTP: ${res.status}`);
+      return res.json();
     })
     .then((data) => {
+      Swal.fire({
+        icon: data.success ? "success" : "error",
+        title: data.success ? "Đã xóa!" : "Xóa thất bại!",
+        text: data.message || "Có lỗi xảy ra."
+      });
+
       if (data.success) {
-        alert(data.message);
-      } else {
-        alert(data.message);
+        fetchParts();
+        resetForm();
       }
-      fetchParts(); // Refresh the list of parts
-      resetForm(); // Clear the form
     })
     .catch((error) => {
       console.error("Lỗi khi xóa phụ tùng:", error);
-      alert("Đã xảy ra lỗi khi xóa phụ tùng: " + error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi!",
+        text: "Không thể xóa phụ tùng: " + error.message
+      });
     });
 }
 
-// Reset form - Clears all input fields
+// Reset form
 function resetForm() {
   document.getElementById("partForm").reset();
-  document.getElementById("partID").value = ""; // Ensure hidden partID is also cleared
-  document.getElementById("saveBtn").textContent = "Thêm"; // Reset button text
+  document.getElementById("partID").value = "";
+  document.getElementById("saveBtn").textContent = "Thêm";
 }
-
 
 // Tải dữ liệu khi load trang
 fetchParts();

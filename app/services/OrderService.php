@@ -27,9 +27,10 @@ class OrderService {
     }
 
     // Thêm dịch vụ vào đơn hàng
-    public function addServiceToOrder($orderID, $serviceID) {
-        return $this->orderRepository->addServiceToOrder($orderID, $serviceID);
-    }
+    public function addServiceToOrder($orderID, $serviceID, $quantity = 1) {
+    return $this->orderRepository->addServiceToOrder($orderID, $serviceID, $quantity);
+}
+
 
 public function checkout($userID, $cart) {
     error_log("Dữ liệu giỏ hàng nhận được từ frontend: " . print_r($cart, true)); // THÊM DÒNG NÀY
@@ -61,22 +62,41 @@ public function checkout($userID, $cart) {
 }
 
 public function buySingle($userID, $item) {
-    if (empty($userID) || empty($item) || !isset($item['id']) || !isset($item['price'])) {
+    if (empty($userID) || empty($item) || !isset($item['id']) || !isset($item['price']) || !isset($item['type'])) {
         return ['success' => false, 'message' => 'Thông tin sản phẩm không hợp lệ!'];
     }
-    if ($item['type'] == 'part') {
-        $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 1;
-        if ($quantity < 1) {
-            return ['success' => false, 'message' => 'Số lượng phụ tùng không hợp lệ!'];
-        }
+
+    $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 1;
+    if ($quantity < 1) {
+        return ['success' => false, 'message' => 'Số lượng không hợp lệ!'];
     }
-    $orderID = $this->orderRepository->buySingle($userID, $item);
-    if ($orderID) {
+
+    $orderDate = date('Y-m-d');
+    $totalAmount = $item['price'] * $quantity;
+
+    $createResult = $this->createOrder($userID, $orderDate, $totalAmount);
+    if (!$createResult['success']) {
+        return ['success' => false, 'message' => $createResult['message']];
+    }
+
+    $orderID = $createResult['orderID'];
+
+    $addResult = false;
+    if ($item['type'] === 'part') {
+        $addResult = $this->addPartToOrder($orderID, $item['id'], $quantity);
+    } elseif ($item['type'] === 'service') {
+        $addResult = $this->addServiceToOrder($orderID, $item['id'], $quantity);
+    } else {
+        return ['success' => false, 'message' => 'Loại sản phẩm không hợp lệ!'];
+    }
+
+    if ($addResult) {
         return ['success' => true, 'orderID' => $orderID];
     } else {
-        return ['success' => false, 'message' => 'Mua hàng thất bại!'];
+        return ['success' => false, 'message' => 'Thêm sản phẩm vào đơn hàng thất bại!'];
     }
 }
+
 
     // Sinh hóa đơn
     public function generateInvoice($orderID) {

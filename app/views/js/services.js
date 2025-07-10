@@ -11,53 +11,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Gọi API đặt dịch vụ
   async function handleOrderService(service) {
-    const itemToSend = {
-      ...service,
-      id: parseInt(service.serviceID), // 🔁 đổi từ serviceID -> id
-      price: parseFloat(service.price),
-      type: "service",
-    };
+  const itemToSend = {
+    ...service,
+    id: parseInt(service.serviceID), // 🔁 đổi từ serviceID -> id
+    price: parseFloat(service.price),
+    type: "service",
+    quantity: 1, // ✅ Gán mặc định quantity = 1
+  };
 
-    console.log("Dịch vụ gửi lên:", itemToSend);
+  console.log("Dịch vụ gửi lên:", itemToSend);
 
-    try {
-      const response = await fetch(
-        "/laptrinhweb/AutoServices/app/controllers/OrderController.php?action=buySingle",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ item: itemToSend }),
-        }
-      );
-
-      const result = await response.json();
-      if (response.ok && result.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Đặt dịch vụ thành công!",
-          html: `Mã đơn hàng của bạn là: <b>${result.orderID}</b>`,
-          confirmButtonText: "OK",
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Đặt dịch vụ thất bại",
-          text: result.message || "Không thể đặt dịch vụ.",
-          confirmButtonText: "Thử lại",
-        });
+  try {
+    const response = await fetch(
+      "/laptrinhweb/AutoServices/app/controllers/OrderController.php?action=buySingle",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ item: itemToSend }),
       }
-    } catch (error) {
-      console.error("Lỗi đặt dịch vụ:", error);
+    );
+
+    const result = await response.json();
+    if (response.ok && result.success) {
+      Swal.fire({
+        icon: "success",
+        title: "Đặt dịch vụ thành công!",
+        html: `Mã đơn hàng của bạn là: <b>${result.orderID}</b>`,
+        confirmButtonText: "OK",
+      });
+    } else {
       Swal.fire({
         icon: "error",
-        title: "Lỗi kết nối",
-        text: "Đã xảy ra lỗi khi đặt dịch vụ. Vui lòng thử lại sau.",
-        confirmButtonText: "Đóng",
+        title: "Đặt dịch vụ thất bại",
+        text: result.message || "Không thể đặt dịch vụ.",
+        confirmButtonText: "Thử lại",
       });
     }
+  } catch (error) {
+    console.error("Lỗi đặt dịch vụ:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Lỗi kết nối",
+      text: "Đã xảy ra lỗi khi đặt dịch vụ. Vui lòng thử lại sau.",
+      confirmButtonText: "Đóng",
+    });
   }
+}
+
 
   // Tạo thẻ dịch vụ
   function createServiceCard(service) {

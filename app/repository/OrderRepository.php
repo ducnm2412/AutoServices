@@ -19,9 +19,10 @@ class OrderRepository {
     }
 
     // Thêm dịch vụ vào đơn hàng
-    public function addServiceToOrder($orderID, $serviceID) {
-        return $this->orderModel->addServiceToOrder($orderID, $serviceID);
-    }
+    public function addServiceToOrder($orderID, $serviceID, $quantity = 1) {
+    return $this->orderModel->addServiceToOrder($orderID, $serviceID, $quantity);
+}
+
 
     // Checkout giỏ hàng
     public function checkout($userID, $cart) {
