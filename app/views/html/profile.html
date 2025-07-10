@@ -14,18 +14,19 @@
     <div class="container">
         <div class="sidebar">
             <img src="../images/profile_avatar.jpg" alt="Ảnh đại diện">
-            <h3 id="user-name"></h3>
-            <p ></p>
+            <h3 id="userName"></h3>
+            <p id="userRole"></p>
             <ul>
                 <li><a href="/index.html">Trang chủ</a></li>
                 <li><a href="#" onclick="loadPage('infor')">Thông tin cá nhân</a></li>
                 <li><a href="#" >Lịch sử sửa chữa</a></li>
                 <li><a href="#">Đơn hàng</a> </li>
                 <li><a href="#" onclick="loadPage('feedback')">Đánh Giá</a></li>
-                <li><a href="#">Đăng xuất</a></li>
+                <li><a href="#logout" >Đăng xuất</a></li>
             </ul>
         </div>
-        <div class="section" id="main-content">
+        <div class="section" >
+            <div id="main-content"></div>
         </div>
     </div>
     <script src="../js/profile.js"></script>

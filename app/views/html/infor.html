@@ -5,27 +5,26 @@
   <div id="view-mode">
     <div class="form-group">
       <label>Họ và Tên:</label>
-      <span class="info-field" id="fullName">Nguyen Van A</span>
+      <span class="info-field" id="user-name"></span>
     </div>
     <div class="form-group">
       <label>Email:</label>
-      <span class="info-field" id="email">vana@example.com</span>
+      <span class="info-field" id="email"></span>
     </div>
     <div class="form-group">
       <label>Số điện thoại:</label>
-      <span class="info-field" id="phoneNumber">123</span>
+      <span class="info-field" id="phoneNumber"></span>
     </div>
     <div class="form-group">
       <label>Địa chỉ:</label>
-      <span class="info-field" id="address">123</span>
+      <span class="info-field" id="address"></span>
     </div>
     <div class="form-group">
       <label>Mật khẩu:</label>
-      <span class="info-field" id="password">******xyz</span>
+      <span class="info-field" id="password"></span>
     </div>
     <div class="button-group">
         <button onclick="showEditForm()">Sửa thông tin</button>
-        <button onclick="showPasswordForm()">Đổi mật khẩu</button>
     </div>
   </div>
 
@@ -53,19 +52,4 @@
     </div>
   </form>
 
-  <!-- 🔹 Form đổi mật khẩu -->
-  <form id="password-form" style="display: none;" onsubmit="submitPassword(event)">
-    <div class="form-group">
-      <label>Mật khẩu cũ:</label>
-      <input type="password" id="oldPassword" required>
-    </div>
-    <div class="form-group">
-      <label>Mật khẩu mới:</label>
-      <input type="password" id="newPassword" required>
-    </div>
-    <div class="button-group">
-      <button type="submit">Đổi mật khẩu</button>
-      <button type="button" onclick="cancelPasswordEdit()">Hủy</button>
-    </div>
-  </form>
 </div>

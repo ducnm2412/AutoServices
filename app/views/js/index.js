@@ -287,9 +287,20 @@ function setupCartButtons() {
 const btn_open = document.getElementById("btn-open");
 const btn_close = document.getElementById("btn-close");
 const mod_container = document.getElementById("mod-container");
+// btn_open.addEventListener("click", () => {
+//   // Add class .show
+//   mod_container.classList.add("show");
+// });
 btn_open.addEventListener("click", () => {
-  // Add class .show
-  mod_container.classList.add("show");
+  const loggedIn = localStorage.getItem("loggedIn");
+
+  if (loggedIn === "true") {
+    // 👉 Nếu đã đăng nhập thì chuyển qua profile.html
+    window.location.href = "/laptrinhweb/AutoServices/app/views/html/profile.html";
+  } else {
+    // 👉 Nếu chưa đăng nhập thì hiện modal
+    mod_container.classList.add("show");
+  }
 });
 btn_close.addEventListener("click", () => {
   // Add class .show
@@ -309,8 +320,110 @@ function togglePassword() {
   }
 }
 
+// document.getElementById("loginForm").addEventListener("submit", function (e) {
+//   e.preventDefault(); // Ngăn reload form
+
+//   const email = document.getElementById("username").value;
+//   const password = document.getElementById("password").value;
+
+//   fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=login", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json"
+//     },
+//     body: JSON.stringify({ email, password })
+//   })
+//     .then(res => res.text()) // 👈 Nhận dưới dạng text trước
+//     .then(text => {
+//       console.log("🔍 Phản hồi từ server:", text); // 👈 thêm dòng này
+//       try {
+//         const data = JSON.parse(text); // ✅ Parse JSON thủ công
+//         if (data.success) {
+
+
+//           const role = data.user.role;
+//           const token = data.token;
+//           alert("Đăng nhập thành công! Token: " + token);
+
+//           if (role === "admin") {
+//             window.location.href = "/laptrinhweb/AutoServices/app/views/html/admin.html";
+//           } else if (role === "customer") {
+//             window.location.href = "/laptrinhweb/AutoServices/"; // hoặc "/" nếu là trang chủ
+//           } else {
+//             alert("Không xác định vai trò.");
+//           }
+//         } else {
+//           alert(data.message || "Đăng nhập thất bại.");
+//         }
+//       } catch (err) {
+//         console.error("❌ Phản hồi không phải JSON:", text);
+//         alert("Đã xảy ra lỗi khi xử lý phản hồi từ server.");
+//       }
+//     })
+//     .catch(err => {
+//       console.error("❌ Lỗi fetch:", err);
+//       alert("Không thể kết nối đến server.");
+//     });
+// });
+
+// document.getElementById("loginForm").addEventListener("submit", function (e) {
+//   e.preventDefault(); // Ngăn reload form
+
+//   const email = document.getElementById("username").value;
+//   const password = document.getElementById("password").value;
+
+//   fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=login", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json"
+//     },
+//     body: JSON.stringify({ email, password })
+//   })
+//     .then(res => res.text()) // 👈 Nhận dưới dạng text trước
+//     .then(text => {
+//       console.log("🔍 Phản hồi từ server:", text);
+//       try {
+//         const data = JSON.parse(text);
+//         if (data.success) {
+//           const role = data.user.role;
+//           const token = data.token;
+//           //sửa id
+//           const userID = data.user.userID;
+
+//           // ✅ Lưu userID và token vào localStorage để profile.html dùng
+//           localStorage.setItem("userID", userID);
+//           localStorage.setItem("token", token); // nếu bạn cần xác thực
+//           localStorage.setItem("loggedIn", "true");
+
+
+//           alert("Đăng nhập thành công!");
+
+//           if (role === "admin") {
+//             window.location.href = "/laptrinhweb/AutoServices/app/views/html/admin.html";
+//           } else if (role === "customer") {
+//             // ❌ KHÔNG redirect nữa nếu bạn muốn ở lại trang index
+//             // ✅ hoặc redirect nhẹ về chính index.html
+//             window.location.href = "/laptrinhweb/AutoServices/index.html";
+//           } else {
+//             alert("Không xác định vai trò.");
+//           }
+//         } else {
+//           alert(data.message || "Đăng nhập thất bại.");
+//         }
+//       } catch (err) {
+//         console.error("❌ Phản hồi không phải JSON:", text);
+//         alert("Đã xảy ra lỗi khi xử lý phản hồi từ server.");
+//       }
+//     })
+//     .catch(err => {
+//       console.error("❌ Lỗi fetch:", err);
+//       alert("Không thể kết nối đến server.");
+//     });
+// });
+
+
 document.getElementById("loginForm").addEventListener("submit", function (e) {
-  e.preventDefault(); // Ngăn reload form
+  e.preventDefault();
 
   const email = document.getElementById("username").value;
   const password = document.getElementById("password").value;
@@ -318,42 +431,46 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
   fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=login", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ email, password }),
   })
-    .then(res => res.text()) // 👈 Nhận dưới dạng text trước
-    .then(text => {
-      console.log("🔍 Phản hồi từ server:", text); // 👈 thêm dòng này
+    .then((res) => res.text())
+    .then((text) => {
+      console.log("🔍 Phản hồi từ server:", text);
       try {
-        const data = JSON.parse(text); // ✅ Parse JSON thủ công
+        const data = JSON.parse(text);
         if (data.success) {
-
-
           const role = data.user.role;
           const token = data.token;
-          alert("Đăng nhập thành công! Token: " + token);
+          const userID = data.user.userID;
+
+          // ✅ Ghi đúng thông tin
+          localStorage.setItem("userID", userID);
+          localStorage.setItem("token", token);
+          localStorage.setItem("loggedIn", "true");
+          localStorage.setItem("user", JSON.stringify(data.user));
+
+
+          alert("Đăng nhập thành công!");
+          console.log("📥 Phản hồi từ server:", data);
 
           if (role === "admin") {
-            window.location.href = "/laptrinhweb/AutoServices/app/views/html/admin.html";
+            window.location.href =
+              "/laptrinhweb/AutoServices/app/views/html/admin.html";
           } else if (role === "customer") {
-            window.location.href = "/laptrinhweb/AutoServices/"; // hoặc "/" nếu là trang chủ
-          } else {
-            alert("Không xác định vai trò.");
+            window.location.href = "/laptrinhweb/AutoServices/index.html";
           }
         } else {
           alert(data.message || "Đăng nhập thất bại.");
         }
       } catch (err) {
-        console.error("❌ Phản hồi không phải JSON:", text);
-        alert("Đã xảy ra lỗi khi xử lý phản hồi từ server.");
+        console.error("❌ Không phải JSON:", text);
+        alert("Lỗi khi xử lý phản hồi từ server.");
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("❌ Lỗi fetch:", err);
       alert("Không thể kết nối đến server.");
     });
 });
-
-
-

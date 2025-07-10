@@ -1,66 +1,138 @@
-let realPassword = "abc123xyz";
 
-function maskPassword(pw) {
-  if (pw.length <= 3) return pw;
-  return "*".repeat(pw.length - 3) + pw.slice(-3);
+console.log("📌 infor.js đã được chạy!");
+
+function loadInforData() {
+  console.log("👉 Gọi loadInforData()");
+
+  const userData = localStorage.getItem("user");
+  const userID = localStorage.getItem("userID");
+console.log("👀 userID hiện tại:", userID);
+  if (!userData) {
+    console.warn("⚠️ Không tìm thấy user trong localStorage!");
+    return;
+  }
+
+  const user = JSON.parse(userData);
+  console.log("📥 Thông tin user:", user);
+
+  // ✅ Hiển thị dữ liệu
+  document.getElementById("user-name").textContent = user.name;
+  document.getElementById("email").textContent = user.email;
+  document.getElementById("phoneNumber").textContent = user.phoneNumber;
+  document.getElementById("address").textContent = user.address;
+  document.getElementById("password").textContent = "******" + user.password.slice(-3);
 }
 
-function showEditForm() {
-  document.getElementById("editFullName").value = document.getElementById("fullName").textContent;
-  document.getElementById("editEmail").value = document.getElementById("email").textContent;
-  document.getElementById("editPhone").value = document.getElementById("phoneNumber").textContent;
-  document.getElementById("editAddress").value = document.getElementById("address").textContent;
 
+// 👉 Hiển thị form sửa thông tin
+function showEditForm() {
   document.getElementById("view-mode").style.display = "none";
   document.getElementById("edit-form").style.display = "block";
+
+  // 👉 Lấy dữ liệu hiện tại để điền sẵn vào form
+  const user = JSON.parse(localStorage.getItem("user"));
+  document.getElementById("editFullName").value = user.name;
+  document.getElementById("editEmail").value = user.email;
+  document.getElementById("editPhone").value = user.phoneNumber;
+  document.getElementById("editAddress").value = user.address;
 }
 
+// 👉 Hủy chỉnh sửa
 function cancelEdit() {
   document.getElementById("edit-form").style.display = "none";
   document.getElementById("view-mode").style.display = "block";
 }
 
-function submitInfo(event) {
-  event.preventDefault();
-
-  document.getElementById("fullName").textContent = document.getElementById("editFullName").value;
-  document.getElementById("email").textContent = document.getElementById("editEmail").value;
-  document.getElementById("phoneNumber").textContent = document.getElementById("editPhone").value;
-  document.getElementById("address").textContent = document.getElementById("editAddress").value;
-
-  cancelEdit();
-}
-
+// 👉 Hiển thị form đổi mật khẩu
 function showPasswordForm() {
   document.getElementById("view-mode").style.display = "none";
   document.getElementById("password-form").style.display = "block";
-  document.getElementById("oldPassword").value = "";
-  document.getElementById("newPassword").value = "";
 }
 
+// 👉 Hủy đổi mật khẩu
 function cancelPasswordEdit() {
   document.getElementById("password-form").style.display = "none";
   document.getElementById("view-mode").style.display = "block";
 }
 
-function submitPassword(event) {
-  event.preventDefault();
+// 👉 Gửi dữ liệu khi sửa thông tin (viết xử lý gửi API tại đây nếu có)
+// function submitInfo(e) {
+//   e.preventDefault();
 
-  const oldPw = document.getElementById("oldPassword").value;
-  const newPw = document.getElementById("newPassword").value;
+//   const updatedUser = {
+//     ...JSON.parse(localStorage.getItem("user")),
+//     name: document.getElementById("editFullName").value,
+//     email: document.getElementById("editEmail").value,
+//     phoneNumber: document.getElementById("editPhone").value,
+//     address: document.getElementById("editAddress").value,
+//   };
 
-  if (oldPw !== realPassword) {
-    alert("❌ Mật khẩu cũ không đúng!");
-    return;
-  }
+//   // ✅ Cập nhật localStorage
+//   localStorage.setItem("user", JSON.stringify(updatedUser));
 
-  if (newPw.length < 6) {
-    alert("⚠ Mật khẩu mới phải có ít nhất 6 ký tự.");
-    return;
-  }
+//   alert("Thông tin đã được cập nhật!");
 
-  realPassword = newPw;
-  document.getElementById("password").textContent = maskPassword(realPassword);
-  cancelPasswordEdit();
-  alert("✅ Đổi mật khẩu thành công!");
+//   // ✅ Reload lại thông tin
+//   document.getElementById("view-mode").style.display = "block";
+//   document.getElementById("edit-form").style.display = "none";
+
+//   // Hiển thị lại dữ liệu mới
+//   document.getElementById("user-name").textContent = updatedUser.name;
+//   document.getElementById("email").textContent = updatedUser.email;
+//   document.getElementById("phoneNumber").textContent = updatedUser.phoneNumber;
+//   document.getElementById("address").textContent = updatedUser.address;
+// }
+
+function submitInfo(e) {
+  e.preventDefault();
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userID = user.userID;
+
+  const updatedUser = {
+    name: document.getElementById("editFullName").value,
+    email: document.getElementById("editEmail").value,
+    phoneNumber: document.getElementById("editPhone").value,
+    address: document.getElementById("editAddress").value,
+  };
+
+  fetch(`/laptrinhweb/AutoServices/app/controllers/UserController.php?action=updateProfile&userID=${userID}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(updatedUser)
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("✅ Cập nhật thông tin thành công!");
+
+        // ✅ Cập nhật lại localStorage
+        const newUser = {
+          ...user,
+          ...updatedUser,
+        };
+        localStorage.setItem("user", JSON.stringify(newUser));
+
+        // ✅ Hiển thị lại dữ liệu
+        document.getElementById("user-name").textContent = newUser.name;
+        document.getElementById("email").textContent = newUser.email;
+        document.getElementById("phoneNumber").textContent = newUser.phoneNumber;
+        document.getElementById("address").textContent = newUser.address;
+
+        // ✅ Đóng form
+        document.getElementById("view-mode").style.display = "block";
+        document.getElementById("edit-form").style.display = "none";
+      } else {
+        alert("❌ " + data.message);
+      }
+    })
+    .catch(err => {
+      console.error("Lỗi:", err);
+      alert("❌ Lỗi kết nối đến server!");
+    });
 }
+
+
+

@@ -1,53 +1,54 @@
+// feedback.js
+function initFeedback() {
+  console.log("✅ Đã gọi initFeedback()");
 
-const form = document.getElementById("feedbackForm");
-const messageBox = document.getElementById("messageBox");
+  const form = document.getElementById("feedbackForm");
+  if (!form) {
+    console.warn("⚠️ Không tìm thấy form feedback!");
+    return;
+  }
 
-form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const payload = {
-    orderID: document.getElementById("orderID").value.trim(),
-    content: document.getElementById("content").value.trim(),
-    rating: document.querySelector("input[name='rating']:checked")?.value,
-    };
+    const orderID = document.getElementById("orderID").value.trim();
+    const content = document.getElementById("feedback").value.trim();
+    const rating = document.querySelector('input[name="rating"]:checked')?.value;
 
-    // Validate rating selection
-    if (!payload.rating) {
-    messageBox.textContent = "Vui lòng chọn số sao đánh giá.";
-    messageBox.className = "message error";
-    messageBox.style.display = "block";
-    return;
+    const messageBox = document.getElementById("messageBox");
+
+    if (!rating) {
+      messageBox.textContent = "⚠️ Vui lòng chọn số sao đánh giá!";
+      messageBox.style.color = "red";
+      return;
     }
 
-    // Reset message box
-    messageBox.style.display = "none";
-    messageBox.textContent = "";
-
-    try {
-    const response = await fetch(
-        "/controllers/FeedbackController.php?action=submit",
-        {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+    fetch("/laptrinhweb/AutoServices/app/controllers/FeedbackController.php?action=submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        orderID,
+        content,
+        rating: parseInt(rating)
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          messageBox.textContent = "✅ Gửi phản hồi thành công!";
+          messageBox.style.color = "green";
+          form.reset();
+        } else {
+          messageBox.textContent = "❌ " + (data.message || "Gửi thất bại!");
+          messageBox.style.color = "red";
         }
-    );
-
-    const data = await response.json();
-
-    if (data.success) {
-        messageBox.textContent = data.message;
-        messageBox.className = "message success";
-        form.reset();
-    } else {
-        throw new Error(data.message);
-    }
-    } catch (err) {
-    messageBox.textContent = err.message || "Có lỗi xảy ra. Vui lòng thử lại.";
-    messageBox.className = "message error";
-    }
-
-    messageBox.style.display = "block";
-});
+      })
+      .catch((err) => {
+        console.error("❌ Lỗi gửi phản hồi:", err);
+        messageBox.textContent = "Lỗi kết nối đến server!";
+        messageBox.style.color = "red";
+      });
+  });
+}
