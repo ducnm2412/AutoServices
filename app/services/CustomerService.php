@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../repositories/CustomerRepository.php';
+require_once __DIR__ . '/../repository/CustomerRepository.php';
 
 class CustomerService {
     private $customerRepository;

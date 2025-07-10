@@ -1,0 +1,91 @@
+:root {
+    --dark-bg: #1a1a1a;
+    --text-color: #f0f0f0;
+    --highlight-color: #ffcc00;
+    --border-color: #444;
+    --button-hover-bg: rgba(230, 184, 0, 0.8);
+}
+.footer {
+  background-image: url(../images/footer2_img.jpg);
+  color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 40px 20px;
+  font-family: Arial, sans-serif;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  justify-content: center;
+}
+
+.footer-column {
+  flex: 1;
+  max-width: 300px;
+}
+
+.footer-column h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column li {
+  margin-bottom: 10px;
+}
+
+.footer-column a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.footer-column a:hover {
+  color: #ccc;
+}
+
+.footer-info {
+  text-align: center;
+  padding: 1rem 0;
+  background-color: #000;
+}
+.footer-info h3 {
+  color: white;
+}
+:root {
+    --dark-bg: #1a1a1a;
+    --text-color: #f0f0f0;
+    --highlight-color: #ffcc00;
+    --border-color: #444;
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.back-home-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--highlight-color); /* màu vàng */
+  color: var(--dark-bg); /* nền tối */
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 1.5em;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-home-btn:hover {
+  background-color: var(--button-hover-bg); /* màu hover đậm hơn */
+  transform: scale(1.1);
+  box-shadow: 0px 0px 16px var(--button-hover-bg);
+}

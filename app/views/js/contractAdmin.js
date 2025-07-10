@@ -14,9 +14,9 @@ function renderContacts(contacts) {
   const tbody = document.getElementById("contactTableBody");
   tbody.innerHTML = "";
   contacts.forEach((contact) => {
-    // Kiểm tra đã có trả lời admin chưa (dựa vào message có chứa 'Admin:' hay không)
     const hasReply = contact.message && contact.message.includes("Admin:");
     let replyCell = "";
+
     if (!hasReply) {
       replyCell = `
         <form onsubmit="return sendReply(event, ${contact.contactID})">
@@ -25,11 +25,11 @@ function renderContacts(contacts) {
         </form>
       `;
     } else {
-      // Hiển thị toàn bộ message, xuống dòng đúng
       replyCell = `<div style='white-space:pre-line;'>${escapeHtml(
         contact.message
       )}</div>`;
     }
+
     tbody.innerHTML += `
       <tr>
         <td>${contact.contactID}</td>
@@ -50,11 +50,12 @@ function fetchContacts() {
     .then((res) => res.json())
     .then((result) => {
       if (!result.success) {
-        document.getElementById(
-          "contactTableBody"
-        ).innerHTML = `<tr><td colspan='8'>${
-          result.message || "Không thể tải dữ liệu!"
-        }</td></tr>`;
+        document.getElementById("contactTableBody").innerHTML = `<tr><td colspan='8'>${result.message || "Không thể tải dữ liệu!"}</td></tr>`;
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi!",
+          text: result.message || "Không thể tải danh sách liên hệ.",
+        });
         return;
       }
       renderContacts(result.contacts);
@@ -62,6 +63,11 @@ function fetchContacts() {
     .catch(() => {
       document.getElementById("contactTableBody").innerHTML =
         '<tr><td colspan="8">Lỗi khi tải dữ liệu!</td></tr>';
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi kết nối!",
+        text: "Không thể kết nối tới máy chủ.",
+      });
     });
 }
 
@@ -70,6 +76,7 @@ window.sendReply = function (event, contactID) {
   const form = event.target;
   const adminReply = form.adminReply.value.trim();
   if (!adminReply) return false;
+
   fetch("/laptrinhweb/AutoServices/app/controllers/ContactController.php?action=reply", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -78,12 +85,28 @@ window.sendReply = function (event, contactID) {
     .then((res) => res.json())
     .then((result) => {
       if (result.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Đã gửi phản hồi!",
+          text: result.message || "Phản hồi đã được gửi thành công.",
+        });
         fetchContacts();
       } else {
-        alert(result.message || "Trả lời thất bại!");
+        Swal.fire({
+          icon: "error",
+          title: "Gửi thất bại!",
+          text: result.message || "Không thể gửi phản hồi.",
+        });
       }
     })
-    .catch(() => alert("Lỗi khi gửi trả lời!"));
+    .catch(() => {
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi!",
+        text: "Đã xảy ra lỗi khi gửi phản hồi.",
+      });
+    });
+
   return false;
 };
 
