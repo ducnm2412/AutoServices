@@ -328,6 +328,8 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
       try {
         const data = JSON.parse(text); // ✅ Parse JSON thủ công
         if (data.success) {
+
+
           const role = data.user.role;
           const token = data.token;
           alert("Đăng nhập thành công! Token: " + token);
@@ -352,3 +354,6 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
       alert("Không thể kết nối đến server.");
     });
 });
+
+
+
