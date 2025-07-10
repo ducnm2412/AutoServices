@@ -39,5 +39,10 @@ class PartRepository {
     public function getByCategory($categoryID) {
         return $this->partModel->getPartsByCategory($categoryID);
     }
+
+    // Đếm số lượng sản phẩm
+    public function countParts() {
+        return $this->partModel->countParts();
+    }
 }
 ?>

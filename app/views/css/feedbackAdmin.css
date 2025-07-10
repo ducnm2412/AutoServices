@@ -4,11 +4,15 @@ body {
   margin: 0;
   padding: 0;
 }
+
 h1 {
   text-align: center;
   margin-top: 30px;
-  color: #2d3a4b;
+  color: #d35400;
+  font-size: 2.2em;
+  font-weight: bold;
 }
+
 table {
   width: 95%;
   margin: 30px auto;
@@ -16,19 +20,35 @@ table {
   background: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
+
 thead th {
-  background: #2d3a4b;
+  background: #e74c3c;
   color: #fff;
-  padding: 10px 8px;
+  padding: 12px 10px;
   font-weight: 600;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid #e67e22;
+  font-size: 1.08em;
 }
+
 tbody td {
   padding: 10px 8px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1.5px solid #e67e22;
   text-align: center;
   font-size: 1em;
 }
+
 tbody tr:last-child td {
   border-bottom: none;
+}
+
+tbody tr:nth-child(even) td {
+  background: #fff7f0;
+}
+
+tbody tr:nth-child(odd) td {
+  background: #fff;
+}
+
+tbody tr:hover td {
+  background: #ffe0b2;
 }

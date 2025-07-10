@@ -71,16 +71,11 @@ class OrderController {
     }
     
     // Admin xem tất cả đơn hàng
-    public function getAllOrders() {
-        $this->checkAuth(true); // Chỉ Admin mới được vào
-        $orders = $this->orderService->getAllOrders();
-        if (!$invoiceData['order'] || ($_SESSION['user']['role'] !== 'admin' && $invoiceData['order']['userID'] !== $_SESSION['user']['userID'])) {
-            http_response_code(404);
-            echo json_encode(['success' => false, 'message' => 'Không tìm thấy đơn hàng hoặc bạn không có quyền xem.']);
-            exit();
-        }
-        echo json_encode(['success' => true, 'orders' => $orders]);
-    }
+public function getAllOrders() {
+    $this->checkAuth(true); // Chỉ Admin mới được vào
+    $orders = $this->orderService->getAllOrders();
+    echo json_encode(['success' => true, 'orders' => $orders]);
+}
 
     // Thanh toán cho một đơn hàng
     public function processPayment() {
@@ -105,6 +100,21 @@ class OrderController {
             echo json_encode(['success' => false, 'message' => 'Thanh toán thất bại.']);
         }
     }
+
+    // Mua nhanh 1 sản phẩm hoặc dịch vụ
+    public function buySingle() {
+        $this->checkAuth();
+        $data = json_decode(file_get_contents('php://input'), true);
+        $item = $data['item'] ?? null;
+        $userID = $_SESSION['user']['userID'];
+        $result = $this->orderService->buySingle($userID, $item);
+        if ($result['success']) {
+            echo json_encode(['success' => true, 'orderID' => $result['orderID']]);
+        } else {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => $result['message']]);
+        }
+    }
 }
 
 // Routing
@@ -123,6 +133,9 @@ switch ($action) {
         break;
     case 'processPayment':
         $controller->processPayment();
+        break;
+    case 'buySingle':
+        $controller->buySingle();
         break;
     default:
         http_response_code(404);

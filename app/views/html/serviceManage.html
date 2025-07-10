@@ -4,10 +4,23 @@
     <meta charset="UTF-8" />
     <title>Quản lý Dịch vụ</title>
     <link rel="stylesheet" href="../css/serviceManage.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <h1>Quản lý Dịch vụ</h1>
-
+    <div style="position: relative">
+      <button
+        class="arrow_back"
+        style="padding: 12px; position: absolute; margin-left: 4rem"
+      >
+        <a href="../html/admin.html" style="text-decoration: none; color: #fff"
+          ><i class="ri-arrow-left-circle-line" style="font-size: 24px"></i
+        ></a>
+      </button>
+      <h1>Quản lý Dịch vụ</h1>
+    </div>
     <form id="serviceForm">
       <input type="hidden" id="serviceID" name="serviceID" />
       <input
@@ -45,6 +58,7 @@
           <th>Giá</th>
           <th>Mô tả</th>
           <th>Mã loại</th>
+          <th>Hành Động</th>
         </tr>
       </thead>
       <tbody id="serviceTableBody">

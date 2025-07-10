@@ -15,9 +15,11 @@ class ContactController {
         $name = $data['name'] ?? '';
         $phone = $data['phone'] ?? '';
         $email = $data['email'] ?? '';
-        $serviceID = $data['serviceID'] ?? '';
+        // Thay đổi serviceID thành categoryID
+        $categoryID = $data['categoryID'] ?? ''; 
         $message = $data['message'] ?? '';
-        $result = $this->contactService->createContact($name, $phone, $email, $serviceID, $message);
+        // Truyền categoryID thay vì serviceID
+        $result = $this->contactService->createContact($name, $phone, $email, $categoryID, $message);
         if ($result['success']) {
             http_response_code(201);
         } else {

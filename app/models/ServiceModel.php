@@ -71,5 +71,12 @@ public function getServicesByCategory($categoryID) {
     }
     return $services;
 }
+
+    // Đếm số lượng dịch vụ
+    public function countServices() {
+        $sql = "SELECT COUNT(*) as total FROM Service";
+        $result = $this->conn->query($sql);
+        return $result->fetch_assoc()['total'] ?? 0;
+    }
 }
 ?> 

@@ -21,5 +21,10 @@ public function viewOrderHistory($userID) {
     public function makePayment($orderID, $paymentInfo) {
         return $this->customerModel->makePayment($orderID, $paymentInfo);
     }
+
+    // Đếm số lượng khách hàng
+    public function countCustomers() {
+        return $this->customerModel->countCustomers();
+    }
 }
 ?>

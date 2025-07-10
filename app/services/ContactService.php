@@ -9,8 +9,8 @@ class ContactService {
     }
 
     // Thêm liên hệ mới (có validate)
-    public function createContact($name, $phone, $email, $serviceID, $message) {
-        if (empty($name) || empty($phone) || empty($email) || empty($serviceID) || empty($message)) {
+     public function createContact($name, $phone, $email, $categoryID, $message) {
+        if (empty($name) || empty($phone) || empty($email) || empty($categoryID) || empty($message)) {
             return ['success' => false, 'message' => 'Vui lòng nhập đầy đủ thông tin liên hệ!'];
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -19,7 +19,8 @@ class ContactService {
         if (!preg_match('/^[0-9]{9,15}$/', $phone)) {
             return ['success' => false, 'message' => 'Số điện thoại không hợp lệ!'];
         }
-        $result = $this->contactRepository->create($name, $phone, $email, $serviceID, $message);
+        // Truyền categoryID thay vì serviceID
+        $result = $this->contactRepository->create($name, $phone, $email, $categoryID, $message);
         if ($result) {
             return ['success' => true, 'message' => 'Gửi liên hệ thành công!'];
         } else {

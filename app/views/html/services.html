@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoServices-Services</title>
+    <link rel="stylesheet" href="../css/services.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Dịch vụ</div>
+        <nav class="navbar">
+            <h1 class="brand-name">AutoServices-Services</h1>
+            <ul class="nav-links">
+                <li><a href="#">TRANG CHỦ</a></li>
+                <li><span class="separator">/</span></li>
+                <li><a href="#" class="active">Dịch vụ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="filter-buttons">
+    <button class="filter-btn active" data-category-id="">TẤT CẢ</button>
+    <button class="filter-btn" data-category-id="cat01">LỐP Ô TÔ</button>
+    <button class="filter-btn" data-category-id="cat02">ẮC QUY</button>
+    <button class="filter-btn" data-category-id="cat04">CHĂM SÓC XE</button>
+    <button class="filter-btn" data-category-id="cat03">BẢO DƯỠNG</button>
+</div>
+
+        <section class="services-grid" id="servicesGrid">
+            <div id="loadingMessage" style="text-align: center; color: #aaa; padding: 20px;">Đang tải dịch vụ...</div>
+            <div id="errorMessage" style="text-align: center; color: red; padding: 20px; display: none;">Không thể tải dịch vụ. Vui lòng thử lại sau.</div>
+            <div id="noServicesMessage" style="text-align: center; color: #aaa; padding: 20px; display: none;">Không tìm thấy dịch vụ nào.</div>
+        </section>
+    </main>
+    <script src="../js/services.js"></script>
+</body>
+</html>

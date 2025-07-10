@@ -79,5 +79,12 @@ class PartModel extends Database {
         }
         return $parts;
     }
+
+    // Đếm số lượng sản phẩm
+    public function countParts() {
+        $sql = "SELECT COUNT(*) as total FROM Part";
+        $result = $this->conn->query($sql);
+        return $result->fetch_assoc()['total'] ?? 0;
+    }
 }
 ?>

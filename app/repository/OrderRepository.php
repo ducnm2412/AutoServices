@@ -43,9 +43,18 @@ class OrderRepository {
         return $this->orderModel->getAllOrders();
     }
 
+    // Lấy số lượng đơn hàng theo từng tháng
+    public function getOrderChart() {
+        return $this->orderModel->getOrderChart();
+    }
+
     // Cập nhật trạng thái đơn hàng
     public function updateStatus($orderID, $status) {
         return $this->orderModel->updateStatus($orderID, $status);
+    }
+        // Đếm tổng số đơn hàng
+    public function countOrders() {
+        return $this->orderModel->countOrders();
     }
 }
 ?>
