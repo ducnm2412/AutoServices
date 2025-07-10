@@ -1,0 +1,29 @@
+:root {
+    --dark-bg: #1a1a1a;
+    --text-color: #f0f0f0;
+    --highlight-color: #ffcc00;
+    --border-color: #444;
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.back-home-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--highlight-color); /* màu vàng */
+  color: var(--dark-bg); /* nền tối */
+  padding: 8px 12px;
+  border-radius: 50%;
+  font-size: 1.5em;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-home-btn:hover {
+  background-color: var(--button-hover-bg); /* màu hover đậm hơn */
+  transform: scale(1.1);
+}

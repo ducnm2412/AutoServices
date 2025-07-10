@@ -1,23 +1,70 @@
+/* Reset và font tổng thể */
 body {
   font-family: Arial, sans-serif;
   background: #f8f9fa;
   margin: 0;
   padding: 0;
 }
-h1 {
+
+/* Header */
+.header {
   text-align: center;
-  margin-top: 30px;
-  color: #2d3a4b;
+  position: relative;
+  padding: 20px 0 10px;
+  background-color: transparent;
 }
+
+h1 {
+  font-size: 2.2em;
+  margin: 0;
+  color: #d35400;
+  font-weight: bold;
+}
+
+/* Nút quay lại */
+.arrow_back {
+  position: absolute;
+  left: 3rem;
+  top: 1rem;
+  background-color: #d35400;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.arrow_back:hover {
+  background-color: #e67e22;
+}
+
+.arrow_back a {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Khối thông tin đơn hàng */
 #orderInfo {
-  max-width: 600px;
-  margin: 20px auto 30px auto;
+  max-width: 700px;
+  margin: 24px auto 20px;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-  padding: 24px 32px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  padding: 28px 36px;
   font-size: 1.1em;
+  color: #333;
 }
+
+/* Tiêu đề phụ */
+h2 {
+  width: 90%;
+  margin: 0 auto 12px auto;
+  color: #e74c3c;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+/* Bảng đơn hàng */
 table {
   width: 90%;
   margin: 0 auto;
@@ -25,35 +72,81 @@ table {
   background: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
+
 thead th {
-  background: #2d3a4b;
+  background: #e74c3c;
   color: #fff;
-  padding: 10px 8px;
+  padding: 12px 10px;
   font-weight: 600;
+  font-size: 1.08em;
 }
+
 tbody td {
   padding: 10px 8px;
-  border-bottom: 1px solid #e0e0e0;
+  border: 1px solid #e67e22;
   text-align: center;
+  font-size: 1em;
 }
-tbody tr:last-child td {
-  border-bottom: none;
+
+tbody tr:nth-child(even) td {
+  background: #fff7f0;
 }
+
+tbody tr:nth-child(odd) td {
+  background: #fff;
+}
+
+tbody tr:hover td {
+  background: #ffe0b2;
+  transition: background 0.2s ease-in-out;
+}
+
+/* Tổng tiền */
 #orderTotal {
   width: 90%;
-  margin: 24px auto 0 auto;
+  margin: 24px auto 40px auto;
   font-size: 1.2em;
   color: #d35400;
   text-align: right;
   background: #fffbe6;
-  padding: 12px 24px;
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  padding: 14px 28px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  font-weight: bold;
 }
-h2 {
-  width: 90%;
-  margin: 0 auto 12px auto;
-  color: #2d3a4b;
-  font-size: 1.15em;
-  font-weight: 500;
+
+/* Responsive */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.8em;
+  }
+
+  #orderInfo {
+    padding: 20px;
+    font-size: 1em;
+  }
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    font-size: 0.95em;
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  #orderTotal {
+    font-size: 1.05em;
+    padding: 10px 20px;
+  }
+
+  .arrow_back {
+    left: 1rem;
+    top: 0.8rem;
+    padding: 10px;
+  }
 }

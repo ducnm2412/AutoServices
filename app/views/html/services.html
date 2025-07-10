@@ -1,42 +1,104 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AutoServices-Services</title>
-    <link rel="stylesheet" href="../css/services.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/services.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/footer.css">
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
     <header class="header">
+      <div class="logo-container">
+        <a href="/laptrinhweb/AutoServices/" class="back-home-btn"><i class="ri-arrow-left-circle-line"></i></a>
         <div class="logo">Dịch vụ</div>
-        <nav class="navbar">
-            <h1 class="brand-name">AutoServices-Services</h1>
-            <ul class="nav-links">
-                <li><a href="#">TRANG CHỦ</a></li>
-                <li><span class="separator">/</span></li>
-                <li><a href="#" class="active">Dịch vụ</a></li>
-            </ul>
-        </nav>
+      </div>
+      <nav class="navbar">
+        <h1 class="brand-name">AutoServices-Services</h1>
+        <ul class="nav-links">
+          <li><a href="/laptrinhweb/AutoServices/">TRANG CHỦ</a></li>
+          <li><span class="separator">/</span></li>
+          <li><a href="#" class="active">DỊCH VỤ</a></li>
+        </ul>
+      </nav>
     </header>
 
     <main class="main-content">
-        <div class="filter-buttons">
-    <button class="filter-btn active" data-category-id="">TẤT CẢ</button>
-    <button class="filter-btn" data-category-id="cat01">LỐP Ô TÔ</button>
-    <button class="filter-btn" data-category-id="cat02">ẮC QUY</button>
-    <button class="filter-btn" data-category-id="cat04">CHĂM SÓC XE</button>
-    <button class="filter-btn" data-category-id="cat03">BẢO DƯỠNG</button>
-</div>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-category-id="">TẤT CẢ</button>
+        <button class="filter-btn" data-category-id="cat01">LỐP Ô TÔ</button>
+        <button class="filter-btn" data-category-id="cat02">ẮC QUY</button>
+        <button class="filter-btn" data-category-id="cat04">CHĂM SÓC XE</button>
+        <button class="filter-btn" data-category-id="cat03">BẢO DƯỠNG</button>
+      </div>
 
-        <section class="services-grid" id="servicesGrid">
-            <div id="loadingMessage" style="text-align: center; color: #aaa; padding: 20px;">Đang tải dịch vụ...</div>
-            <div id="errorMessage" style="text-align: center; color: red; padding: 20px; display: none;">Không thể tải dịch vụ. Vui lòng thử lại sau.</div>
-            <div id="noServicesMessage" style="text-align: center; color: #aaa; padding: 20px; display: none;">Không tìm thấy dịch vụ nào.</div>
-        </section>
+      <section class="services-grid" id="servicesGrid">
+        <div
+          id="loadingMessage"
+          style="text-align: center; color: #aaa; padding: 20px"
+        >
+          Đang tải dịch vụ...
+        </div>
+        <div
+          id="errorMessage"
+          style="text-align: center; color: red; padding: 20px; display: none"
+        >
+          Không thể tải dịch vụ. Vui lòng thử lại sau.
+        </div>
+        <div
+          id="noServicesMessage"
+          style="text-align: center; color: #aaa; padding: 20px; display: none"
+        >
+          Không tìm thấy dịch vụ nào.
+        </div>
+      </section>
     </main>
+    <footer>
+      <div class="footer">
+        <div class="footer-column">
+          <h4>Về AutoServices</h4>
+          <ul>
+            <li><a href="/laptrinhweb/AutoServices/">Trang chủ</a></li>
+            <li><a href="/laptrinhweb/AutoServices/app/views/html/about.html">Giới thiệu</a></li>
+            <li><a href="/laptrinhweb/AutoServices/app/views/html/services.html">Dịch vụ</a></li>
+            <li><a href="/laptrinhweb/AutoServices/app/views/html/products.html">Sản phẩm</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Dịch vụ</h4>
+          <ul>
+            <li><a href="#">Lốp oto</a></li>
+            <li><a href="#">Ac quy</a></li>
+            <li><a href="#">Bảo dưỡng - Sửa chữa</a></li>
+            <li><a href="#">Chăm sóc xe</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Địa chỉ liên hệ</h4>
+          <ul>
+            <li>70 Đ. Tô Ký, Tân Chánh Hiệp, Quận 12, Hồ Chí Minh, Việt Nam</li>
+          </ul>
+          <div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.2946148745123!2d106.61381087415717!3d10.865181857552134!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752b2a11844fb9%3A0xbed3d5f0a6d6e0fe!2zVFLGr-G7nE5HIMSQ4bqgSSBI4buMQyBHSUFPIFRIw5RORyBW4bqsTiBU4bqiSSBUUC5IQ00gW0PGoCBT4bueIDNd!5e0!3m2!1sen!2s!4v1751443947330!5m2!1sen!2s"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="footer-info">
+        <h3><a href="https://ducnm2412.github.io/MyTeam/"></a>CN2301C-Team4</h3>
+      </div>
+    </footer>
     <script src="../js/services.js"></script>
-</body>
+  </body>
 </html>
