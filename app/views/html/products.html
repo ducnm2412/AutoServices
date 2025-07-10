@@ -5,17 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AutoServices-Products</title>
     <link rel="stylesheet" href="../css/products.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/footer.css">
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
     <header class="header">
-      <div class="logo">Sản phẩm</div>
+      <div class="logo-container">
+        <a href="/laptrinhweb/AutoServices/" class="back-home-btn"><i class="ri-arrow-left-circle-line"></i></a>
+        <div class="logo">Sản phẩm</div>
+      </div>
       <nav class="navbar">
         <h1 class="brand-name">AutoServices-Products</h1>
         <ul class="nav-links">
-          <li><a href="#">TRANG CHỦ</a></li>
+          <li><a href="/laptrinhweb/AutoServices/">TRANG CHỦ</a></li>
           <li><span class="separator">/</span></li>
           <li><a href="#" class="active">SẢN PHẨM</a></li>
         </ul>
@@ -31,8 +42,12 @@
 
       <div class="products-grid product-list">
         <p id="loadingMessage" class="loading-message">Đang tải sản phẩm...</p>
-        <p id="errorMessage" class="error-message">Không thể tải sản phẩm. Vui lòng thử lại sau.</p>
-        <p id="noProductsMessage" class="no-products-message">Không có sản phẩm nào trong danh mục này.</p>
+        <p id="errorMessage" class="error-message">
+          Không thể tải sản phẩm. Vui lòng thử lại sau.
+        </p>
+        <p id="noProductsMessage" class="no-products-message">
+          Không có sản phẩm nào trong danh mục này.
+        </p>
       </div>
     </main>
 
@@ -46,13 +61,14 @@
           <p>Giá: <span id="modal-product-price"></span></p>
 
           <div class="modal-customer-info">
-  <p>Tên: <span id="modal-customer-name"></span></p>
-  <p>SĐT: <span id="modal-customer-phone"></span></p>
-  <p>Địa chỉ: <span id="modal-customer-address"></span></p>
-</div>
+            <p>Tên: <span id="modal-customer-name"></span></p>
+            <p>SĐT: <span id="modal-customer-phone"></span></p>
+            <p>Địa chỉ: <span id="modal-customer-address"></span></p>
+          </div>
 
-
-          <button id="confirmOrderBtn" class="confirm-order-btn">Xác nhận đơn hàng</button>
+          <button id="confirmOrderBtn" class="confirm-order-btn">
+            Xác nhận đơn hàng
+          </button>
         </div>
       </div>
     </div>
@@ -114,7 +130,42 @@
         </p>
       </div>
     </div>
-
+    <footer>
+      <div class="footer">
+        <div class="footer-column">
+          <h4>Về AutoServices</h4>
+          <ul>
+            <li><a href="/laptrinhweb/AutoServices/">Trang chủ</a></li>
+            <li><a href="/laptrinhweb/AutoServices/app/views/html/about.html">Giới thiệu</a></li>
+            <li><a href="/laptrinhweb/AutoServices/app/views/html/services.html">Dịch vụ</a></li>
+            <li><a href="/laptrinhweb/AutoServices/app/views/html/products.html">Sản phẩm</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Dịch vụ</h4>
+          <ul>
+            <li><a href="#">Lốp oto</a></li>
+            <li><a href="#">Ac quy</a></li>
+            <li><a href="#">Bảo dưỡng - Sửa chữa</a></li>
+            <li><a href="#">Chăm sóc xe</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Địa chỉ liên hệ</h4>
+          <ul>
+            <li>70 Đ. Tô Ký, Tân Chánh Hiệp, Quận 12, Hồ Chí Minh, Việt Nam</li>
+          </ul>
+          <div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.2946148745123!2d106.61381087415717!3d10.865181857552134!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752b2a11844fb9%3A0xbed3d5f0a6d6e0fe!2zVFLGr-G7nE5HIMSQ4bqgSSBI4buMQyBHSUFPIFRIw5RORyBW4bqsTiBU4bqiSSBUUC5IQ00gW0PGoCBT4bueIDNd!5e0!3m2!1sen!2s!4v1751443947330!5m2!1sen!2s"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="footer-info">
+        <h3><a href="https://ducnm2412.github.io/MyTeam/"></a>CN2301C-Team4</h3>
+      </div>
+    </footer>
     <script src="../js/products.js"></script>
   </body>
 </html>

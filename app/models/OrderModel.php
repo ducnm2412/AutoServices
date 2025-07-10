@@ -117,7 +117,7 @@ public function buySingle($userID, $item) {
     return $orderID;
 }
 public function countOrders() {
-    $sql = "SELECT COUNT(*) as total FROM orders";
+    $sql = "SELECT COUNT(*) as total FROM `order`";
     $result = $this->conn->query($sql);
     return $result->fetch_assoc()['total'] ?? 0;
 }

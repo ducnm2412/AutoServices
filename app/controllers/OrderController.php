@@ -104,6 +104,7 @@ public function getAllOrders() {
     // Mua nhanh 1 sản phẩm hoặc dịch vụ
     public function buySingle() {
         $this->checkAuth();
+        
         $data = json_decode(file_get_contents('php://input'), true);
         $item = $data['item'] ?? null;
         $userID = $_SESSION['user']['userID'];
