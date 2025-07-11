@@ -1,646 +1,648 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
 
 :root {
-    --dark-bg: #1a1a1a;
-    --card-bg: #222222;
-    --text-color: #f0f0f0;
-    --highlight-color: #ffcc00; /* Yellowish color for prices/accents */
-    --button-bg: linear-gradient(to right, #ffcc00, #ffcc00); /* Adjusted for visual match */
-    --button-hover-bg: linear-gradient(to right, #e6b800, #e6b800);
-    --border-color: #444;
-    --gear-color: #ffcc00; /* Color for the gear icon */
-    --check-icon-color: #ffcc00; /* Color for checkmark icons */
-    --active-button-bg: #ffcc00;
-    --active-button-text: #1a1a1a;
-    --danger-color: #dc3545; /* Đỏ cho lỗi/hủy */
+  --dark-bg: #1a1a1a;
+  --card-bg: #222222;
+  --text-color: #f0f0f0;
+  --highlight-color: #ffcc00; /* Yellowish color for prices/accents */
+  --button-bg: linear-gradient(
+    to right,
+    #ffcc00,
+    #ffcc00
+  ); /* Adjusted for visual match */
+  --button-hover-bg: linear-gradient(to right, #e6b800, #e6b800);
+  --border-color: #444;
+  --gear-color: #ffcc00; /* Color for the gear icon */
+  --check-icon-color: #ffcc00; /* Color for checkmark icons */
+  --active-button-bg: #ffcc00;
+  --active-button-text: #1a1a1a;
+  --danger-color: #dc3545; /* Đỏ cho lỗi/hủy */
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: var(--dark-bg);
-    color: var(--text-color);
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: "Roboto", sans-serif;
+  background-color: var(--dark-bg);
+  color: var(--text-color);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Header Styles */
 .header {
-    background-color: var(--dark-bg);
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
+  background-color: var(--dark-bg);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .logo {
-    font-size: 2em;
-    font-weight: 700;
-    color: var(--text-color);
+  font-size: 2em;
+  font-weight: 700;
+  color: var(--text-color);
 }
 
 .navbar {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .brand-name {
-    font-size: 1.5em;
-    font-weight: 500;
-    color: var(--text-color);
-    margin-bottom: 5px;
+  font-size: 1.5em;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 5px;
 }
 
 .nav-links {
-    list-style: none;
-    display: flex;
-    gap: 15px;
-    font-size: 0.9em;
+  list-style: none;
+  display: flex;
+  gap: 15px;
+  font-size: 0.9em;
 }
 
 .nav-links a {
-    color: var(--text-color);
-    text-decoration: none;
-    transition: color 0.3s ease;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 .nav-links a:hover {
-    color: var(--highlight-color);
+  color: var(--highlight-color);
 }
 
 .nav-links .separator {
-    color: var(--text-color);
-    opacity: 0.7;
+  color: var(--text-color);
+  opacity: 0.7;
 }
 
 .nav-links .active {
-    color: var(--highlight-color);
-    font-weight: 500;
+  color: var(--highlight-color);
+  font-weight: 500;
 }
 
 /* Main Content Area */
 .main-content {
-    padding: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: var(--dark-bg);
-    box-shadow: none;
-    border-radius: 0;
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: var(--dark-bg);
+  box-shadow: none;
+  border-radius: 0;
 }
 
 /* Filter Buttons (sử dụng .tab-btn thay vì .filter-btn cho sản phẩm) */
 .filter-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
 }
 
 .tab-btn {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-    font-weight: 500;
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-    box-shadow: none;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+  box-shadow: none;
 }
 
 .tab-btn:hover {
-    background-color: var(--border-color);
-    transform: translateY(0);
+  background-color: var(--border-color);
+  transform: translateY(0);
 }
 
 .tab-btn.active {
-    background-color: var(--active-button-bg);
-    color: var(--active-button-text);
-    border-color: var(--active-button-bg);
-    box-shadow: none;
+  background-color: var(--active-button-bg);
+  color: var(--active-button-text);
+  border-color: var(--active-button-bg);
+  box-shadow: none;
 }
 
 /* Products Grid */
-.products-grid, .product-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    justify-content: center;
+.products-grid,
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  justify-content: center;
 }
 
 /* Product Card */
 .product-card {
-    background-color: var(--card-bg);
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
 .product-card img {
-    max-width: 100%;
-    height: 180px;
-    object-fit: contain;
-    border-radius: 8px;
-    margin-bottom: 15px;
+  max-width: 100%;
+  height: 180px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 15px;
 }
 
 .product-card p {
-    margin: 5px 0;
-    font-size: 1.1em;
-    font-weight: 500;
-    color: var(--text-color);
+  margin: 5px 0;
+  font-size: 1.1em;
+  font-weight: 500;
+  color: var(--text-color);
 }
 
 .product-card p:first-of-type {
-    font-size: 1.4em;
-    font-weight: 700;
-    color: var(--text-color);
-    margin-bottom: 10px;
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 10px;
 }
 
 .product-card p span {
-    font-weight: normal;
-    color: #aaa;
-    font-size: 0.8em;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 5px;
+  font-weight: normal;
+  color: #aaa;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 5px;
 }
 
 .product-card .price-value-actual {
-    font-size: 2.2em;
-    font-weight: 700;
-    color: var(--highlight-color);
-    display: inline-block;
+  font-size: 2.2em;
+  font-weight: 700;
+  color: var(--highlight-color);
+  display: inline-block;
 }
 
 .product-card .price-value-actual .currency {
-    font-size: 0.6em;
-    vertical-align: super;
+  font-size: 0.6em;
+  vertical-align: super;
 }
 
-
 .product-card .cart {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .product-card .cart button {
-    flex: 1;
-    border: none;
-    padding: 12px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    color: var(--dark-bg);
+  flex: 1;
+  border: none;
+  padding: 12px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  color: var(--dark-bg);
 }
 
 .product-card .btn-buy {
-    background: var(--button-bg);
+  background: var(--button-bg);
 }
 
 .product-card .btn-buy:hover {
-    background: var(--button-hover-bg);
-    transform: translateY(-2px);
+  background: var(--button-hover-bg);
+  transform: translateY(-2px);
 }
 
 .product-card .btn-add-to-cart {
-    background: var(--button-bg);
+  background: var(--button-bg);
 }
 
 .product-card .btn-add-to-cart:hover {
-    background: var(--button-hover-bg);
-    transform: translateY(-2px);
+  background: var(--button-hover-bg);
+  transform: translateY(-2px);
 }
-
 
 /* Common button styles for modals */
 .confirm-order-btn,
 .cancel-order-btn {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 600;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
-    width: 100%;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  width: 100%;
 }
 
 .confirm-order-btn {
-    background: var(--button-bg);
-    color: var(--dark-bg);
-    margin-top: 20px;
+  background: var(--button-bg);
+  color: var(--dark-bg);
+  margin-top: 20px;
 }
 
 .confirm-order-btn:hover {
-    background: var(--button-hover-bg);
+  background: var(--button-hover-bg);
 }
 
 .confirm-order-btn:disabled {
-    background-color: var(--border-color);
-    cursor: not-allowed;
-    opacity: 0.7;
+  background-color: var(--border-color);
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 /* Loading/Error/No Products Messages */
 #loadingMessage,
 #errorMessage,
 #noProductsMessage {
-    text-align: center;
-    font-size: 1.1em;
-    padding: 20px;
-    margin-top: 30px;
-    border-radius: 8px;
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
+  text-align: center;
+  font-size: 1.1em;
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 8px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
 }
 
 #errorMessage {
-    color: var(--danger-color);
-    border-color: var(--danger-color);
+  color: var(--danger-color);
+  border-color: var(--danger-color);
 }
-
 
 /* Modal Styles (for Order Confirmation Modal) */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .modal.active {
-    display: flex;
-    opacity: 1;
+  display: flex;
+  opacity: 1;
 }
 
 .modal-content {
-    background-color: var(--card-bg);
-    margin: auto;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-    transform: translateY(-20px);
-    transition: transform 0.3s ease;
-    color: var(--text-color);
+  background-color: var(--card-bg);
+  margin: auto;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+  color: var(--text-color);
 }
 
 .modal.active .modal-content {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 .modal-content h2 {
-    color: var(--highlight-color);
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 1.8em;
+  color: var(--highlight-color);
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.8em;
 }
 
 .modal-product-details {
-    text-align: center;
+  text-align: center;
 }
 
 .modal-product-details h3 {
-    margin-bottom: 10px;
-    font-size: 1.5em;
-    color: var(--text-color);
+  margin-bottom: 10px;
+  font-size: 1.5em;
+  color: var(--text-color);
 }
 
 .modal-product-details p {
-    font-size: 1.1em;
-    margin-bottom: 5px;
-    color: var(--text-color);
+  font-size: 1.1em;
+  margin-bottom: 5px;
+  color: var(--text-color);
 }
 
 .modal-product-details span {
-    font-weight: bold;
-    color: var(--highlight-color);
+  font-weight: bold;
+  color: var(--highlight-color);
 }
 
 .modal-customer-info {
-    border-top: 1px solid var(--border-color);
-    padding-top: 15px;
-    margin-top: 15px;
-    text-align: left;
+  border-top: 1px solid var(--border-color);
+  padding-top: 15px;
+  margin-top: 15px;
+  text-align: left;
 }
 
 .modal-customer-info h4 {
-    color: var(--highlight-color);
-    margin-bottom: 10px;
-    font-size: 1.2em;
+  color: var(--highlight-color);
+  margin-bottom: 10px;
+  font-size: 1.2em;
 }
 
 .modal-customer-info p {
-    font-size: 1em;
-    margin-bottom: 5px;
-    color: var(--text-color);
+  font-size: 1em;
+  margin-bottom: 5px;
+  color: var(--text-color);
 }
 
 .modal-customer-info p span {
-    font-weight: normal;
-    color: var(--text-color);
+  font-weight: normal;
+  color: var(--text-color);
 }
 
-
 .modal .btn-close {
-    color: #aaa;
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    font-size: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
+  color: #aaa;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .modal .btn-close:hover,
 .modal .btn-close:focus {
-    color: var(--danger-color);
-    text-decoration: none;
+  color: var(--danger-color);
+  text-decoration: none;
 }
 
 /* Styles for Login/Register Modals (from your JS) */
 .modal-login,
 .modal-register {
-    display: none;
-    position: fixed;
-    z-index: 1001;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .modal-login.show,
 .modal-register.show {
-    display: flex;
-    opacity: 1;
+  display: flex;
+  opacity: 1;
 }
 
 .modal-content-login,
 .modal-content-register {
-    background-color: var(--card-bg);
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-    width: 90%;
-    max-width: 450px;
-    position: relative;
-    text-align: center;
-    transform: scale(0.9);
-    transition: transform 0.3s ease;
-    color: var(--text-color);
+  background-color: var(--card-bg);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  width: 90%;
+  max-width: 450px;
+  position: relative;
+  text-align: center;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  color: var(--text-color);
 }
 
 .modal-login.show .modal-content-login,
 .modal-register.show .modal-content-register {
-    transform: scale(1);
+  transform: scale(1);
 }
 
 .modal-content-login h2,
 .modal-content-register h2 {
-    color: var(--highlight-color);
-    margin-bottom: 25px;
-    font-size: 2em;
+  color: var(--highlight-color);
+  margin-bottom: 25px;
+  font-size: 2em;
 }
 
 .modal-content-login .btn-close,
 .modal-content-register .btn-close {
-    color: #aaa;
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    font-size: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
+  color: #aaa;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .modal-content-login .btn-close:hover,
 .modal-content-register .btn-close:hover {
-    color: var(--danger-color);
+  color: var(--danger-color);
 }
 
 .form-group {
-    margin-bottom: 20px;
-    text-align: left;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: var(--text-color);
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-color);
 }
 
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="password"] {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    font-size: 1em;
-    box-sizing: border-box;
-    background-color: var(--dark-bg);
-    color: var(--text-color);
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box;
+  background-color: var(--dark-bg);
+  color: var(--text-color);
 }
 
 .password-input-wrapper {
-    position: relative;
+  position: relative;
 }
 
 .toggle-password {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    font-size: 1.2em;
-    color: var(--highlight-color);
-    user-select: none;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2em;
+  color: var(--highlight-color);
+  user-select: none;
 }
 
 .modal-login button[type="submit"],
 .modal-register button[type="submit"] {
-    background: var(--button-bg);
-    color: var(--dark-bg);
-    padding: 15px 30px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    width: 100%;
+  background: var(--button-bg);
+  color: var(--dark-bg);
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
 }
 
 .modal-login button[type="submit"]:hover,
 .modal-register button[type="submit"]:hover {
-    background: var(--button-hover-bg);
-    transform: translateY(-2px);
+  background: var(--button-hover-bg);
+  transform: translateY(-2px);
 }
 
 .switch-link {
-    margin-top: 25px;
-    font-size: 0.95em;
-    color: var(--text-color);
+  margin-top: 25px;
+  font-size: 0.95em;
+  color: var(--text-color);
 }
 
 .switch-link a {
-    color: var(--highlight-color);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
+  color: var(--highlight-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 .switch-link a:hover {
-    color: var(--button-hover-bg);
-    text-decoration: underline;
+  color: var(--button-hover-bg);
+  text-decoration: underline;
 }
-
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
-    .header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 20px;
-    }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
 
-    .navbar {
-        align-items: flex-start;
-        margin-top: 15px;
-    }
+  .navbar {
+    align-items: flex-start;
+    margin-top: 15px;
+  }
 
-    .brand-name {
-        font-size: 1.3em;
-    }
+  .brand-name {
+    font-size: 1.3em;
+  }
 
-    .filter-buttons {
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        gap: 10px;
-    }
+  .filter-buttons {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
 
-    .main-content {
-        padding: 20px;
-    }
+  .main-content {
+    padding: 20px;
+  }
 
-    .products-grid, .product-list {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    }
+  .products-grid,
+  .product-list {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
-    .header {
-        padding: 15px 20px;
-    }
+  .header {
+    padding: 15px 20px;
+  }
 
-    .logo {
-        font-size: 1.8em;
-    }
+  .logo {
+    font-size: 1.8em;
+  }
 
-    .navbar {
-        width: 100%;
-    }
+  .navbar {
+    width: 100%;
+  }
 
-    .nav-links {
-        width: 100%;
-        justify-content: space-around;
-        gap: 0;
-    }
+  .nav-links {
+    width: 100%;
+    justify-content: space-around;
+    gap: 0;
+  }
 
-    .filter-buttons {
-        flex-direction: column;
-        align-items: stretch;
-    }
+  .filter-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-    .tab-btn {
-        width: 100%;
-    }
+  .tab-btn {
+    width: 100%;
+  }
 
-    .product-card {
-        padding: 25px;
-    }
+  .product-card {
+    padding: 25px;
+  }
 
-    .modal-content,
-    .modal-content-login,
-    .modal-content-register {
-        padding: 20px;
-        width: 95%;
-    }
+  .modal-content,
+  .modal-content-login,
+  .modal-content-register {
+    padding: 20px;
+    width: 95%;
+  }
 }
 
 @media (max-width: 480px) {
-    .header {
-        padding: 10px 15px;
-    }
+  .header {
+    padding: 10px 15px;
+  }
 
-    .logo {
-        font-size: 1.5em;
-    }
+  .logo {
+    font-size: 1.5em;
+  }
 
-    .brand-name {
-        font-size: 1.1em;
-    }
+  .brand-name {
+    font-size: 1.1em;
+  }
 
-    .nav-links {
-        font-size: 0.8em;
-    }
+  .nav-links {
+    font-size: 0.8em;
+  }
 
-    .main-content {
-        padding: 15px;
-    }
+  .main-content {
+    padding: 15px;
+  }
 
-    .product-card {
-        padding: 20px;
-    }
+  .product-card {
+    padding: 20px;
+  }
 }
 .loading-message,
 .error-message,
@@ -677,9 +679,9 @@ body {
 }
 .products-grid,
 .product-list {
-    justify-content: center;
+  justify-content: center;
 }
 
 .product-card {
-    width: 320px; /* hoặc bất kỳ giá trị cố định nào bạn muốn */
+  width: 320px; /* hoặc bất kỳ giá trị cố định nào bạn muốn */
 }
