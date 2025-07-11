@@ -190,8 +190,6 @@ function renderProducts(products) {
   setupCartButtons();
 }
 
-
-
 function setupBuyButtons() {
   const buyButtons = document.querySelectorAll(".btn-buy");
   buyButtons.forEach((btn) => {
@@ -235,9 +233,6 @@ function setupCartButtons() {
       } else {
         cart.push(newItem);
       }
-
-      localStorage.setItem("cart", JSON.stringify(cart));
-      alert("Đã thêm vào giỏ hàng!");
     });
   });
 }
@@ -252,7 +247,8 @@ btn_open.addEventListener("click", () => {
 
   if (loggedIn === "true") {
     // 👉 Nếu đã đăng nhập thì chuyển qua profile.html
-    window.location.href = "/laptrinhweb/AutoServices/app/views/html/profile.html";
+    window.location.href =
+      "/laptrinhweb/AutoServices/app/views/html/profile.html";
   } else {
     // 👉 Nếu chưa đăng nhập thì hiện modal
     mod_container.classList.add("show");
@@ -275,9 +271,6 @@ function togglePassword() {
     toggleIcon.textContent = "👁️"; // đổi lại icon khi ẩn mật khẩu
   }
 }
-
-
-
 
 document.getElementById("loginForm").addEventListener("submit", function (e) {
   e.preventDefault();
@@ -302,36 +295,57 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
           const token = data.token;
           const userID = data.user.userID;
 
-          // ✅ Ghi đúng thông tin
+          // ✅ Ghi thông tin người dùng vào localStorage
           localStorage.setItem("userID", userID);
           localStorage.setItem("token", token);
           localStorage.setItem("loggedIn", "true");
           localStorage.setItem("user", JSON.stringify(data.user));
 
+          // ✅ Ẩn form đăng nhập (ẩn thẻ cha chứa form nếu cần)
+          document.getElementById("mod-container").style.display = "none";
 
-          alert("Đăng nhập thành công!");
+          // ✅ Hiện thông báo thành công
+          Swal.fire({
+            icon: "success",
+            title: "Đăng nhập thành công",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            // ✅ Chuyển trang sau khi đóng thông báo
+            if (role === "admin") {
+              window.location.href =
+                "/laptrinhweb/AutoServices/app/views/html/admin.html";
+            } else if (role === "customer") {
+              window.location.href = "/laptrinhweb/AutoServices/index.html";
+            }
+          });
+
           console.log("📥 Phản hồi từ server:", data);
-
-          if (role === "admin") {
-            window.location.href =
-              "/laptrinhweb/AutoServices/app/views/html/admin.html";
-          } else if (role === "customer") {
-            window.location.href = "/laptrinhweb/AutoServices/index.html";
-          }
         } else {
-          alert(data.message || "Đăng nhập thất bại.");
+          Swal.fire({
+            icon: "error",
+            title: "Đăng nhập thất bại",
+            text: data.message || "Thông tin đăng nhập không chính xác.",
+          });
         }
       } catch (err) {
         console.error("❌ Không phải JSON:", text);
-        alert("Lỗi khi xử lý phản hồi từ server.");
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi phản hồi từ server",
+          text: "Không thể xử lý dữ liệu nhận được từ server.",
+        });
       }
     })
     .catch((err) => {
       console.error("❌ Lỗi fetch:", err);
-      alert("Không thể kết nối đến server.");
+      Swal.fire({
+        icon: "error",
+        title: "Không thể kết nối server",
+        text: "Vui lòng thử lại sau.",
+      });
     });
 });
-
 
 document.addEventListener("DOMContentLoaded", function () {
   const openRegisterBtn = document.getElementById("open-register");
@@ -372,75 +386,329 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+// 👉 Gửi form đăng ký
+document
+  .getElementById("registerForm")
+  .addEventListener("submit", function (e) {
+    e.preventDefault(); // Ngăn reload
 
+    const name = document.getElementById("reg-name").value.trim();
+    const email = document.getElementById("reg-email").value.trim();
+    const password = document.getElementById("reg-password").value;
+    const phoneNumber = document.getElementById("reg-phone").value.trim();
+    const address = document.getElementById("reg-address").value.trim();
 
+    const role = "customer";
+    const registerContainer = document.getElementById("register-container"); // ✅ Khai báo rõ ràng
 
-  // 👉 Gửi form đăng ký
-document.getElementById("registerForm").addEventListener("submit", function (e) {
-  e.preventDefault(); // Ngăn reload
+    // Optional: kiểm tra dữ liệu trước khi gửi
+    if (!name || !email || !password || !phoneNumber || !address) {
+      Swal.fire({
+        icon: "warning",
+        title: "Thiếu thông tin",
+        text: "Vui lòng điền đầy đủ thông tin!",
+      });
+      return;
+    }
 
-  const name = document.getElementById("reg-name").value.trim();
-  const email = document.getElementById("reg-email").value.trim();
-  const password = document.getElementById("reg-password").value;
-  const phoneNumber = document.getElementById("reg-phone").value.trim();
-  const address = document.getElementById("reg-address").value.trim();
+    fetch(
+      "/laptrinhweb/AutoServices/app/controllers/auth.php?action=register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          name,
+          password,
+          phoneNumber,
+          role,
+          address,
+        }),
+      }
+    )
+      .then((res) => res.text()) // ✅ Đọc toàn bộ nội dung trả về (dù là HTML hay JSON)
+      .then((text) => {
+        try {
+          const data = JSON.parse(text); // ✅ Thử parse JSON
+          if (data.success) {
+            
+            registerContainer?.classList.remove("show");
+            Swal.fire({
+              icon: "success",
+              title: "Đăng ký thành công",
+              text: data.message || "Vui lòng đăng nhập để tiếp tục",
+            }).then(() => {
+              registerContainer?.classList.remove("show");
+              window.location.href = "/laptrinhweb/AutoServices/";
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Đăng ký thất bại",
+              text: data.message || "Vui lòng thử lại sau!",
+            });
+          }
+        } catch (err) {
+          console.error("❌ Không parse được JSON. Nội dung trả về:", text);
+          Swal.fire({
+            icon: "error",
+            title: "Lỗi máy chủ",
+            text: "Phản hồi không hợp lệ từ máy chủ. Xem console để biết chi tiết.",
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("❌ Lỗi fetch:", err);
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi kết nối",
+          text: "Không thể kết nối đến máy chủ!",
+        });
+      });
+  });
+//contact//
+function submitContactForm(event) {
+  event.preventDefault();
+  console.log("📥 Đã submit form liên hệ");
 
-  const role = "customer";
-  const registerContainer = document.getElementById("register-container"); // ✅ Khai báo rõ ràng
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const categoryID = document.getElementById("service").value.trim();
+  const message = document.getElementById("message").value.trim();
 
-  // Optional: kiểm tra dữ liệu trước khi gửi
-  if (!name || !email || !password || !phoneNumber || !address) {
+  if (!name || !phone || !email || !categoryID || !message) {
+    return Swal.fire({
+      icon: "error",
+      title: "Lỗi!",
+      text: "Vui lòng điền đầy đủ thông tin!",
+    });
+  }
+
+  if (!/^[0-9]{9,15}$/.test(phone)) {
+    return Swal.fire({
+      icon: "error",
+      title: "Lỗi!",
+      text: "Số điện thoại không hợp lệ!",
+    });
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return Swal.fire({
+      icon: "error",
+      title: "Lỗi!",
+      text: "Email không hợp lệ!",
+    });
+  }
+
+  const contactData = { name, phone, email, categoryID, message };
+  console.log("🚀 Dữ liệu liên hệ gửi đi từ Frontend:", contactData);
+
+  fetch(
+    "/laptrinhweb/AutoServices/app/controllers/ContactController.php?action=create",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(contactData),
+    }
+  )
+    .then((res) => res.text())
+    .then((text) => {
+      console.log("📦 Raw response từ server:", text);
+      try {
+        const data = JSON.parse(text.trim());
+        console.log("✅ Phản hồi từ Backend:", data);
+
+        if (data.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Thành công!",
+            text: data.message,
+            timer: 2000,
+            showConfirmButton: false,
+          }).then(() => {
+            document.getElementById("contactForm").reset();
+          });
+        } else {
+          Swal.fire({ icon: "error", title: "Lỗi!", text: data.message });
+        }
+      } catch (err) {
+        console.error("❌ Lỗi khi parse JSON:", err);
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi!",
+          text: "Phản hồi không hợp lệ từ server!",
+        });
+      }
+    })
+    .catch((err) => {
+      console.error("🚫 Lỗi trong quá trình gửi yêu cầu Fetch:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi!",
+        text: "Không thể kết nối đến server!",
+      });
+    });
+}
+//xử lý nút mua//
+function setupBuyButtons() {
+  const buyButtons = document.querySelectorAll(".btn-buy");
+  buyButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const name = btn.getAttribute("data-name");
+      const price = btn.getAttribute("data-price");
+      const img = btn.getAttribute("data-img");
+
+      document.getElementById("modal-product-name").textContent = name;
+      document.getElementById("modal-product-price").textContent =
+        Number(price).toLocaleString() + "₫";
+      document.getElementById("modal-product-img").src = img;
+
+      // Gán item vào nút xác nhận
+      const product = allProducts.find((p) => p.name === name);
+      console.log("🔍 Tìm thấy sản phẩm:", product);
+      if (product) {
+        document.getElementById("confirmOrderBtn").dataset.item =
+          JSON.stringify({
+            id: product.partID,
+            name: product.name,
+            price: product.price,
+            img: product.images,
+            quantity: 1,
+            type: "part",
+          });
+      } else {
+        console.warn("❌ Không tìm thấy product hoặc thiếu ID:", product);
+      }
+
+      // Mở modal
+      document.getElementById("orderModal").classList.add("active");
+    });
+  });
+}
+
+document.querySelector(".modal .btn-close").addEventListener("click", () => {
+  document.getElementById("orderModal").classList.remove("active");
+});
+fetch(
+  "/laptrinhweb/AutoServices/app/controllers/auth.php?action=getCurrentUser"
+)
+  .then((res) => res.text()) // ⚠️ Đọc text thay vì json
+  .then((text) => {
+    console.log("🔍 Phản hồi từ server:", text);
+    try {
+      const data = JSON.parse(text);
+      if (data.success) {
+        const user = data.user;
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+        document.getElementById("modal-customer-name").textContent = user.name;
+        document.getElementById("modal-customer-phone").textContent =
+          user.phoneNumber;
+        document.getElementById("modal-customer-address").textContent =
+          user.address;
+
+        window.loggedInUser = user;
+      } else {
+        console.warn("Chưa đăng nhập");
+      }
+    } catch (err) {
+      console.error("❌ Phản hồi không phải JSON:", text);
+    }
+  })
+  .catch((err) => {
+    console.error("Lỗi khi lấy người dùng:", err);
+  });
+
+document.getElementById("confirmOrderBtn").addEventListener("click", () => {
+  const confirmBtn = document.getElementById("confirmOrderBtn");
+  const item = JSON.parse(confirmBtn.dataset.item || "{}");
+
+  const user = window.loggedInUser;
+  if (!user) {
     Swal.fire({
       icon: "warning",
-      title: "Thiếu thông tin",
-      text: "Vui lòng điền đầy đủ thông tin!",
+      title: "Bạn chưa đăng nhập",
+      text: "Vui lòng đăng nhập để đặt hàng.",
     });
     return;
   }
 
-  fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
+  if (!item || !item.id) {
+    Swal.fire({
+      icon: "warning",
+      title: "Lỗi",
+      text: "Không tìm thấy sản phẩm để đặt hàng.",
+    });
+    return;
+  }
+
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "Đang xử lý...";
+  const payload = {
+    items: [item],
+    customer: {
+      name: user.name,
+      phone: user.phoneNumber,
+      address: user.address,
     },
-    body: JSON.stringify({ email, name, password, phoneNumber, role, address })
-  })
-    .then(res => res.text()) // ✅ Đọc toàn bộ nội dung trả về (dù là HTML hay JSON)
-  .then(text => {
-    try {
-      const data = JSON.parse(text); // ✅ Thử parse JSON
-      if (data.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Đăng ký thành công",
-          text: data.message || "Vui lòng đăng nhập để tiếp tục",
-        }).then(() => {
-          registerContainer?.classList.remove("show");
-          window.location.href = "/laptrinhweb/AutoServices/";
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Đăng ký thất bại",
-          text: data.message || "Vui lòng thử lại sau!",
+  };
+
+  console.log("📦 Đơn hàng gửi:", payload);
+  fetch(
+    "/laptrinhweb/AutoServices/app/controllers/OrderController.php?action=checkout",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+
+      body: JSON.stringify({
+        items: [item],
+        customer: {
+          name: user.name,
+          phone: user.phoneNumber,
+          address: user.address,
+        },
+      }),
+    }
+  )
+    .then((res) => {
+      if (!res.ok) {
+        return res.json().then((error) => {
+          throw new Error(error.message || "Có lỗi xảy ra.");
         });
       }
-    } catch (err) {
-      console.error("❌ Không parse được JSON. Nội dung trả về:", text);
+      return res.json();
+    })
+    .then((data) => {
+      if (data.success) {
+        // Đóng modal trước
+        document.getElementById("orderModal").classList.remove("active");
+
+        // Đợi modal đóng xong (có thể thêm một chút delay nếu có animation)
+        setTimeout(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Thành công!",
+            text: "Đơn hàng của bạn đã được đặt.",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = "Xác nhận đơn hàng";
+        }, 300); // delay 300ms cho mượt mà
+      } else {
+        throw new Error(data.message || "Lỗi đặt hàng.");
+      }
+    })
+    .catch((err) => {
       Swal.fire({
         icon: "error",
-        title: "Lỗi máy chủ",
-        text: "Phản hồi không hợp lệ từ máy chủ. Xem console để biết chi tiết.",
+        title: "Lỗi",
+        text: "Đã xảy ra lỗi khi đặt hàng: " + err.message,
       });
-    }
-  })
-  .catch(err => {
-    console.error("❌ Lỗi fetch:", err);
-    Swal.fire({
-      icon: "error",
-      title: "Lỗi kết nối",
-      text: "Không thể kết nối đến máy chủ!",
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = "Xác nhận đơn hàng";
     });
-  });
 });
-
