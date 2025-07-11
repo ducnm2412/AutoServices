@@ -1,8 +1,7 @@
-
 function loadPage(page) {
   fetch(`${page}.html`)
-    .then(res => res.text())
-    .then(html => {
+    .then((res) => res.text())
+    .then((html) => {
       document.getElementById("main-content").innerHTML = html;
       loadPageStyle(`../css/${page}.css`);
 
@@ -12,19 +11,20 @@ function loadPage(page) {
           loadInforData();
         } else if (page === "feedback" && typeof initFeedback === "function") {
           initFeedback(); // 💥 GỌI HÀM Ở ĐÂY
-        }  else if (page === "orderHistory" && typeof initOrderHistory === "function") {
+        } else if (
+          page === "orderHistory" &&
+          typeof initOrderHistory === "function"
+        ) {
           initOrderHistory();
         }
       }, 50); // Cho browser thời gian render DOM
     })
-    .catch(err => {
-      document.getElementById("main-content").innerHTML =
-        `<p style="color:red">Không thể tải ${page}</p>`;
+    .catch((err) => {
+      document.getElementById(
+        "main-content"
+      ).innerHTML = `<p style="color:red">Không thể tải ${page}</p>`;
     });
 }
-
-
-
 
 function loadPageStyle(cssPath) {
   const old = document.getElementById("page-style");
@@ -41,29 +41,30 @@ document.addEventListener("DOMContentLoaded", () => {
   loadPage("infor"); // Load mặc định
 });
 
-
-
-fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=getCurrentUser", {
+fetch(
+  "/laptrinhweb/AutoServices/app/controllers/auth.php?action=getCurrentUser",
+  {
     method: "GET",
-    credentials: "include" // 🔑 Gửi cookie PHPSESSID
-})
-.then(res => res.json())
-.then(data => {
+    credentials: "include", // 🔑 Gửi cookie PHPSESSID
+  }
+)
+  .then((res) => res.json())
+  .then((data) => {
     if (data.success) {
-        document.getElementById("userName").textContent = data.user.name;
+      document.getElementById("userName").textContent = data.user.name;
 
-        // 👇 Hiển thị vai trò
-        const roleText = data.user.role === "admin" ? "Quản Trị viên" : "Khách hàng";
-        document.getElementById("userRole").textContent = roleText;
-
+      // 👇 Hiển thị vai trò
+      const roleText =
+        data.user.role === "admin" ? "Quản Trị viên" : "Khách hàng";
+      document.getElementById("userRole").textContent = roleText;
     } else {
-        alert("Bạn chưa đăng nhập. Chuyển hướng...");
-        window.location.href = "/laptrinhweb/AutoServices/index.html";
+      alert("Bạn chưa đăng nhập. Chuyển hướng...");
+      window.location.href = "/laptrinhweb/AutoServices/index.html";
     }
-})
-.catch(err => {
+  })
+  .catch((err) => {
     console.error("Lỗi khi gọi getCurrentUser:", err);
-});
+  });
 
 function showLogoutConfirm() {
   const mainContent = document.getElementById("main-content");
@@ -79,28 +80,43 @@ function showLogoutConfirm() {
 function performLogout() {
   fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=logout", {
     method: "POST",
-    credentials: "include"
+    credentials: "include",
   })
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       if (data.success) {
-        alert(data.message || "Đăng xuất thành công!");
-        localStorage.clear();
-        // 🔁 Quay về trang chủ
-        window.location.href = "/laptrinhweb/AutoServices/index.html";
+        Swal.fire({
+          icon: "success",
+          title: "Đăng xuất thành công!",
+          text: data.message || "",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          localStorage.clear();
+          window.location.href = "/laptrinhweb/AutoServices/index.html";
+        });
       } else {
-        alert("Đăng xuất thất bại.");
+        Swal.fire({
+          icon: "error",
+          title: "Đăng xuất thất bại",
+          text: data.message || "Có lỗi xảy ra khi đăng xuất.",
+        });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("❌ Lỗi khi đăng xuất:", err);
-      alert("Không thể kết nối đến server.");
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi kết nối",
+        text: "Không thể kết nối đến server.",
+      });
     });
 }
 
 function cancelLogout() {
   // Reload lại trang profile.html
-  window.location.href = "/laptrinhweb/AutoServices/app/views/html/profile.html";
+  window.location.href =
+    "/laptrinhweb/AutoServices/app/views/html/profile.html";
 }
 document.addEventListener("DOMContentLoaded", function () {
   const logoutLink = document.querySelector('a[href="#logout"]');

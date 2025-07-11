@@ -1,4 +1,3 @@
-
 console.log("📌 infor.js đã được chạy!");
 
 function loadInforData() {
@@ -6,7 +5,7 @@ function loadInforData() {
 
   const userData = localStorage.getItem("user");
   const userID = localStorage.getItem("userID");
-console.log("👀 userID hiện tại:", userID);
+  console.log("👀 userID hiện tại:", userID);
   if (!userData) {
     console.warn("⚠️ Không tìm thấy user trong localStorage!");
     return;
@@ -20,9 +19,9 @@ console.log("👀 userID hiện tại:", userID);
   document.getElementById("email").textContent = user.email;
   document.getElementById("phoneNumber").textContent = user.phoneNumber;
   document.getElementById("address").textContent = user.address;
-  document.getElementById("password").textContent = "******" + user.password.slice(-3);
+  document.getElementById("password").textContent =
+    "******" + user.password.slice(-3);
 }
-
 
 // 👉 Hiển thị form sửa thông tin
 function showEditForm() {
@@ -96,18 +95,26 @@ function submitInfo(e) {
     address: document.getElementById("editAddress").value,
   };
 
-  fetch(`/laptrinhweb/AutoServices/app/controllers/UserController.php?action=updateProfile&userID=${userID}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(updatedUser)
-  })
-    .then(res => res.json())
-    .then(data => {
+  fetch(
+    `/laptrinhweb/AutoServices/app/controllers/UserController.php?action=updateProfile&userID=${userID}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedUser),
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => {
       if (data.success) {
-        alert("✅ Cập nhật thông tin thành công!");
-
+        Swal.fire({
+          icon: "success",
+          title: "Thành công!",
+          text: "Cập nhật thông tin thành công!",
+          timer: 1800,
+          showConfirmButton: false,
+        });
         // ✅ Cập nhật lại localStorage
         const newUser = {
           ...user,
@@ -118,21 +125,27 @@ function submitInfo(e) {
         // ✅ Hiển thị lại dữ liệu
         document.getElementById("user-name").textContent = newUser.name;
         document.getElementById("email").textContent = newUser.email;
-        document.getElementById("phoneNumber").textContent = newUser.phoneNumber;
+        document.getElementById("phoneNumber").textContent =
+          newUser.phoneNumber;
         document.getElementById("address").textContent = newUser.address;
 
         // ✅ Đóng form
         document.getElementById("view-mode").style.display = "block";
         document.getElementById("edit-form").style.display = "none";
       } else {
-        alert("❌ " + data.message);
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: data.message || "Cập nhật thất bại!",
+        });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("Lỗi:", err);
-      alert("❌ Lỗi kết nối đến server!");
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi kết nối",
+        text: "Không thể kết nối đến server!",
+      });
     });
 }
-
-
-

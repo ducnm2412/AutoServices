@@ -24,32 +24,31 @@
       <span class="info-field" id="password"></span>
     </div>
     <div class="button-group">
-        <button onclick="showEditForm()">Sửa thông tin</button>
+      <button onclick="showEditForm()">Sửa thông tin</button>
     </div>
   </div>
 
   <!-- 🔹 Form sửa thông tin -->
-  <form id="edit-form" style="display: none;" onsubmit="submitInfo(event)">
+  <form id="edit-form" style="display: none" onsubmit="submitInfo(event)">
     <div class="form-group">
       <label>Họ và Tên:</label>
-      <input type="text" id="editFullName">
+      <input type="text" id="editFullName" />
     </div>
     <div class="form-group">
       <label>Email:</label>
-      <input type="email" id="editEmail">
+      <input type="email" id="editEmail" />
     </div>
     <div class="form-group">
       <label>Số điện thoại:</label>
-      <input type="text" id="editPhone">
+      <input type="text" id="editPhone" />
     </div>
     <div class="form-group">
       <label>Địa chỉ:</label>
-      <input type="text" id="editAddress">
+      <input type="text" id="editAddress" />
     </div>
     <div class="button-group">
       <button type="submit">Lưu</button>
       <button type="button" onclick="cancelEdit()">Hủy</button>
     </div>
   </form>
-
 </div>
