@@ -214,6 +214,7 @@ document.querySelector(".modal .btn-close").addEventListener("click", () => {
 /*xử lý giỏ hàng */
 function setupCartButtons() {
   const cartButtons = document.querySelectorAll(".cart button:last-child"); // Nút Giỏ hàng
+
   cartButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       const card = btn.closest(".product-card");
@@ -221,10 +222,11 @@ function setupCartButtons() {
 
       const priceText =
         card.querySelector("p:nth-of-type(2)")?.textContent || "0";
-      const price = parseFloat(priceText.replace(/[^\d]/g, ""));
+      const price = parseFloat(priceText.replace(/[^\d]/g, "")); // Lấy số từ chuỗi giá
       const img = card.querySelector("img").src;
 
       const newItem = { name, price, img, quantity: 1 };
+
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
       const existing = cart.find((item) => item.name === name);
@@ -233,9 +235,31 @@ function setupCartButtons() {
       } else {
         cart.push(newItem);
       }
+
+      // ✅ Lưu lại vào localStorage
+      localStorage.setItem("cart", JSON.stringify(cart));
+
+      // ✅ Hiển thị thông báo SweetAlert2
+      Swal.fire({
+        icon: "success",
+        title: "Đã thêm vào giỏ hàng",
+        text: `"${name}" đã được thêm vào giỏ hàng.`,
+        showConfirmButton: false,
+        timer: 1500
+      });
     });
   });
 }
+//account-name
+window.addEventListener('DOMContentLoaded', function() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user && user.name) {
+    const accountName = document.querySelector('.account-name');
+    if (accountName) {
+      accountName.textContent = user.name;
+    }
+  }
+});
 
 //popup
 const btn_open = document.getElementById("btn-open");
