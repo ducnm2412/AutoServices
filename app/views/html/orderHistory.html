@@ -1,25 +1,25 @@
 <div class="content">
-  <button >
+  <button>
     <a href="../html/profile.html">
       <i class="ri-arrow-left-circle-line" style="font-size: 24px"></i>
     </a>
   </button>
-  <h2>Lịch sử đơn Hàng</h2>
+  <h2>Lịch sử đơn hàng</h2>
 </div>
+
 <table>
   <thead>
     <tr>
-      <th>STT</th>
       <th>Mã đơn</th>
       <th>Tên khách hàng</th>
+      <th>Mã khách hàng</th> <!-- ✅ nên là userID hoặc customerID -->
       <th>Ngày đặt</th>
-      <!-- <th>Tổng tiền</th> -->
+      <th>Tổng tiền</th> <!-- ✅ bật cột này lên -->
       <th>Trạng thái</th>
-      <!-- <th>Hành động</th> -->
+      <!-- <th>Hành động</th> nếu cần thêm nút xem chi tiết sau -->
     </tr>
   </thead>
   <tbody id="orderTableBody">
-    <!-- Dữ liệu sẽ được render ở đây -->
+    <!-- Dữ liệu JS sẽ render ở đây -->
   </tbody>
 </table>
-
