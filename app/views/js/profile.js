@@ -56,7 +56,7 @@ fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=getCurrentUser"
 
     } else {
         alert("Bạn chưa đăng nhập. Chuyển hướng...");
-        window.location.href = "/laptrinhweb/login.html";
+        window.location.href = "/laptrinhweb/AutoServices/index.html";
     }
 })
 .catch(err => {
