@@ -276,10 +276,7 @@ function togglePassword() {
   }
 }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> master
 
 
 document.getElementById("loginForm").addEventListener("submit", function (e) {
@@ -339,31 +336,43 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
 document.addEventListener("DOMContentLoaded", function () {
   const openRegisterBtn = document.getElementById("open-register");
   const registerContainer = document.getElementById("register-container");
+  const modRegister = document.getElementById("mod-register");
   const closeRegisterBtn = document.getElementById("btn-close-register");
   const switchToLoginBtn = document.getElementById("switch-to-login");
   const loginModal = document.getElementById("mod");
+  const modContainer = document.getElementById("mod-container");
 
-  // 👉 Mở form đăng ký
   openRegisterBtn?.addEventListener("click", function (e) {
     e.preventDefault();
-    registerContainer.style.display = "flex";
+    console.log("✅ Click Sign Up");
+
+    // Hiện khung đăng ký
     registerContainer.classList.add("show");
-    loginModal.style.display = "none"; // Ẩn form đăng nhập
+    registerContainer.style.display = "flex";
+
+    modRegister.style.display = "flex"; // 👉 KHÔNG ĐƯỢC BỎ
+    loginModal.style.display = "none";
+    modContainer.classList.remove("show");
   });
 
-  // 👉 Đóng form đăng ký
   closeRegisterBtn?.addEventListener("click", function () {
     registerContainer.classList.remove("show");
     registerContainer.style.display = "none";
+    modRegister.style.display = "none";
   });
 
-  // 👉 Chuyển lại form đăng nhập từ đăng ký
   switchToLoginBtn?.addEventListener("click", function (e) {
     e.preventDefault();
     registerContainer.classList.remove("show");
+    registerContainer.style.display = "none";
+    modRegister.style.display = "none";
+
     loginModal.style.display = "flex";
+    modContainer.classList.add("show");
   });
 });
+
+
 
 
   // 👉 Gửi form đăng ký

@@ -292,6 +292,7 @@ button #btn-open {
   opacity: 1;
   pointer-events: all;
   height: 100vh;
+  display: flex;
 }
 #mod-register {
   box-shadow: 0 0 50px #0ef;
