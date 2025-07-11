@@ -12,6 +12,8 @@ function loadPage(page) {
           loadInforData();
         } else if (page === "feedback" && typeof initFeedback === "function") {
           initFeedback(); // 💥 GỌI HÀM Ở ĐÂY
+        }  else if (page === "orderHistory" && typeof initOrderHistory === "function") {
+          initOrderHistory();
         }
       }, 50); // Cho browser thời gian render DOM
     })
