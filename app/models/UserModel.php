@@ -3,17 +3,17 @@ require_once __DIR__ . '/../../core/Database.php';
 
 class UserModel extends Database {
     // Đăng ký user mới
-    public function addUser($email, $name, $password, $phoneNumber, $role, $address) {
-        $stmt = $this->conn->prepare(
-            "INSERT INTO User (email, name, password, phoneNumber, role, address) VALUES (?, ?, ?, ?, ?, ?)"
-        );
-        $stmt->bind_param("ssssss", $email, $name, $password, $phoneNumber, $role, $address);
-        if ($stmt->execute()) {
-            return "Thêm user thành công!";
-        } else {
-            return "Lỗi khi thêm user: " . $stmt->error;
-        }
+    public function addUser($userID, $email, $name, $password, $phoneNumber, $role, $address) {
+    $stmt = $this->conn->prepare(
+        "INSERT INTO User (userID, email, name, password, phoneNumber, role, address) VALUES (?, ?, ?, ?, ?, ?, ?)"
+    );
+    $stmt->bind_param("sssssss", $userID, $email, $name, $password, $phoneNumber, $role, $address);
+    if ($stmt->execute()) {
+        return "Thêm user thành công!";
+    } else {
+        return "Lỗi khi thêm user: " . $stmt->error;
     }
+}
 
     // Đăng nhập
     public function login($email, $password) {

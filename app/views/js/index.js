@@ -376,50 +376,71 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // 👉 Gửi form đăng ký
-  document.getElementById("registerForm").addEventListener("submit", function (e) {
-    e.preventDefault(); // Ngăn reload
+document.getElementById("registerForm").addEventListener("submit", function (e) {
+  e.preventDefault(); // Ngăn reload
 
-    const name = document.getElementById("reg-name").value;
-    const email = document.getElementById("reg-email").value;
-    const password = document.getElementById("reg-password").value;
-    const phoneNumber = document.getElementById("reg-phone").value;
-    const address = document.getElementById("reg-address").value;
+  const name = document.getElementById("reg-name").value.trim();
+  const email = document.getElementById("reg-email").value.trim();
+  const password = document.getElementById("reg-password").value;
+  const phoneNumber = document.getElementById("reg-phone").value.trim();
+  const address = document.getElementById("reg-address").value.trim();
 
-    const role = "customer";
+  const role = "customer";
+  const registerContainer = document.getElementById("register-container"); // ✅ Khai báo rõ ràng
 
-    fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, name, password, phoneNumber, role, address })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          Swal.fire({
-            icon: "success",
-            title: "Đăng ký thành công",
-            text: data.message || "Vui lòng đăng nhập để tiếp tục",
-          });
-          registerContainer.classList.remove("show");
+  // Optional: kiểm tra dữ liệu trước khi gửi
+  if (!name || !email || !password || !phoneNumber || !address) {
+    Swal.fire({
+      icon: "warning",
+      title: "Thiếu thông tin",
+      text: "Vui lòng điền đầy đủ thông tin!",
+    });
+    return;
+  }
+
+  fetch("/laptrinhweb/AutoServices/app/controllers/auth.php?action=register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email, name, password, phoneNumber, role, address })
+  })
+    .then(res => res.text()) // ✅ Đọc toàn bộ nội dung trả về (dù là HTML hay JSON)
+  .then(text => {
+    try {
+      const data = JSON.parse(text); // ✅ Thử parse JSON
+      if (data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Đăng ký thành công",
+          text: data.message || "Vui lòng đăng nhập để tiếp tục",
+        }).then(() => {
+          registerContainer?.classList.remove("show");
           window.location.href = "/laptrinhweb/AutoServices/";
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Đăng ký thất bại",
-            text: data.message || "Vui lòng thử lại sau!",
-          });
-        }
-      })
-      .catch(err => {
-        console.error("❌ Lỗi khi đăng ký:", err);
+        });
+      } else {
         Swal.fire({
           icon: "error",
-          title: "Lỗi kết nối",
-          text: "Không thể kết nối đến máy chủ!",
+          title: "Đăng ký thất bại",
+          text: data.message || "Vui lòng thử lại sau!",
         });
+      }
+    } catch (err) {
+      console.error("❌ Không parse được JSON. Nội dung trả về:", text);
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi máy chủ",
+        text: "Phản hồi không hợp lệ từ máy chủ. Xem console để biết chi tiết.",
       });
+    }
+  })
+  .catch(err => {
+    console.error("❌ Lỗi fetch:", err);
+    Swal.fire({
+      icon: "error",
+      title: "Lỗi kết nối",
+      text: "Không thể kết nối đến máy chủ!",
+    });
   });
-
+});
 

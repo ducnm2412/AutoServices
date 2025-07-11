@@ -14,16 +14,24 @@ class AuthController {
         $this->authService = new AuthService();
     }
 
-    public function register() {
+     public function register() {
         $data = json_decode(file_get_contents('php://input'), true);
-        $result = $this->authService->register(
-            $data['email'],
-            $data['name'],
-            $data['password'],
-            $data['phoneNumber'],
-            $data['role'],
-            $data['address']
-        );
+
+        if (!$data || !is_array($data)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Dữ liệu đầu vào không hợp lệ!']);
+            return;
+        }
+
+        $email = $data['email'] ?? '';
+        $name = $data['name'] ?? '';
+        $password = $data['password'] ?? '';
+        $phoneNumber = $data['phoneNumber'] ?? '';
+        $role = $data['role'] ?? '';
+        $address = $data['address'] ?? '';
+
+        $result = $this->authService->register($email, $name, $password, $phoneNumber, $role, $address);
+
         http_response_code($result['success'] ? 201 : 400);
         echo json_encode($result);
     }

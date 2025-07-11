@@ -20,12 +20,14 @@ class AuthService {
         if (!preg_match('/^[0-9]+$/', $phoneNumber)) {
             return ['success' => false, 'message' => 'Số điện thoại chỉ được chứa số!'];
         }
-        // Có thể hash password ở đây nếu muốn
+
+        // Gọi repo để đăng ký
         $result = $this->authRepository->register($email, $name, $password, $phoneNumber, $role, $address);
-        if ($result === "Thêm user thành công!") {
+
+        if ($result) {
             return ['success' => true, 'message' => 'Đăng ký thành công!'];
         } else {
-            return ['success' => false, 'message' => $result];
+            return ['success' => false, 'message' => $result['message']];
         }
     }
 
