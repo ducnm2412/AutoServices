@@ -50,3 +50,50 @@ fetch("/laptrinhweb/AutoServices/app/controllers/AdminController.php?action=getO
       });
     }
   });
+function cancelLogout() {
+  // Quay lại trang dashboard nếu hủy
+  window.location.href = "/laptrinhweb/AutoServices/app/views/html/admin.html";
+}
+
+function performLogout() {
+  // Xóa thông tin localStorage nếu có
+  localStorage.removeItem("user");
+
+  // Gọi API logout từ PHP nếu dùng session
+  fetch('/laptrinhweb/AutoServices/app/controllers/AuthController.php?action=logout')
+    .then(() => {
+      window.location.href = "/laptrinhweb/AutoServices/"; // Trở về trang chủ
+    })
+    .catch((err) => {
+      console.error("Lỗi logout:", err);
+      window.location.href = "/laptrinhweb/AutoServices/";
+    });
+}
+
+function showLogoutConfirm() {
+  Swal.fire({
+    title: "Đăng xuất?",
+    text: "Bạn có chắc chắn muốn đăng xuất?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Đồng ý",
+    cancelButtonText: "Hủy",
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      performLogout(); // Nếu chọn Đồng ý
+    }
+  });
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const logoutLink = document.querySelector('a[href="#logout"]');
+  if (logoutLink) {
+    logoutLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      showLogoutConfirm();
+    });
+  }
+});
+
