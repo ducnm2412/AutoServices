@@ -289,8 +289,7 @@ button#btn-close:hover {
 }
 /*register*/
 #register-container {
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  height: auto;
   position: fixed;
   top: 0;
   left: 0;
@@ -299,13 +298,39 @@ button#btn-close:hover {
   pointer-events: none;
   z-index: 99999;
   display: none;
-  transition: opacity 0.3s ease;
 }
 
 #register-container.show {
-  display: flex;
   opacity: 1;
   pointer-events: all;
+  height: 100vh;
+  display: flex;
+}
+#mod-register {
+  box-shadow: 0 0 50px #0ef;
+  max-width: 500px;
+  border-radius: 20px;
+  padding: 40px;
+  position: relative;
+  left: 50%;
+  top: 100px;
+  transform: translateX(-50%);
+  display: none;
+}
+#mod-register .mod-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+}
+#mod-register .mod-header h2 {
+  margin: 0;
+  font-size: 30px;
+  color: #fff;
+  text-align: center;
+}
+#btn-close-register {
+  font-size: 18px;
 }
 
 /*container*/

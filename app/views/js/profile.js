@@ -1,24 +1,4 @@
 
-// function loadPage(page) {
-//   fetch(`${page}.html`)
-//     .then(res => res.text())
-//     .then(html => {
-//       document.getElementById("main-content").innerHTML = html;
-//       loadPageStyle(`../css/${page}.css`);
-
-//       // Gọi hàm JS tương ứng
-//       if (page === "infor" && typeof loadInforData === "function") {
-//         // Đợi DOM render xong
-//         setTimeout(() => {
-//           loadInforData();
-//         }, 50);
-//       }
-//     })
-//     .catch(err => {
-//       document.getElementById("main-content").innerHTML =
-//         `<p style="color:red">Không thể tải ${page}</p>`;
-//     });
-// }
 function loadPage(page) {
   fetch(`${page}.html`)
     .then(res => res.text())
