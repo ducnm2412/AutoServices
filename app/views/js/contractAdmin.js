@@ -36,7 +36,7 @@ function renderContacts(contacts) {
         <td>${escapeHtml(contact.name)}</td>
         <td>${escapeHtml(contact.phone)}</td>
         <td>${escapeHtml(contact.email)}</td>
-        <td>${escapeHtml(contact.serviceID)}</td>
+        <td>${escapeHtml(contact.categoryID)}</td>
         <td style='white-space:pre-line;'>${escapeHtml(contact.message)}</td>
         <td>${contact.created_at || ""}</td>
         <td>${replyCell}</td>
@@ -47,29 +47,31 @@ function renderContacts(contacts) {
 
 function fetchContacts() {
   fetch("/laptrinhweb/AutoServices/app/controllers/ContactController.php?action=getAll")
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) {
+        return res.json().then((error) => {
+          throw new Error(error.message || "Lỗi từ server.");
+        });
+      }
+      return res.json();
+    })
     .then((result) => {
       if (!result.success) {
-        document.getElementById("contactTableBody").innerHTML = `<tr><td colspan='8'>${result.message || "Không thể tải dữ liệu!"}</td></tr>`;
-        Swal.fire({
-          icon: "error",
-          title: "Lỗi!",
-          text: result.message || "Không thể tải danh sách liên hệ.",
-        });
-        return;
+        throw new Error(result.message || "Không thể tải danh sách liên hệ.");
       }
       renderContacts(result.contacts);
     })
-    .catch(() => {
+    .catch((err) => {
       document.getElementById("contactTableBody").innerHTML =
         '<tr><td colspan="8">Lỗi khi tải dữ liệu!</td></tr>';
       Swal.fire({
         icon: "error",
-        title: "Lỗi kết nối!",
-        text: "Không thể kết nối tới máy chủ.",
+        title: "Lỗi!",
+        text: err.message || "Không thể kết nối tới máy chủ.",
       });
     });
 }
+
 
 window.sendReply = function (event, contactID) {
   event.preventDefault();

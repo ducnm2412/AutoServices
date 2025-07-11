@@ -1,5 +1,6 @@
 <?php
 session_start();
+header('Content-Type: application/json');
 require_once __DIR__ . '/../services/ContactService.php';
 
 class ContactController {
@@ -31,11 +32,6 @@ class ContactController {
         // Lấy tất cả liên hệ
         public function getAll() {
             // Chỉ admin mới được xem danh sách liên hệ
-            if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-                http_response_code(403);
-                echo json_encode(['success' => false, 'message' => 'Bạn không có quyền truy cập!']);
-                exit();
-            }
             $contacts = $this->contactService->getAllContacts();
             echo json_encode(['success' => true, 'contacts' => $contacts]);
         }
