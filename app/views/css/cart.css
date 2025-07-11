@@ -16,7 +16,7 @@ header {
   width: 100%;
   z-index: 99;
   padding: 0;
-   background-image: url(../images/footer2_img.jpg);
+  background-image: url(../images/footer2_img.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -424,7 +424,7 @@ section .sum .summary {
   box-shadow: 0px 0px 14px #ccc;
 }
 .modal-header {
-  background: linear-gradient(to right, #0077ff, #00c2ff);
+  background: linear-gradient(to right, #ffa500, #ffd580);
   color: white;
   display: flex;
   align-items: center;
@@ -435,16 +435,20 @@ section .sum .summary {
 .modal-header h1 {
   font-size: 1.3rem;
   letter-spacing: 1px;
+  color: #fff;
 }
 
 .modal-header .btn-close i {
   font-size: 1.8rem;
+  color: #ffa500;
+  background: #fff3e0;
   cursor: pointer;
   transition: 0.3s;
 }
 
 .modal-header .btn-close i:hover {
-  color: #ff4d4d;
+  background: #ffd580;
+  color: #ff9800;
   transform: scale(1.2);
 }
 
@@ -538,22 +542,26 @@ section .sum .summary {
 }
 
 .payment-method input[type="radio"] {
-  accent-color:#ffcc00    ;
+  accent-color: #ffcc00;
 }
 .modal-footer .btn-confirm {
-  padding: 10px 20px;
+  padding: 10px 32px;
   border: none;
-  border-radius: 12px;
-  background: #fff;
-  color: #0077ff;
-  font-weight: bold;
+  border-radius: 30px;
+  background: #ffa500;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 10px #ffd580;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  margin-left: 20px;
+  outline: none;
+  display: inline-block;
 }
 
 .modal-footer .btn-confirm:hover {
-  background: #ffcc00;
-  color: #000;
+  background: #ff9800;
+  color: #fff;
   transform: scale(1.05);
 }
