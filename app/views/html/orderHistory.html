@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lịch sử đơn hàng</title>
+    <link rel="stylesheet" href="../css/allOrder.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div style="position: relative">
+      <button
+        class="arrow_back"
+        style="padding: 12px; position: absolute; margin-left: 3rem"
+      >
+        <a
+          href="../html/profile.html"
+          style="text-decoration: none; color: #fff"
+          ><i class="ri-arrow-left-circle-line" style="font-size: 24px"></i
+        ></a>
+      </button>
+      <h1>Lịch sử đơn Hàng</h1>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Mã đơn</th>
+          <th>Tên khách hàng</th>
+          <th>Ngày đặt</th>
+          <th>Tổng tiền</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="orderTableBody">
+        <!-- Dữ liệu sẽ được render ở đây -->
+      </tbody>
+    </table>
+    <script src="../js/allOrder.js"></script>
+  </body>
+</html>

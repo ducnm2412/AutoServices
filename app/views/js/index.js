@@ -190,48 +190,7 @@ function renderProducts(products) {
   setupCartButtons();
 }
 
-/*
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/laptrinhweb/AutoServices/app/controllers/PartController.php?action=getAll")
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success) {
-        renderProducts(data.parts);
-      } else {
-        console.error("Không thể tải sản phẩm:", data.message);
-      }
-    })
-    .catch((err) => {
-      console.error("Lỗi kết nối:", err);
-    });
-});
-function renderProducts(products) {
-  const container = document.querySelector(".product-list");
-  container.innerHTML = ""; // Clear cũ
 
-  products.forEach((product) => {
-    const item = document.createElement("div");
-    item.classList.add("product-item");
-
-    item.innerHTML = `
-      <img src="${product.images}" alt="${product.name}" />
-      <h3>${product.name}</h3>
-      <p>Giá: ${formatCurrency(product.price)}</p>
-      <button class="add-to-cart">Thêm vào giỏ</button>
-    `;
-
-    container.appendChild(item);
-  });
-}
-
-function formatCurrency(value) {
-  return value.toLocaleString("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  });
-}
-*/
-/* xử lý mua */
 
 function setupBuyButtons() {
   const buyButtons = document.querySelectorAll(".btn-buy");
@@ -317,7 +276,10 @@ function togglePassword() {
   }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 
 
 document.getElementById("loginForm").addEventListener("submit", function (e) {

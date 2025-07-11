@@ -2,22 +2,7 @@ let allProducts = []; // Lưu trữ toàn bộ sản phẩm sau khi fetch
 
 document.addEventListener("DOMContentLoaded", () => {
   // ✅ Lấy thông tin người dùng đã đăng nhập từ localStorage
-  window.loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-  if (!window.loggedInUser) {
-    Swal.fire({
-      icon: "warning",
-      title: "Bạn chưa đăng nhập",
-      text: "Vui lòng đăng nhập để mua hàng.",
-      showCancelButton: true,
-      confirmButtonText: "Đăng nhập",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = "/laptrinhweb/AutoServices/";
-      }
-    });
-    return;
-  }
+  window.loggedInUser = JSON.parse(localStorage.getItem("user"));
 
   const loadingMessage = document.getElementById("loadingMessage");
   const errorMessage = document.getElementById("errorMessage");
@@ -79,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("confirmOrderBtn").addEventListener("click", () => {
     const confirmBtn = document.getElementById("confirmOrderBtn");
     const item = JSON.parse(confirmBtn.dataset.item || "{}");
-
+    window.loggedInUser = JSON.parse(localStorage.getItem("user"));
     const user = window.loggedInUser;
     if (!user) {
       Swal.fire({

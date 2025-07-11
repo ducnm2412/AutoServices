@@ -113,7 +113,7 @@ class OrderModel extends Database
     // Lấy tất cả đơn hàng (cho admin)
     public function getAllOrders()
     {
-        $sql = "SELECT * FROM `Order` ORDER BY orderID ASC"; // Sắp xếp theo số thứ tự tăng dần
+        $sql = "SELECT * FROM `order` ORDER BY orderID ASC"; // Sắp xếp theo số thứ tự tăng dần
         $result = $this->conn->query($sql);
         $orders = [];
         if ($result && $result->num_rows > 0) {

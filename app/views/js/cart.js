@@ -17,7 +17,7 @@ function updateCartSummary() {
       const priceText = cartItem.querySelector(".new-price").textContent;
       const price = parseFloat(priceText.replace(/\D/g, ""));
       const quantityInput = cartItem.querySelector("input[type='text']");
-const quantity = parseInt(quantityInput?.value) || 1;
+      const quantity = parseInt(quantityInput?.value) || 1;
 
       total += price * quantity;
       count++;
@@ -78,17 +78,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalCartItems = document.querySelector(".modal-cart-items");
   const confirmBtn = document.querySelector(".btn-confirm");
 
-  // Xử lý sự kiện mở modal
   openModalBtn.addEventListener("click", () => {
     modal.classList.add("active");
     modalCartItems.innerHTML = "";
     let modalTotal = 0;
-
-    // Lấy các mục đã chọn từ giỏ hàng thực tế
-    const cartItems = document.querySelectorAll(".cart-container .cart-item");
-    // Định nghĩa selectedItems ở đây để nó có thể được sử dụng
     let selectedItems = [];
 
+    const cartItems = document.querySelectorAll(".cart-container .cart-item");
     cartItems.forEach((item) => {
       const checkbox = item.querySelector("input[type='checkbox']");
       if (checkbox.checked) {
@@ -98,127 +94,121 @@ document.addEventListener("DOMContentLoaded", () => {
         const price = parseFloat(priceText.replace(/\D/g, ""));
         const quantityInput = item.querySelector("input[type='text']");
         const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
-        const itemId = item.querySelector(".remove-from-cart").dataset.id; // Lấy ID của sản phẩm/dịch vụ
-        const itemType = item.querySelector(".remove-from-cart").dataset.type; // Lấy loại của sản phẩm/dịch vụ
+        const itemId = item.querySelector(".remove-from-cart").dataset.id;
+        const itemType = item.querySelector(".remove-from-cart").dataset.type;
 
-        // Thêm vào mảng selectedItems
         selectedItems.push({
           id: itemId,
           type: itemType,
           name: title,
-          price: price,
-          quantity: quantity,
+          price,
+          quantity,
           img: imgSrc,
         });
-
         modalTotal += price * quantity;
 
         const div = document.createElement("div");
         div.className = "modal-cart-item";
         div.innerHTML = `
-                    <img src="${imgSrc}" alt="${title}" />
-                    <div class="item-info">
-                        <div class="title">${title}</div>
-                        <div class="price-quantity">
-                            ${formatCurrency(price)} x ${quantity}
-                        </div>
-                    </div>
-                `;
+          <img src="${imgSrc}" alt="${title}" />
+          <div class="item-info">
+            <div class="title">${title}</div>
+            <div class="price-quantity">
+              ${formatCurrency(price)} x ${quantity}
+            </div>
+          </div>
+        `;
         modalCartItems.appendChild(div);
       }
     });
 
     document.querySelector(".modal-footer .total-value").textContent =
       formatCurrency(modalTotal);
-
-    // Lưu selectedItems vào thuộc tính dataset của nút xác nhận để có thể truy cập sau
-    // Hoặc đơn giản hơn là định nghĩa fetch ở đây, ngay trong scope này
     confirmBtn.dataset.selectedItems = JSON.stringify(selectedItems);
   });
 
-  // Xử lý sự kiện đóng modal
-  closeModalBtn.addEventListener("click", () => {
-    modal.classList.remove("active");
-  });
-
-  // Đóng modal khi click ra ngoài
+  closeModalBtn.addEventListener("click", () =>
+    modal.classList.remove("active")
+  );
   window.addEventListener("click", (event) => {
-    if (event.target == modal) {
-      modal.classList.remove("active");
-    }
+    if (event.target == modal) modal.classList.remove("active");
   });
 
-  // Xử lý thay đổi số lượng
   cartContainer.addEventListener("click", (e) => {
-    if (e.target.tagName === "BUTTON" || e.target.closest("button")) {
-      const button = e.target.closest("button");
-      const action = button.dataset.action;
-      const itemId = button.dataset.id;
-      const itemType = button.dataset.type;
+    if (e.target.tagName === "BUTTON" || e.target.closest("button")) {
+      const button = e.target.closest("button");
+      const action = button.dataset.action;
+      const itemId = button.dataset.id;
+      const itemType = button.dataset.type;
 
-      // 🔒 Kiểm tra nếu là nút xóa
-      if (button.classList.contains("remove-from-cart")) {
-        let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-        cart = cart.filter(
-          (item) => !(item.id === itemId && item.type === itemType)
-        );
-        localStorage.setItem("cart", JSON.stringify(cart));
+      // Handle "remove-from-cart" first
+      // Handle "remove-from-cart" first
+      if (button.classList.contains("remove-from-cart")) {
+        let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        console.log("Cart before removal:", JSON.stringify(cart)); // ✅ Kiểm tra trước khi xóa
+        console.log("Attempting to remove:", "ID:", itemId, "Type:", itemType); // ✅ Kiểm tra ID và Type
 
-        // ✅ Render lại giỏ hàng
-        renderCartFromStorage();
-        return;
-      }
+        cart = cart.filter(
+          (item) => !(item.id === itemId && item.type === itemType)
+        );
+        console.log("Cart after filter:", JSON.stringify(cart)); // ✅ Kiểm tra sau khi lọc
 
-      const quantityInput = item.querySelector("input[type='text']");
-const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+        localStorage.setItem("cart", JSON.stringify(cart));
+        console.log("localStorage updated. New cart:", localStorage.getItem("cart")); // ✅ Xác nhận đã lưu
 
-      // 🛡️ Kiểm tra quantityInput có tồn tại không
-      if (!quantityInput) {
-        console.warn("Không tìm thấy input số lượng.");
-        return;
-      }
+        const cartItemToRemove = button.closest(".cart-item");
+        if (cartItemToRemove) {
+          cartItemToRemove.remove();
+        }
 
+        updateCartSummary();
+        return;
+      }
 
-      if (action === "decrease" && quantity > 1) {
-        quantity--;
-      } else if (action === "increase") {
-        quantity++;
-      } else {
-        return; // Không xử lý gì nếu không hợp lệ
-      }
+      // Now that "remove" is handled, safely get the item and quantity input
+      const item = button.closest(".cart-item"); // This is line 172
+      const quantityInput = item.querySelector("input[type='text']");
+      let quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
 
-      quantityInput.value = quantity;
-      updateCartSummary();
+      if (!quantityInput) {
+        console.warn("Không tìm thấy input số lượng.");
+        return;
+      }
 
-      // 🔄 Cập nhật localStorage
-      let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      const itemIndex = cart.findIndex(
-        (item) => item.id === itemId && item.type === itemType
-      );
-      if (itemIndex !== -1) {
-        cart[itemIndex].quantity = quantity;
-        localStorage.setItem("cart", JSON.stringify(cart));
-      }
-    }
-  });
+      // Handle increase/decrease actions
+      if (action === "decrease" && quantity > 1) {
+        quantity--;
+      } else if (action === "increase") {
+        quantity++;
+      } else {
+        return; // No relevant action or quantity not changed
+      }
 
-  // Cập nhật summary khi checkbox thay đổi
+      quantityInput.value = quantity;
+      updateCartSummary();
+
+      // Update localStorage
+      let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const itemIndex = cart.findIndex(
+        (cartItem) => cartItem.id === itemId && cartItem.type === itemType
+      );
+      if (itemIndex !== -1) {
+        cart[itemIndex].quantity = quantity;
+        localStorage.setItem("cart", JSON.stringify(cart));
+      }
+    }
+  });
   cartContainer.addEventListener("change", (e) => {
-    if (e.target.type === "checkbox") {
-      updateCartSummary();
-    }
+    if (e.target.type === "checkbox") updateCartSummary();
   });
 
-  // Xử lý nút Xác nhận đơn hàng
   confirmBtn.addEventListener("click", () => {
     confirmBtn.disabled = true;
     confirmBtn.textContent = "Đang xử lý...";
 
-    // Lấy dữ liệu selectedItems từ data attribute đã lưu khi mở modal
     const selectedItemsData = JSON.parse(
       confirmBtn.dataset.selectedItems || "[]"
     );
-    console.log("Dữ liệu gửi đi:", selectedItemsData);
     if (selectedItemsData.length === 0) {
       Swal.fire({
         icon: "warning",
@@ -230,18 +220,16 @@ const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
       return;
     }
 
-    // Di chuyển lệnh fetch vào đây
     fetch(
       "/laptrinhweb/AutoServices/app/controllers/OrderController.php?action=checkout",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: selectedItemsData }), // Sử dụng selectedItemsData
+        body: JSON.stringify({ items: selectedItemsData }),
       }
     )
       .then((res) => {
         if (!res.ok) {
-          // Xử lý lỗi HTTP (ví dụ: 400, 500)
           return res.json().then((errorData) => {
             throw new Error(
               errorData.message || `HTTP error! status: ${res.status}`
@@ -252,46 +240,39 @@ const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
       })
       .then((data) => {
         if (data.success) {
-          Swal.fire({
-            icon: "success",
-            title: "Thành công!",
-            text: "Đặt hàng thành công!",
-            timer: 2000,
-            showConfirmButton: false,
-          }).then(() => {
-            localStorage.removeItem("cart"); // Xóa giỏ hàng
-            renderCartFromStorage(); // Hiển thị giỏ hàng trống trên giao diện
-            updateCartSummary(); // Cập nhật tổng tiền/số lượng về 0
+          localStorage.removeItem("cart");
+          renderCartFromStorage();
+          updateCartSummary();
+          confirmBtn.style.display = "none";
 
-            // THÊM DÒNG NÀY ĐỂ ẨN NÚT XÁC NHẬN ĐƠN HÀNG KHI THÀNH CÔNG
-            confirmBtn.style.display = "none";
-
-            // Đảm bảo modal cũng được đóng nếu nó đang mở
-            const modal = document.getElementById("orderModal");
-            if (modal) {
-              modal.classList.remove("active");
-            }
-          });
+          if (modal) {
+            modal.classList.remove("active");
+            setTimeout(() => {
+              Swal.fire({
+                icon: "success",
+                title: "Thành công!",
+                text: "Đặt hàng thành công!",
+                timer: 2000,
+                showConfirmButton: false,
+              });
+            }, 300);
+          }
         } else {
-          // Nếu có lỗi, hiển thị thông báo lỗi và kích hoạt lại nút
           Swal.fire({
             icon: "error",
             title: "Lỗi",
             text: "Lỗi khi đặt hàng: " + data.message,
           });
-          // Kích hoạt lại nút và đặt lại văn bản nếu có lỗi
           confirmBtn.disabled = false;
           confirmBtn.textContent = "Xác nhận đơn hàng";
         }
       })
       .catch((err) => {
-        console.error("Lỗi:", err);
         Swal.fire({
           icon: "error",
           title: "Lỗi",
           text: "Đã xảy ra lỗi khi gửi đơn hàng: " + err.message,
         });
-        // Kích hoạt lại nút và đặt lại văn bản nếu có lỗi mạng
         confirmBtn.disabled = false;
         confirmBtn.textContent = "Xác nhận đơn hàng";
       });
