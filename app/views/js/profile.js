@@ -41,31 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadPage("infor"); // Load mặc định
 });
 
-fetch(
-  "/laptrinhweb/AutoServices/app/controllers/auth.php?action=getCurrentUser",
-  {
-    method: "GET",
-    credentials: "include", // 🔑 Gửi cookie PHPSESSID
-  }
-)
-  .then((res) => res.json())
-  .then((data) => {
-    if (data.success) {
-      document.getElementById("userName").textContent = data.user.name;
-
-      // 👇 Hiển thị vai trò
-      const roleText =
-        data.user.role === "admin" ? "Quản Trị viên" : "Khách hàng";
-      document.getElementById("userRole").textContent = roleText;
-    } else {
-      alert("Bạn chưa đăng nhập. Chuyển hướng...");
-      window.location.href = "/laptrinhweb/AutoServices/index.html";
-    }
-  })
-  .catch((err) => {
-    console.error("Lỗi khi gọi getCurrentUser:", err);
-  });
-
 function showLogoutConfirm() {
   const mainContent = document.getElementById("main-content");
   mainContent.innerHTML = `
