@@ -200,8 +200,9 @@ button #btn-open {
 button#btn-close {
   color: #ffa500;
   background: #fff3e0;
-  border-radius: 50%;
+  border-radius: 10px;
   border: none;
+  padding: 10px;
   transition: background 0.2s;
 }
 button#btn-close:hover {
@@ -289,10 +290,11 @@ button#btn-close:hover {
 }
 /*register*/
 #register-container {
-  height: auto;
+  height: 100%;
+    background: rgba(0, 0, 0, 0.5);
   position: fixed;
-  top: 0;
   left: 0;
+  right: 0;
   width: 100vw;
   opacity: 0;
   pointer-events: none;
@@ -303,7 +305,6 @@ button#btn-close:hover {
 #register-container.show {
   opacity: 1;
   pointer-events: all;
-  height: 100vh;
   display: flex;
 }
 #mod-register {
@@ -311,18 +312,17 @@ button#btn-close:hover {
   box-shadow: 0 0 40px 0 #ffa500, 0 0 0 1px #ffd580;
   max-width: 500px;
   border-radius: 20px;
-  padding: 40px;
+  padding: 25px;
   position: relative;
   left: 50%;
-  top: 100px;
   transform: translateX(-50%);
   display: none;
+  margin: 30px;
 }
 #mod-register .mod-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
 }
 #mod-register .mod-header h2 {
   margin: 0;
@@ -333,7 +333,8 @@ button#btn-close:hover {
 #btn-close-register {
   color: #ffa500;
   background: #fff3e0;
-  border-radius: 50%;
+  border-radius: 10px;
+  padding: 10px;
   border: none;
   font-size: 18px;
   transition: background 0.2s;
